@@ -1,0 +1,121 @@
+// This is your Prisma schema file for AgentPipe Web
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ConversationStatus {
+  ACTIVE
+  COMPLETED
+  INTERRUPTED
+  ERROR
+}
+
+model Conversation {
+  id              String               @id @default(cuid())
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  startedAt       DateTime             @default(now())
+  completedAt     DateTime?
+  status          ConversationStatus   @default(ACTIVE)
+
+  // Configuration
+  mode            String               // "round-robin", "reactive", "free-form"
+  maxTurns        Int?
+  initialPrompt   String               @db.Text
+
+  // Aggregate metrics
+  totalMessages   Int                  @default(0)
+  totalTokens     Int                  @default(0)
+  totalCost       Float                @default(0)
+  totalDuration   Int                  @default(0) // milliseconds
+
+  // Relations
+  messages        Message[]
+  participants    ConversationAgent[]
+
+  // Additional metadata (JSON field for flexibility)
+  metadata        Json?
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([mode])
+  @@map("conversations")
+}
+
+model Message {
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Agent information
+  agentId         String
+  agentName       String
+  agentType       String
+
+  // Message content
+  content         String       @db.Text
+  role            String       // "agent", "user", "system"
+  timestamp       DateTime     @default(now())
+
+  // Performance metrics
+  duration        Int?         // milliseconds
+  inputTokens     Int?
+  outputTokens    Int?
+  totalTokens     Int?
+  model           String?
+  cost            Float?
+
+  @@index([conversationId, timestamp])
+  @@index([agentType])
+  @@index([timestamp])
+  @@map("messages")
+}
+
+model ConversationAgent {
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Agent configuration
+  agentId         String
+  agentType       String
+  agentName       String
+  model           String?
+  prompt          String?      @db.Text
+  announcement    String?
+
+  // Additional agent settings (JSON field for custom settings)
+  settings        Json?
+
+  @@unique([conversationId, agentId])
+  @@index([agentType])
+  @@map("conversation_agents")
+}
+
+model Event {
+  id              String       @id @default(cuid())
+  createdAt       DateTime     @default(now())
+
+  // Event details
+  type            String       // Event type (conversation.started, message.created, etc.)
+  conversationId  String?
+
+  // Event data
+  data            Json
+
+  // Error tracking
+  errorMessage    String?      @db.Text
+  errorStack      String?      @db.Text
+
+  @@index([createdAt])
+  @@index([type])
+  @@index([conversationId])
+  @@map("events")
+}
