@@ -1715,7 +1715,6 @@
             position: sticky;
             top: 0;
             height: 100vh;
-            display: none;
         }
 
         .sidebar-content {
@@ -1870,37 +1869,60 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="section">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h1 class="h1 mb-2">AgentPipe Web Design System</h1>
-                    <p class="text-muted">
-                        A comprehensive design system for visualizing multi-agent AI conversations
-                    </p>
+    <div class="layout-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-6);">
+                        <div>
+                            <h2 style="font-size: var(--text-lg); font-weight: var(--font-semibold); margin: 0;">Design System</h2>
+                            <p style="font-size: var(--text-xs); color: var(--muted-foreground); margin: var(--space-1) 0 0 0;">v1.0</p>
+                        </div>
+                        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path class="sun-icon" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                        <path class="sun-icon" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-            </div>
-        </header>
 
-        <!-- Navigation -->
-        <nav class="mb-8">
-            <div class="filter-group">
-                <a href="#colors" class="filter-chip">Colors</a>
-                <a href="#typography" class="filter-chip">Typography</a>
-                <a href="#components" class="filter-chip">Components</a>
-                <a href="#agents" class="filter-chip">Agent Styles</a>
-                <a href="#messages" class="filter-chip">Messages</a>
-                <a href="#metrics" class="filter-chip">Metrics</a>
-                <a href="#code" class="filter-chip">Code Blocks</a>
-                <a href="#status" class="filter-chip">Status Indicators</a>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Foundation</div>
+                    <nav class="sidebar-nav">
+                        <a href="#colors" class="sidebar-link">Colors</a>
+                        <a href="#typography" class="sidebar-link">Typography</a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Components</div>
+                    <nav class="sidebar-nav">
+                        <a href="#components" class="sidebar-link">Base Components</a>
+                        <a href="#agents" class="sidebar-link">Agent Styles</a>
+                        <a href="#messages" class="sidebar-link">Messages</a>
+                        <a href="#metrics" class="sidebar-link">Metrics</a>
+                        <a href="#code" class="sidebar-link">Code Blocks</a>
+                        <a href="#status" class="sidebar-link">Status Indicators</a>
+                        <a href="#loading" class="sidebar-link">Loading States</a>
+                        <a href="#empty" class="sidebar-link">Empty States</a>
+                    </nav>
+                </div>
             </div>
-        </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Header -->
+                <header class="section">
+                    <div>
+                        <h1 class="h1 mb-2">AgentPipe Web Design System</h1>
+                        <p class="text-muted">
+                            A comprehensive design system for visualizing multi-agent AI conversations
+                        </p>
+                    </div>
+                </header>
 
         <!-- Color Palette Section -->
         <section id="colors" class="section">
@@ -2395,12 +2417,14 @@
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="section">
-            <div class="text-center text-muted text-sm">
-                <p>AgentPipe Web Design System v1.0 - Built with accessibility and performance in mind</p>
+                <!-- Footer -->
+                <footer class="section">
+                    <div class="text-center text-muted text-sm">
+                        <p>AgentPipe Web Design System v1.0 - Built with accessibility and performance in mind</p>
+                    </div>
+                </footer>
             </div>
-        </footer>
+        </main>
     </div>
 
     <script>
@@ -2435,6 +2459,32 @@
                 }
             });
         });
+
+        // Highlight active section in sidebar navigation
+        (function initScrollSpy() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.sidebar-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Remove active class from all links
+                        navLinks.forEach(link => link.classList.remove('active'));
+
+                        // Add active class to current section's link
+                        const activeLink = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }, {
+                rootMargin: '-100px 0px -66%',
+                threshold: 0
+            });
+
+            sections.forEach(section => observer.observe(section));
+        })();
     </script>
 </body>
 </html>
