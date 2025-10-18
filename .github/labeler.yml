@@ -1,0 +1,60 @@
+# Labeler configuration for automatic PR labeling based on file paths
+
+# Frontend
+"frontend":
+  - "app/components/**/*"
+  - "app/page.tsx"
+  - "app/dashboard/**/*"
+  - "app/conversations/**/*"
+  - "app/globals.css"
+
+# Backend/API
+"backend":
+  - "app/api/**/*"
+  - "app/lib/**/*"
+
+# Database
+"database":
+  - "prisma/**/*"
+
+# Docker
+"docker":
+  - "Dockerfile"
+  - "docker-compose.yaml"
+  - ".dockerignore"
+
+# CI/CD
+"ci/cd":
+  - ".github/workflows/**/*"
+  - "Makefile"
+
+# Documentation
+"documentation":
+  - "**/*.md"
+  - "docs/**/*"
+
+# Configuration
+"config":
+  - "package.json"
+  - "package-lock.json"
+  - "tsconfig.json"
+  - "next.config.ts"
+  - "tailwind.config.ts"
+  - ".env.example"
+
+# Dependencies
+"dependencies":
+  - "package.json"
+  - "package-lock.json"
+
+# Tests
+"tests":
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+
+# Types
+"types":
+  - "app/types/**/*"
+  - "**/*.d.ts"
