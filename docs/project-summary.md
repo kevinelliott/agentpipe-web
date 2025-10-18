@@ -8,7 +8,7 @@ AgentPipe Web is a Next.js 15+ application for displaying realtime and historica
 
 ### ✅ Architecture & Design (COMPLETED)
 
-1. **System Architecture** (`ARCHITECTURE.md`)
+1. **System Architecture** (`architecture.md`)
    - Comprehensive architecture documentation
    - Data flow diagrams
    - Technology stack decisions
@@ -96,14 +96,14 @@ AgentPipe Web is a Next.js 15+ application for displaying realtime and historica
 
 ### ✅ Documentation (COMPLETED)
 
-1. **ARCHITECTURE.md**
+1. **architecture.md**
    - Complete system architecture
    - Data flow diagrams
    - API documentation with examples
    - Database schema details
    - Implementation phases
 
-2. **AGENTPIPE_INTEGRATION.md**
+2. **agentpipe-integration.md**
    - Required changes to AgentPipe
    - Bridge component specification (Go)
    - Configuration examples
@@ -117,7 +117,7 @@ AgentPipe Web is a Next.js 15+ application for displaying realtime and historica
    - Development instructions
    - Deployment options
 
-4. **PROJECT_SUMMARY.md** (this file)
+4. **project-summary.md** (this file)
    - What has been built
    - What needs to be built
    - Next steps
@@ -289,7 +289,7 @@ AgentPipe Web is a Next.js 15+ application for displaying realtime and historica
 
 **Priority: HIGH** (for realtime functionality)
 
-Implement the bridge component in AgentPipe (Go) as documented in `AGENTPIPE_INTEGRATION.md`:
+Implement the bridge component in AgentPipe (Go) as documented in `agentpipe-integration.md`:
 
 1. Create bridge package (`pkg/bridge/bridge.go`)
 2. Update config schema
@@ -362,7 +362,7 @@ Implement the bridge component in AgentPipe (Go) as documented in `AGENTPIPE_INT
 
 5. **Access application:**
    - Main app: http://localhost:3000
-   - API docs: See ARCHITECTURE.md
+   - API docs: See architecture.md
    - Realtime stream: http://localhost:3000/api/realtime/stream
 
 ### Additional Setup (Recommended)
@@ -447,10 +447,10 @@ agentpipe-web/
 ├── prisma/
 │   └── schema.prisma    # Database schema
 ├── public/              # Static assets
-├── ARCHITECTURE.md      # Architecture documentation
-├── AGENTPIPE_INTEGRATION.md  # Bridge implementation guide
+├── architecture.md      # Architecture documentation
+├── agentpipe-integration.md  # Bridge implementation guide
 ├── README.md            # Setup and usage guide
-├── PROJECT_SUMMARY.md   # This file
+├── project-summary.md   # This file
 ├── package.json
 ├── tsconfig.json
 ├── tailwind.config.ts
@@ -552,8 +552,8 @@ agentpipe-web/
 
 ### Design References
 - UI/UX specifications in Task agent output
-- ARCHITECTURE.md for data models
-- AGENTPIPE_INTEGRATION.md for event schema
+- architecture.md for data models
+- agentpipe-integration.md for event schema
 
 ### Code Examples
 - API routes in `app/api/`

@@ -260,7 +260,7 @@ When data sharing is active, show a subtle indicator:
 
 ### AgentPipe Integration Guide
 
-Update `docs/AGENTPIPE_INTEGRATION.md` to emphasize opt-in:
+Update `docs/agentpipe-integration.md` to emphasize opt-in:
 
 **Add this section at the beginning:**
 
@@ -311,10 +311,10 @@ The bridge feature must be explicitly enabled in your configuration. No data is 
 
 ### Documentation
 
-- [ ] Update AGENTPIPE_INTEGRATION.md with opt-in emphasis
-- [ ] Create OPT_IN_DESIGN.md (this document)
+- [ ] Update agentpipe-integration.md with opt-in emphasis
+- [ ] Create opt-in-design.md (this document)
 - [ ] Add privacy section to README.md
-- [ ] Update PROJECT_SUMMARY.md with opt-in approach
+- [ ] Update project-summary.md with opt-in approach
 
 ### User Flow
 
@@ -448,5 +448,5 @@ Monitor opt-in effectiveness:
 - `app/components/SetupGuideModal.tsx` (to be created)
 - `app/settings/api-keys/page.tsx` (to be created)
 - `app/privacy/page.tsx` (to be created)
-- `docs/AGENTPIPE_INTEGRATION.md` (update)
+- `docs/agentpipe-integration.md` (update)
 - `README.md` (add privacy section)

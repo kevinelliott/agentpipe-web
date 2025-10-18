@@ -2,6 +2,31 @@
 
 This document outlines the required changes to the AgentPipe Go application to enable realtime data delivery to AgentPipe Web.
 
+## ⚠️ Important: Opt-In Only
+
+**AgentPipe does NOT send data to AgentPipe Web by default.**
+
+The bridge feature must be **explicitly enabled** in your configuration. No conversation data is collected or transmitted unless you choose to enable it.
+
+### Why Enable Data Sharing?
+
+✅ **Realtime Monitoring**: View conversations as they happen
+✅ **Historical Search**: Search through past conversations
+✅ **Performance Analytics**: Track costs, tokens, and response times
+✅ **Agent Comparison**: Compare different AI models and agents
+✅ **Team Collaboration**: Share insights with your team (optional)
+
+### Privacy & Security
+
+🔒 Data is only sent when bridge is enabled
+🔒 You control what instances receive your data
+🔒 API key authentication required
+🔒 HTTPS encryption in transit
+🔒 Data can be deleted at any time
+🔒 Full transparency on what's collected
+
+See the [Opt-In Design](opt-in-design.md) document for details on user privacy and data handling.
+
 ## Overview
 
 AgentPipe Web receives realtime conversation and message events via HTTP webhooks sent to the `/api/ingest` endpoint. To enable this, AgentPipe needs a **Bridge Component** that captures events during orchestration and sends them to the web application.

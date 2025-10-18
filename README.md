@@ -1,14 +1,18 @@
-# AgentPipe Web
+# AgentPipe
 
-A Next.js 15+ application for displaying realtime and historical multi-agent conversations from [AgentPipe](https://github.com/kevinelliott/agentpipe).
+The official website and dashboard for AgentPipe at [agentpipe.ai](https://agentpipe.ai) - a multi-agent AI orchestration platform.
+
+This Next.js 15+ application serves as both the main website introducing AgentPipe and a realtime dashboard for displaying multi-agent conversations from [AgentPipe](https://github.com/kevinelliott/agentpipe) installations.
 
 ## Features
 
+- **Marketing Hero**: Beautiful landing page introducing AgentPipe with GitHub CTA
 - **Realtime Dashboard**: View active multi-agent conversations as they happen
 - **Historical Search**: Search and filter through past conversations
 - **Metrics & Analytics**: Track token usage, costs, and agent performance
 - **API Documentation**: Well-documented REST and WebSocket APIs
-- **AgentPipe Integration**: Seamless integration with AgentPipe via bridge component
+- **AgentPipe Integration**: Seamless opt-in integration with local AgentPipe installations
+- **Design System**: Comprehensive design system with agent-specific colors and components
 
 ## Tech Stack
 
@@ -78,10 +82,14 @@ agentpipe-web/
 │   ├── layout.tsx      # Root layout
 │   ├── page.tsx        # Home page (realtime dashboard)
 │   └── globals.css     # Global styles
+├── docs/               # Documentation
+│   ├── ARCHITECTURE.md
+│   ├── AGENTPIPE_INTEGRATION.md
+│   ├── AGENT_VERSION_TRACKING.md
+│   └── PROJECT_SUMMARY.md
 ├── prisma/
 │   └── schema.prisma   # Database schema
 ├── public/             # Static assets
-├── ARCHITECTURE.md     # Detailed architecture documentation
 └── package.json
 ```
 
@@ -113,15 +121,22 @@ Connect to `/api/realtime/ws` for live updates:
 - `message.created` - New message in conversation
 - `conversation.completed` - Conversation finished
 
-See `ARCHITECTURE.md` for complete API documentation.
+See `docs/ARCHITECTURE.md` for complete API documentation.
 
 ## AgentPipe Integration
 
+**⚠️ Privacy First**: AgentPipe Web operates on an **opt-in model**. No data is collected unless you explicitly enable the bridge feature in your AgentPipe configuration.
+
 To enable realtime data delivery from AgentPipe:
 
-1. Build and configure the bridge component in AgentPipe (see `ARCHITECTURE.md`)
+1. Build and configure the bridge component in AgentPipe (see `docs/AGENTPIPE_INTEGRATION.md`)
 2. Set the bridge URL to point to your AgentPipe Web instance
 3. Configure authentication with the API key
+
+What's shared: Conversation metadata, messages, performance metrics
+What's NOT shared: Config files, API keys, file system data, analytics (when disabled)
+
+See `docs/OPT_IN_DESIGN.md` for complete privacy information.
 
 ## Development
 
@@ -159,13 +174,20 @@ npx prisma studio
 
 ### Docker
 
-```bash
-# Build image
-docker build -t agentpipe-web .
+The easiest way to run AgentPipe Web is using Docker Compose:
 
-# Run container
-docker run -p 3000:3000 --env-file .env agentpipe-web
+```bash
+# Start all services (web app + database)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
 ```
+
+See [DOCKER.md](docs/DOCKER.md) for complete Docker setup and usage guide.
 
 ## Contributing
 
@@ -174,6 +196,13 @@ Contributions are welcome! Please read the contributing guidelines before submit
 ## License
 
 [Your License]
+
+## Documentation
+
+- [Architecture Guide](docs/ARCHITECTURE.md) - Complete system architecture and design
+- [AgentPipe Integration](docs/AGENTPIPE_INTEGRATION.md) - Bridge implementation guide
+- [Agent Version Tracking](docs/AGENT_VERSION_TRACKING.md) - How agent and model versions are tracked
+- [Project Summary](docs/PROJECT_SUMMARY.md) - Current status and next steps
 
 ## Links
 

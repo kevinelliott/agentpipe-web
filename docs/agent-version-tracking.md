@@ -472,14 +472,14 @@ Alert when using deprecated or outdated model versions:
 
 ## Related Documentation
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) - Overall system design
-- [AGENTPIPE_INTEGRATION.md](AGENTPIPE_INTEGRATION.md) - Bridge implementation
+- [architecture.md](architecture.md) - Overall system design
+- [agentpipe-integration.md](agentpipe-integration.md) - Bridge implementation
 - [Database Schema](../prisma/schema.prisma) - Complete Prisma schema
 
 ## Support
 
 For questions about agent version tracking:
 1. Check this documentation
-2. Review example events in `AGENTPIPE_INTEGRATION.md`
+2. Review example events in `agentpipe-integration.md`
 3. Examine the API routes for model filtering
 4. Open an issue on GitHub
