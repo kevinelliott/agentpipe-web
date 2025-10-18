@@ -54,13 +54,6 @@ export async function GET(request: NextRequest) {
         _count: {
           agentType: true,
         },
-        _sum: {
-          conversation: {
-            _sum: {
-              totalCost: true,
-            },
-          },
-        },
         orderBy: {
           _count: {
             agentType: 'desc',

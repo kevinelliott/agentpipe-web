@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
         // Create conversation in database
         const conversation = await prisma.conversation.create({
           data: {
+            name: data.name || `Conversation ${new Date().toISOString()}`,
             mode: data.mode,
             maxTurns: data.maxTurns,
             initialPrompt: data.initialPrompt,
