@@ -121,7 +121,7 @@ Connect to `/api/realtime/ws` for live updates:
 - `message.created` - New message in conversation
 - `conversation.completed` - Conversation finished
 
-See `docs/ARCHITECTURE.md` for complete API documentation.
+See `docs/architecture.md` for complete API documentation.
 
 ## AgentPipe Integration
 
@@ -129,14 +129,14 @@ See `docs/ARCHITECTURE.md` for complete API documentation.
 
 To enable realtime data delivery from AgentPipe:
 
-1. Build and configure the bridge component in AgentPipe (see `docs/AGENTPIPE_INTEGRATION.md`)
+1. Build and configure the bridge component in AgentPipe (see `docs/agentpipe-integration.md`)
 2. Set the bridge URL to point to your AgentPipe Web instance
 3. Configure authentication with the API key
 
 What's shared: Conversation metadata, messages, performance metrics
 What's NOT shared: Config files, API keys, file system data, analytics (when disabled)
 
-See `docs/OPT_IN_DESIGN.md` for complete privacy information.
+See `docs/opt-in-design.md` for complete privacy information.
 
 ## Development
 
@@ -187,7 +187,7 @@ docker-compose logs -f
 docker-compose down
 ```
 
-See [DOCKER.md](docs/DOCKER.md) for complete Docker setup and usage guide.
+See [docker.md](docs/docker.md) for complete Docker setup and usage guide.
 
 ## Contributing
 
@@ -199,10 +199,10 @@ Contributions are welcome! Please read the contributing guidelines before submit
 
 ## Documentation
 
-- [Architecture Guide](docs/ARCHITECTURE.md) - Complete system architecture and design
-- [AgentPipe Integration](docs/AGENTPIPE_INTEGRATION.md) - Bridge implementation guide
-- [Agent Version Tracking](docs/AGENT_VERSION_TRACKING.md) - How agent and model versions are tracked
-- [Project Summary](docs/PROJECT_SUMMARY.md) - Current status and next steps
+- [Architecture Guide](docs/architecture.md) - Complete system architecture and design
+- [AgentPipe Integration](docs/agentpipe-integration.md) - Bridge implementation guide
+- [Agent Version Tracking](docs/agent-version-tracking.md) - How agent and model versions are tracked
+- [Project Summary](docs/project-summary.md) - Current status and next steps
 
 ## Links
 
