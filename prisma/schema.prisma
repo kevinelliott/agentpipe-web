@@ -25,10 +25,19 @@ model Conversation {
   completedAt     DateTime?
   status          ConversationStatus   @default(ACTIVE)
 
+  // Basic info
+  name            String
+
   // Configuration
   mode            String               // "round-robin", "reactive", "free-form"
   maxTurns        Int?
   initialPrompt   String               @db.Text
+
+  // Docker container tracking
+  containerId     String?
+  containerStatus String?              // "starting", "running", "stopped", "error"
+  errorMessage    String?              @db.Text
+  errorStack      String?              @db.Text
 
   // Aggregate metrics
   totalMessages   Int                  @default(0)
@@ -46,6 +55,7 @@ model Conversation {
   @@index([createdAt])
   @@index([status])
   @@index([mode])
+  @@index([containerId])
   @@map("conversations")
 }
 
@@ -57,7 +67,8 @@ model Message {
   // Agent information
   agentId         String
   agentName       String
-  agentType       String
+  agentType       String       // Agent type: "claude", "gemini", "amp", "gpt", etc.
+  agentVersion    String?      // Agent software version: "1.2.0", "0.5.0", etc.
 
   // Message content
   content         String       @db.Text
@@ -69,11 +80,12 @@ model Message {
   inputTokens     Int?
   outputTokens    Int?
   totalTokens     Int?
-  model           String?
+  model           String?      // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
   cost            Float?
 
   @@index([conversationId, timestamp])
   @@index([agentType])
+  @@index([model])             // Index for filtering by AI model
   @@index([timestamp])
   @@map("messages")
 }
@@ -85,9 +97,10 @@ model ConversationAgent {
 
   // Agent configuration
   agentId         String
-  agentType       String
+  agentType       String       // Agent type: "claude", "gemini", "amp", "gpt", etc.
   agentName       String
-  model           String?
+  agentVersion    String?      // Agent software version: "1.2.0", "0.5.0", etc.
+  model           String?      // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
   prompt          String?      @db.Text
   announcement    String?
 
@@ -96,6 +109,8 @@ model ConversationAgent {
 
   @@unique([conversationId, agentId])
   @@index([agentType])
+  @@index([model])             // Index for filtering by AI model
+  @@index([agentVersion])      // Index for filtering by agent version
   @@map("conversation_agents")
 }
 

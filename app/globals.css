@@ -1,25 +1,584 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Agent Colors */
+  --color-agent-claude: var(--agent-claude);
+  --color-agent-claude-bg: var(--agent-claude-bg);
+  --color-agent-claude-border: var(--agent-claude-border);
+  --color-agent-claude-hover: var(--agent-claude-hover);
+
+  --color-agent-gemini: var(--agent-gemini);
+  --color-agent-gemini-bg: var(--agent-gemini-bg);
+  --color-agent-gemini-border: var(--agent-gemini-border);
+  --color-agent-gemini-hover: var(--agent-gemini-hover);
+
+  --color-agent-gpt: var(--agent-gpt);
+  --color-agent-gpt-bg: var(--agent-gpt-bg);
+  --color-agent-gpt-border: var(--agent-gpt-border);
+  --color-agent-gpt-hover: var(--agent-gpt-hover);
+
+  --color-agent-amp: var(--agent-amp);
+  --color-agent-amp-bg: var(--agent-amp-bg);
+  --color-agent-amp-border: var(--agent-amp-border);
+  --color-agent-amp-hover: var(--agent-amp-hover);
+
+  --color-agent-o1: var(--agent-o1);
+  --color-agent-o1-bg: var(--agent-o1-bg);
+  --color-agent-o1-border: var(--agent-o1-border);
+  --color-agent-o1-hover: var(--agent-o1-hover);
+
+  --color-agent-default: var(--agent-default);
+  --color-agent-default-bg: var(--agent-default-bg);
+  --color-agent-default-border: var(--agent-default-border);
+  --color-agent-default-hover: var(--agent-default-hover);
+
+  /* Status Colors */
+  --color-status-active: var(--status-active);
+  --color-status-active-bg: var(--status-active-bg);
+  --color-status-active-border: var(--status-active-border);
+
+  --color-status-completed: var(--status-completed);
+  --color-status-completed-bg: var(--status-completed-bg);
+  --color-status-completed-border: var(--status-completed-border);
+
+  --color-status-error: var(--status-error);
+  --color-status-error-bg: var(--status-error-bg);
+  --color-status-error-border: var(--status-error-border);
+
+  --color-status-interrupted: var(--status-interrupted);
+  --color-status-interrupted-bg: var(--status-interrupted-bg);
+  --color-status-interrupted-border: var(--status-interrupted-border);
+
+  --color-status-pending: var(--status-pending);
+  --color-status-pending-bg: var(--status-pending-bg);
+  --color-status-pending-border: var(--status-pending-border);
+
+  /* Primary Colors */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
+  /* Semantic Colors */
+  --color-background: var(--background);
+  --color-background-elevated: var(--background-elevated);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-input-foreground: var(--input-foreground);
+  --color-ring: var(--ring);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Z-index */
+  --z-index-sticky: var(--z-sticky);
+
+  /* Animations */
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-message-appear: message-appear 300ms ease-out;
+  --animate-connection-pulse: connection-pulse 2s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
+  /* Design System CSS Variables */
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    /* ========================================
+       COLOR PALETTE
+       ======================================== */
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    /* Gray Scale */
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e5e5e5;
+    --gray-300: #d4d4d4;
+    --gray-400: #a3a3a3;
+    --gray-500: #737373;
+    --gray-600: #525252;
+    --gray-700: #404040;
+    --gray-800: #262626;
+    --gray-900: #171717;
+    --gray-950: #0a0a0a;
+
+    /* Brand Colors */
+    --primary-50: #eff6ff;
+    --primary-100: #dbeafe;
+    --primary-200: #bfdbfe;
+    --primary-300: #93c5fd;
+    --primary-400: #60a5fa;
+    --primary-500: #3b82f6;
+    --primary-600: #2563eb;
+    --primary-700: #1d4ed8;
+    --primary-800: #1e40af;
+    --primary-900: #1e3a8a;
+    --primary-950: #172554;
+
+    /* Agent Colors - Light Mode */
+    --agent-claude: #cc785c;
+    --agent-claude-bg: #fef3f0;
+    --agent-claude-border: #f4d7cc;
+    --agent-claude-hover: #b86849;
+
+    --agent-gemini: #4f7fd9;
+    --agent-gemini-bg: #eff6ff;
+    --agent-gemini-border: #d6e4ff;
+    --agent-gemini-hover: #3b6bc8;
+
+    --agent-gpt: #0d8968;
+    --agent-gpt-bg: #ecfdf5;
+    --agent-gpt-border: #d1f4e8;
+    --agent-gpt-hover: #0a7355;
+
+    --agent-amp: #7c3aed;
+    --agent-amp-bg: #f5f3ff;
+    --agent-amp-border: #e9d5ff;
+    --agent-amp-hover: #6d28d9;
+
+    --agent-o1: #dc2626;
+    --agent-o1-bg: #fef2f2;
+    --agent-o1-border: #fecaca;
+    --agent-o1-hover: #b91c1c;
+
+    --agent-default: #64748b;
+    --agent-default-bg: #f8fafc;
+    --agent-default-border: #e2e8f0;
+    --agent-default-hover: #475569;
+
+    /* Status Colors */
+    --status-active: #22c55e;
+    --status-active-bg: #f0fdf4;
+    --status-active-border: #bbf7d0;
+
+    --status-completed: #3b82f6;
+    --status-completed-bg: #eff6ff;
+    --status-completed-border: #bfdbfe;
+
+    --status-error: #ef4444;
+    --status-error-bg: #fef2f2;
+    --status-error-border: #fecaca;
+
+    --status-interrupted: #f59e0b;
+    --status-interrupted-bg: #fffbeb;
+    --status-interrupted-border: #fef3c7;
+
+    --status-pending: #6b7280;
+    --status-pending-bg: #f9fafb;
+    --status-pending-border: #e5e7eb;
+
+    /* Semantic Colors - Light Mode */
+    --background: #fafafa;
+    --background-elevated: #ffffff;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --border: #e4e4e7;
+    --border-strong: #d4d4d8;
+    --input: #e4e4e7;
+    --input-foreground: #09090b;
+    --ring: #3b82f6;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --success: #22c55e;
+    --success-foreground: #ffffff;
+    --warning: #f59e0b;
+    --warning-foreground: #ffffff;
+
+    /* Code & Syntax Colors - Light Mode */
+    --code-bg: #f8fafc;
+    --code-border: #e2e8f0;
+    --code-foreground: #1e293b;
+    --code-comment: #64748b;
+    --code-keyword: #7c3aed;
+    --code-string: #059669;
+    --code-function: #0284c7;
+    --code-number: #dc2626;
+    --code-operator: #475569;
+    --code-variable: #ea580c;
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Roboto Mono',
+        ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
+        'DejaVu Sans Mono', monospace;
+
+    /* Font Sizes */
+    --text-2xs: 0.6875rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    /* Line Heights */
+    --leading-none: 1;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose: 2;
+
+    /* Font Weights */
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+
+    /* Letter Spacing */
+    --tracking-tighter: -0.05em;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
+
+    /* ========================================
+       SPACING SCALE
+       ======================================== */
+
+    --space-0: 0px;
+    --space-px: 1px;
+    --space-0-5: 0.125rem;
+    --space-1: 0.25rem;
+    --space-1-5: 0.375rem;
+    --space-2: 0.5rem;
+    --space-2-5: 0.625rem;
+    --space-3: 0.75rem;
+    --space-3-5: 0.875rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-7: 1.75rem;
+    --space-8: 2rem;
+    --space-9: 2.25rem;
+    --space-10: 2.5rem;
+    --space-11: 2.75rem;
+    --space-12: 3rem;
+    --space-14: 3.5rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+    --space-32: 8rem;
+
+    /* ========================================
+       BORDER RADIUS
+       ======================================== */
+
+    --radius-none: 0px;
+    --radius-sm: 0.125rem;
+    --radius-DEFAULT: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* ========================================
+       SHADOWS
+       ======================================== */
+
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-DEFAULT: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 6px 16px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 24px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 32px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -8px rgba(0, 0, 0, 0.08);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+    --shadow-inner-lg: inset 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+
+    /* ========================================
+       TRANSITIONS
+       ======================================== */
+
+    --transition-fast: 100ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ========================================
+       Z-INDEX SCALE
+       ======================================== */
+
+    --z-base: 0;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-fixed: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-tooltip: 70;
+
+    /* ========================================
+       FOCUS RINGS
+       ======================================== */
+
+    --ring-width: 2px;
+    --ring-offset: 2px;
+    --ring-offset-color: var(--background);
+  }
+
+  /* Dark Mode Variables */
+  .dark {
+    --background: #09090b;
+    --background-elevated: #18181b;
+    --foreground: #fafafa;
+    --card: #18181b;
+    --card-foreground: #fafafa;
+    --border: #27272a;
+    --border-strong: #3f3f46;
+    --input: #27272a;
+    --input-foreground: #fafafa;
+    --ring: #3b82f6;
+    --muted: #18181b;
+    --muted-foreground: #a1a1aa;
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fca5a5;
+    --success: #14532d;
+    --success-foreground: #86efac;
+    --warning: #78350f;
+    --warning-foreground: #fcd34d;
+
+    /* Agent Colors - Dark Mode */
+    --agent-claude: #e89b7d;
+    --agent-claude-bg: #2d1f1a;
+    --agent-claude-border: #4a2f26;
+    --agent-claude-hover: #f4b396;
+
+    --agent-gemini: #8ab4f8;
+    --agent-gemini-bg: #1a2332;
+    --agent-gemini-border: #2a3a4f;
+    --agent-gemini-hover: #a4c7fa;
+
+    --agent-gpt: #34d399;
+    --agent-gpt-bg: #1a2d27;
+    --agent-gpt-border: #264d3f;
+    --agent-gpt-hover: #6ee7b7;
+
+    --agent-amp: #a78bfa;
+    --agent-amp-bg: #231d32;
+    --agent-amp-border: #3a2f4f;
+    --agent-amp-hover: #c4b5fd;
+
+    --agent-o1: #f87171;
+    --agent-o1-bg: #2d1a1a;
+    --agent-o1-border: #4f2626;
+    --agent-o1-hover: #fca5a5;
+
+    --agent-default: #94a3b8;
+    --agent-default-bg: #1e293b;
+    --agent-default-border: #334155;
+    --agent-default-hover: #cbd5e1;
+
+    /* Status Colors - Dark Mode */
+    --status-active: #4ade80;
+    --status-active-bg: #14532d;
+    --status-active-border: #166534;
+
+    --status-completed: #60a5fa;
+    --status-completed-bg: #1e3a8a;
+    --status-completed-border: #1e40af;
+
+    --status-error: #f87171;
+    --status-error-bg: #7f1d1d;
+    --status-error-border: #991b1b;
+
+    --status-interrupted: #fbbf24;
+    --status-interrupted-bg: #78350f;
+    --status-interrupted-border: #92400e;
+
+    --status-pending: #9ca3af;
+    --status-pending-bg: #1f2937;
+    --status-pending-border: #374151;
+
+    /* Code & Syntax Colors - Dark Mode */
+    --code-bg: #0f172a;
+    --code-border: #1e293b;
+    --code-foreground: #e2e8f0;
+    --code-comment: #94a3b8;
+    --code-keyword: #a78bfa;
+    --code-string: #34d399;
+    --code-function: #38bdf8;
+    --code-number: #f87171;
+    --code-operator: #cbd5e1;
+    --code-variable: #fb923c;
+
+    /* Adjust shadows for dark mode */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+    --shadow-DEFAULT: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 16px -2px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 24px -4px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 32px -8px rgba(0, 0, 0, 0.7), 0 8px 16px -8px rgba(0, 0, 0, 0.5);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  }
+
+  /* System preference support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --background: #09090b;
+      --background-elevated: #18181b;
+      --foreground: #fafafa;
+      --card: #18181b;
+      --card-foreground: #fafafa;
+      --border: #27272a;
+      --border-strong: #3f3f46;
+      --input: #27272a;
+      --input-foreground: #fafafa;
+      --muted: #18181b;
+      --muted-foreground: #a1a1aa;
+      --accent: #27272a;
+      --accent-foreground: #fafafa;
+    }
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  /* ========================================
+     ANIMATIONS & KEYFRAMES
+     ======================================== */
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes skeleton-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Realtime message animation */
+  @keyframes message-appear {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* WebSocket connection pulse */
+  @keyframes connection-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+  }
 }
 
 @layer utilities {

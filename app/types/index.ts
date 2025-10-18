@@ -24,7 +24,7 @@ export interface ResponseMetrics {
   inputTokens?: number;
   outputTokens?: number;
   totalTokens?: number;
-  model?: string;
+  model?: string;           // AI model: "claude-sonnet-4", "gpt-4-turbo", etc.
   cost?: number;            // USD
 }
 
@@ -33,7 +33,8 @@ export interface Message {
   conversationId: string;
   agentId: string;
   agentName: string;
-  agentType: string;
+  agentType: string;          // Agent type: "claude", "amp", "gemini", etc.
+  agentVersion?: string;      // Agent software version: "1.2.0", "0.5.0", etc.
   content: string;
   role: MessageRole;
   timestamp: Date;
@@ -44,9 +45,10 @@ export interface ConversationAgent {
   id: string;
   conversationId: string;
   agentId: string;
-  agentType: string;
+  agentType: string;          // Agent type: "claude", "amp", "gemini", etc.
   agentName: string;
-  model?: string;
+  agentVersion?: string;      // Agent software version: "1.2.0", "0.5.0", etc.
+  model?: string;             // AI model: "claude-sonnet-4", "gpt-4-turbo", etc.
   prompt?: string;
   announcement?: string;
 }

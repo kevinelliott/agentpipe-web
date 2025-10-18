@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
 import { ConversationStatus } from '@prisma/client';
+import { spawnAgentPipeContainer, type AgentConfig } from '@/app/lib/docker';
 
 /**
  * GET /api/conversations
@@ -90,12 +91,16 @@ export async function GET(request: NextRequest) {
     // Format response
     const data = conversations.map((conv) => ({
       id: conv.id,
+      name: conv.name,
       createdAt: conv.createdAt,
       updatedAt: conv.updatedAt,
       startedAt: conv.startedAt,
       completedAt: conv.completedAt,
       status: conv.status,
       mode: conv.mode,
+      containerId: conv.containerId,
+      containerStatus: conv.containerStatus,
+      errorMessage: conv.errorMessage,
       totalMessages: conv.totalMessages,
       totalTokens: conv.totalTokens,
       totalCost: conv.totalCost,
@@ -123,24 +128,44 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/conversations
- * Create a new conversation (used by AgentPipe bridge)
+ * Create a new conversation and spawn an AgentPipe Docker container
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Validate required fields
+    if (!body.name || !body.mode || !body.initialPrompt) {
+      return NextResponse.json(
+        { error: 'Missing required fields: name, mode, initialPrompt' },
+        { status: 400 }
+      );
+    }
+
+    // Validate mode
+    const validModes = ['round-robin', 'reactive', 'free-form'];
+    if (!validModes.includes(body.mode)) {
+      return NextResponse.json(
+        { error: 'Invalid mode. Must be one of: round-robin, reactive, free-form' },
+        { status: 400 }
+      );
+    }
+
+    // Create conversation in database
     const conversation = await prisma.conversation.create({
       data: {
+        name: body.name,
         mode: body.mode,
-        maxTurns: body.maxTurns,
+        maxTurns: body.maxTurns || 10, // Default to 10 if not specified
         initialPrompt: body.initialPrompt,
         status: 'ACTIVE',
+        containerStatus: 'starting',
         metadata: body.metadata || {},
         participants: {
-          create: body.participants?.map((p: any) => ({
-            agentId: p.agentId,
-            agentType: p.agentType,
-            agentName: p.agentName,
+          create: body.participants?.map((p: any, index: number) => ({
+            agentId: p.agentId || `agent-${index}`,
+            agentType: p.agentType || p.type,
+            agentName: p.agentName || p.name || `${p.type}-${index}`,
             model: p.model,
             prompt: p.prompt,
             announcement: p.announcement,
@@ -153,11 +178,84 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(conversation, { status: 201 });
+    // Prepare agents for Docker spawn
+    const agents: AgentConfig[] = (body.participants || []).map((p: any) => ({
+      type: p.agentType || p.type,
+      model: p.model,
+      name: p.agentName || p.name,
+      prompt: p.prompt,
+    }));
+
+    // Spawn Docker container with AgentPipe
+    const dockerResult = await spawnAgentPipeContainer(conversation.id, {
+      mode: body.mode,
+      maxTurns: body.maxTurns,
+      initialPrompt: body.initialPrompt,
+      agents,
+    });
+
+    // Update conversation with container information
+    const updatedConversation = await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: {
+        containerId: dockerResult.containerId || null,
+        containerStatus: dockerResult.success ? 'running' : 'error',
+        status: dockerResult.success ? 'ACTIVE' : 'ERROR',
+        errorMessage: dockerResult.error || null,
+        errorStack: dockerResult.errorStack || null,
+      },
+      include: {
+        participants: true,
+      },
+    });
+
+    // Log event
+    await prisma.event.create({
+      data: {
+        type: 'conversation.created',
+        conversationId: conversation.id,
+        data: {
+          conversationId: conversation.id,
+          mode: body.mode,
+          agentCount: agents.length,
+          containerSuccess: dockerResult.success,
+        },
+        errorMessage: dockerResult.error || null,
+        errorStack: dockerResult.errorStack || null,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        conversation: updatedConversation,
+        success: dockerResult.success,
+        error: dockerResult.error,
+      },
+      { status: dockerResult.success ? 201 : 500 }
+    );
   } catch (error) {
     console.error('Error creating conversation:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    // Log error event
+    await prisma.event.create({
+      data: {
+        type: 'conversation.error',
+        data: {
+          error: errorMessage,
+        },
+        errorMessage,
+        errorStack,
+      },
+    });
+
     return NextResponse.json(
-      { error: 'Failed to create conversation' },
+      {
+        error: 'Failed to create conversation',
+        details: errorMessage,
+      },
       { status: 500 }
     );
   }
