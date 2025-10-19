@@ -12,6 +12,48 @@ AgentPipe Web is a Next.js 15 application that serves as both a marketing websit
 - Can spawn and manage AgentPipe Docker containers
 - Tracks token costs, performance metrics, and agent/model versions
 
+## Development Workflow
+
+**IMPORTANT: All changes must pass quality checks before committing or merging:**
+
+### Required Checks
+Before any code change is considered complete, the following must pass:
+
+1. **Linting**: Code must pass ESLint checks
+   ```bash
+   make lint
+   npm run lint
+   ```
+
+2. **Type Checking**: TypeScript must compile without errors
+   ```bash
+   npx tsc --noEmit
+   ```
+
+3. **Build**: Production build must succeed
+   ```bash
+   make build
+   npm run build
+   ```
+
+4. **Tests**: All tests must pass (when test suite exists)
+   ```bash
+   npm test
+   ```
+
+### CI Pipeline
+The CI pipeline (`.github/workflows/ci.yml`) automatically runs all these checks on:
+- Every pull request
+- Every push to `main` or `develop` branches
+
+**Pull requests cannot be merged if CI checks fail.**
+
+### Quick Check All
+Run all CI checks locally before pushing:
+```bash
+make ci-test  # Runs: install + lint + build
+```
+
 ## Common Commands
 
 ### Development
@@ -127,7 +169,7 @@ User creates conversation
   ↓ POST /api/conversations
 app/lib/docker.ts spawns container
   ↓
-Docker CLI: docker run agentpipe/agentpipe:latest
+Docker CLI: docker run kevinelliott/agentpipe:latest
   ↓
 Container ID stored in Conversation.containerId
 ```
