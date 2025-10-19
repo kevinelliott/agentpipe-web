@@ -129,7 +129,7 @@ The web application can spawn AgentPipe containers via the mounted Docker socket
 ### Requirements
 
 For AgentPipe containers to work:
-1. The `agentpipe/agentpipe:latest` image must be available
+1. The `kevinelliott/agentpipe:latest` image must be available
 2. Any required API keys should be passed as environment variables
 3. The containers need network access to AI provider APIs
 
