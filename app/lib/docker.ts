@@ -79,7 +79,7 @@ export async function spawnAgentPipeContainer(
       // Environment variables
       '-e', `CONVERSATION_ID=${conversationId}`,
       // AgentPipe Docker image
-      'agentpipe/agentpipe:latest',
+      'kevinelliott/agentpipe:latest',
       // AgentPipe arguments
       ...args,
     ].join(' ');

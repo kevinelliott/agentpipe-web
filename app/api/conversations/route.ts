@@ -239,17 +239,21 @@ export async function POST(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorStack = error instanceof Error ? error.stack : undefined;
 
-    // Log error event
-    await prisma.event.create({
-      data: {
-        type: 'conversation.error',
+    // Try to log error event (don't throw if this fails)
+    try {
+      await prisma.event.create({
         data: {
-          error: errorMessage,
+          type: 'conversation.error',
+          data: {
+            error: errorMessage,
+          },
+          errorMessage,
+          errorStack,
         },
-        errorMessage,
-        errorStack,
-      },
-    });
+      });
+    } catch (eventError) {
+      console.error('Failed to log error event:', eventError);
+    }
 
     return NextResponse.json(
       {
