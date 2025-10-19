@@ -27,6 +27,7 @@ export function MessageBubble({
     gemini: 'bg-agent-gemini-bg border-agent-gemini-border',
     gpt: 'bg-agent-gpt-bg border-agent-gpt-border',
     amp: 'bg-agent-amp-bg border-agent-amp-border',
+    factory: 'bg-agent-factory-bg border-agent-factory-border',
     o1: 'bg-agent-o1-bg border-agent-o1-border',
     default: 'bg-agent-default-bg border-agent-default-border',
   };

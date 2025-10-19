@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '../../components/ui/Input';
 import { Textarea } from '../../components/ui/Textarea';
@@ -8,6 +8,7 @@ import { Select } from '../../components/ui/Select';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { AgentAvatar, type AgentType } from '../../components/agent/AgentAvatar';
+import { useAvailableAgents } from '../../hooks/useAvailableAgents';
 
 interface Agent {
   id: string;
@@ -22,6 +23,7 @@ const AGENT_TYPES = [
   { value: 'claude', label: 'Claude CLI', provider: 'Anthropic' },
   { value: 'copilot', label: 'GitHub Copilot CLI', provider: 'GitHub' },
   { value: 'cursor', label: 'Cursor CLI', provider: 'Cursor' },
+  { value: 'factory', label: 'Factory CLI', provider: 'Factory.ai' },
   { value: 'gemini', label: 'Gemini CLI', provider: 'Google' },
   { value: 'qoder', label: 'Qoder CLI', provider: 'Qoder' },
   { value: 'qwen', label: 'Qwen CLI', provider: 'Alibaba Cloud' },
@@ -42,6 +44,11 @@ const MODEL_OPTIONS: Record<string, { value: string; label: string }[]> = {
   ],
   cursor: [
     { value: 'cursor-default', label: 'Cursor Default' },
+  ],
+  factory: [
+    { value: 'factory-default', label: 'Factory Default' },
+    { value: 'claude-sonnet-4.5', label: 'Claude Sonnet 4.5' },
+    { value: 'gpt-4', label: 'GPT-4' },
   ],
   gemini: [
     { value: 'gemini-pro-1.5', label: 'Gemini Pro 1.5' },
@@ -82,27 +89,46 @@ const MODES = [
 
 export default function NewConversation() {
   const router = useRouter();
+  const { agents: availableAgents, unavailableAgents, isLoading: agentsLoading, error: agentsError } = useAvailableAgents();
+
   const [name, setName] = useState('');
   const [initialPrompt, setInitialPrompt] = useState('');
   const [mode, setMode] = useState<string>('round-robin');
-  const [agents, setAgents] = useState<Agent[]>([
-    {
-      id: '1',
-      type: 'amp',
-      model: 'amp-default',
-      name: '',
-      prompt: '',
-    },
-  ]);
+  const [agents, setAgents] = useState<Agent[]>([]);
   const [maxTurns, setMaxTurns] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Initialize with first available agent when data loads
+  useEffect(() => {
+    if (availableAgents.length > 0 && agents.length === 0) {
+      const firstAgent = availableAgents[0];
+      const firstModel = MODEL_OPTIONS[firstAgent.type]?.[0]?.value || '';
+
+      setAgents([
+        {
+          id: '1',
+          type: firstAgent.type as AgentType,
+          model: firstModel,
+          name: '',
+          prompt: '',
+        },
+      ]);
+    }
+  }, [availableAgents, agents.length]);
+
   const addAgent = () => {
+    if (availableAgents.length === 0) {
+      return; // Don't add if no agents available
+    }
+
+    const firstAgent = availableAgents[0];
+    const firstModel = MODEL_OPTIONS[firstAgent.type]?.[0]?.value || '';
+
     const newAgent: Agent = {
       id: Date.now().toString(),
-      type: 'amp',
-      model: 'amp-default',
+      type: firstAgent.type as AgentType,
+      model: firstModel,
       name: '',
       prompt: '',
     };
@@ -263,8 +289,51 @@ export default function NewConversation() {
               </p>
             </div>
 
+            {/* Loading State */}
+            {agentsLoading && (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+                <span className="ml-3 text-muted-foreground">Loading available agents...</span>
+              </div>
+            )}
+
+            {/* Error State */}
+            {agentsError && (
+              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-4">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-destructive mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <div>
+                    <p className="font-medium text-destructive">Failed to load available agents</p>
+                    <p className="text-sm text-muted-foreground mt-1">{agentsError}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Make sure AgentPipe is installed: <code className="bg-muted px-1 py-0.5 rounded">npm install -g agentpipe</code>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Unavailable Agents Warning */}
+            {unavailableAgents.length > 0 && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 mb-4">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p className="font-medium text-amber-900 dark:text-amber-100">Some agents are not available</p>
+                    <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
+                      {unavailableAgents.map((a) => a.name).join(', ')} {unavailableAgents.length === 1 ? 'is' : 'are'} not installed or configured.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="space-y-3">
-              {agents.map((agent, index) => (
+              {!agentsLoading && agents.map((agent, index) => (
                 <div
                   key={agent.id}
                   className="bg-muted/20 border border-border rounded-lg p-4"
@@ -295,10 +364,11 @@ export default function NewConversation() {
                       label="Agent Type"
                       value={agent.type}
                       onChange={(value) => updateAgent(agent.id, 'type', value)}
-                      options={AGENT_TYPES.map((t) => ({
-                        value: t.value,
-                        label: `${t.label} (${t.provider})`,
+                      options={availableAgents.map((a) => ({
+                        value: a.type,
+                        label: `${a.name}${a.version ? ` v${a.version}` : ''}`,
                       }))}
+                      disabled={agentsLoading || availableAgents.length === 0}
                     />
 
                     <Select
@@ -332,6 +402,7 @@ export default function NewConversation() {
                 type="button"
                 variant="outline"
                 onClick={addAgent}
+                disabled={agentsLoading || availableAgents.length === 0}
                 className="w-full"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AgentPipe Web is a Next.js 15 application that serves as both a marketing website and realtime dashboard for AgentPipe - a multi-agent AI orchestration platform. It displays live conversations between multiple AI agents (Claude, GPT-4, Gemini, etc.) and provides historical search and analytics.
+AgentPipe Web is a Next.js 15 application that serves as both a marketing website and realtime dashboard for AgentPipe - a multi-agent AI orchestration platform. It displays live conversations between 9 AI CLI tools (Amp, Claude, Copilot, Cursor, Factory, Gemini, Qoder, Qwen, Codex) and provides historical search and analytics.
 
 **Key Characteristics:**
 - Privacy-first: Opt-in data collection model - never collects API keys, config files, or sensitive data
@@ -202,10 +202,10 @@ Used in `/api/ingest` to broadcast database writes to all connected SSE clients.
 ### Agent Color System
 Each agent type has dedicated CSS variables in `app/globals.css`:
 - `--agent-claude`, `--agent-claude-bg`, `--agent-claude-border`, etc.
-- `--agent-gpt`, `--agent-gemini`, `--agent-amp`, `--agent-o1`, `--agent-default`
+- `--agent-gpt`, `--agent-gemini`, `--agent-amp`, `--agent-factory`, `--agent-o1`, `--agent-default`
 - Status colors: `--status-active`, `--status-completed`, `--status-error`, etc.
 
-Components use Tailwind classes like `bg-agent-claude` or `text-status-active`.
+Components use Tailwind classes like `bg-agent-claude` or `bg-agent-factory` or `text-status-active`.
 
 ### Tailwind CSS v4 Configuration
 Uses `@tailwindcss/postcss` v4 - configuration is in CSS, not JavaScript:

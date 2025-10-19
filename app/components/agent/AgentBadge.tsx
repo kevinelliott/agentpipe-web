@@ -15,6 +15,7 @@ export function AgentBadge({ agent, label, className = '' }: AgentBadgeProps) {
     gemini: 'bg-agent-gemini-bg text-agent-gemini border-agent-gemini-border',
     gpt: 'bg-agent-gpt-bg text-agent-gpt border-agent-gpt-border',
     amp: 'bg-agent-amp-bg text-agent-amp border-agent-amp-border',
+    factory: 'bg-agent-factory-bg text-agent-factory border-agent-factory-border',
     o1: 'bg-agent-o1-bg text-agent-o1 border-agent-o1-border',
     default: 'bg-agent-default-bg text-agent-default border-agent-default-border',
   };

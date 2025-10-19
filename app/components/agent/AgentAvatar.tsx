@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type AgentType = 'claude' | 'gemini' | 'gpt' | 'amp' | 'o1' | 'default';
+export type AgentType = 'claude' | 'gemini' | 'gpt' | 'amp' | 'factory' | 'o1' | 'default';
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 interface AgentAvatarProps {
@@ -15,6 +15,7 @@ const agentLabels: Record<AgentType, string> = {
   gemini: 'GM',
   gpt: 'GP',
   amp: 'AM',
+  factory: 'FA',
   o1: 'O1',
   default: 'DF',
 };
@@ -24,6 +25,7 @@ const agentNames: Record<AgentType, string> = {
   gemini: 'Gemini',
   gpt: 'GPT',
   amp: 'AMP',
+  factory: 'Factory',
   o1: 'O1',
   default: 'Default',
 };
@@ -48,6 +50,7 @@ export function AgentAvatar({
     gemini: 'bg-agent-gemini-bg text-agent-gemini border-agent-gemini-border hover:bg-agent-gemini-border',
     gpt: 'bg-agent-gpt-bg text-agent-gpt border-agent-gpt-border hover:bg-agent-gpt-border',
     amp: 'bg-agent-amp-bg text-agent-amp border-agent-amp-border hover:bg-agent-amp-border',
+    factory: 'bg-agent-factory-bg text-agent-factory border-agent-factory-border hover:bg-agent-factory-border',
     o1: 'bg-agent-o1-bg text-agent-o1 border-agent-o1-border hover:bg-agent-o1-border',
     default: 'bg-agent-default-bg text-agent-default border-agent-default-border hover:bg-agent-default-border',
   };

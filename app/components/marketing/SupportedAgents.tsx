@@ -59,6 +59,24 @@ const agents = [
     description: 'AI-first code editor with CLI support',
   },
   {
+    name: 'Factory CLI',
+    provider: 'Factory.ai',
+    url: 'https://factory.ai',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
+        <rect x="5" y="2" width="14" height="7" rx="1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M5 9v10a2 2 0 002 2h10a2 2 0 002-2V9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="9" cy="14" r="1" fill="currentColor"/>
+        <circle cx="15" cy="14" r="1" fill="currentColor"/>
+        <path d="M9 18h6" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    ),
+    color: 'text-[#0891b2]',
+    bgColor: 'bg-[#ecfeff]',
+    borderColor: 'border-[#cffafe]',
+    description: 'Agent-native software development with Code and Knowledge Droids',
+  },
+  {
     name: 'Gemini CLI',
     provider: 'Google',
     url: 'https://ai.google.dev',

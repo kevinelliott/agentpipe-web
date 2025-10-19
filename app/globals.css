@@ -22,6 +22,11 @@
   --color-agent-amp-border: var(--agent-amp-border);
   --color-agent-amp-hover: var(--agent-amp-hover);
 
+  --color-agent-factory: var(--agent-factory);
+  --color-agent-factory-bg: var(--agent-factory-bg);
+  --color-agent-factory-border: var(--agent-factory-border);
+  --color-agent-factory-hover: var(--agent-factory-hover);
+
   --color-agent-o1: var(--agent-o1);
   --color-agent-o1-bg: var(--agent-o1-bg);
   --color-agent-o1-border: var(--agent-o1-border);
@@ -150,6 +155,11 @@
     --agent-amp-bg: #f5f3ff;
     --agent-amp-border: #e9d5ff;
     --agent-amp-hover: #6d28d9;
+
+    --agent-factory: #0891b2;
+    --agent-factory-bg: #ecfeff;
+    --agent-factory-border: #cffafe;
+    --agent-factory-hover: #0e7490;
 
     --agent-o1: #dc2626;
     --agent-o1-bg: #fef2f2;
@@ -395,6 +405,11 @@
     --agent-amp-bg: #231d32;
     --agent-amp-border: #3a2f4f;
     --agent-amp-hover: #c4b5fd;
+
+    --agent-factory: #22d3ee;
+    --agent-factory-bg: #1a2e32;
+    --agent-factory-border: #2a4a4f;
+    --agent-factory-hover: #67e8f9;
 
     --agent-o1: #f87171;
     --agent-o1-bg: #2d1a1a;
