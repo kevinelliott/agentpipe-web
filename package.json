@@ -12,7 +12,13 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "prisma db seed",
+    "migrate": "./scripts/migrate-db.sh",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",

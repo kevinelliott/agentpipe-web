@@ -49,18 +49,40 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` and add your configuration:
-- Supabase credentials
-- Database URL
-- AgentPipe bridge API key
+Edit `.env` and configure your database:
+
+**Option A: Local PostgreSQL**
+```bash
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/agentpipe
+DIRECT_URL=postgresql://postgres:postgres@localhost:5432/agentpipe
+```
+
+**Option B: Supabase (Recommended for Production)**
+
+See [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for detailed setup instructions.
+
+```bash
+# Get these from your Supabase project dashboard
+DATABASE_URL=postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+```
+
+Also configure:
+```bash
+# Generate a secure API key for AgentPipe bridge
+AGENTPIPE_BRIDGE_API_KEY=ap_test_$(node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))")
+```
 
 4. Set up the database:
 ```bash
-# Generate Prisma client
-npx prisma generate
+# Run the interactive migration script
+npm run migrate
 
-# Run migrations
-npx prisma migrate dev --name init
+# Or manually:
+npx prisma generate     # Generate Prisma client
+npx prisma db push      # Quick setup (no migration history)
+# OR
+npx prisma migrate dev  # Full migrations (recommended)
 ```
 
 5. Run the development server:
@@ -93,16 +115,61 @@ agentpipe-web/
 └── package.json
 ```
 
-## Database Schema
+## Database Setup
 
-The application uses Prisma with PostgreSQL and includes the following models:
+### Local PostgreSQL
+
+Install PostgreSQL locally:
+
+```bash
+# macOS (Homebrew)
+brew install postgresql@16
+brew services start postgresql@16
+
+# Ubuntu/Debian
+sudo apt-get install postgresql-16
+sudo systemctl start postgresql
+
+# Create database
+createdb agentpipe
+```
+
+### Supabase (Production)
+
+For production deployments, we recommend Supabase:
+
+1. Create account at [supabase.com](https://supabase.com)
+2. Create new project
+3. Get connection strings from Settings → Database
+4. Follow [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for complete setup
+
+### Database Schema
+
+The application uses Prisma with PostgreSQL and includes:
 
 - **Conversation**: Metadata and configuration for multi-agent conversations
 - **Message**: Individual messages from agents with metrics
 - **ConversationAgent**: Participant information for each conversation
 - **Event**: System events and error tracking
+- **Setting**: Application and user settings
 
 See `prisma/schema.prisma` for the complete schema.
+
+### Database Commands
+
+```bash
+# Interactive migration helper
+npm run migrate
+
+# Specific operations
+npm run db:generate          # Generate Prisma Client
+npm run db:push             # Push schema to database (quick)
+npm run db:migrate          # Create migration (dev)
+npm run db:migrate:deploy   # Deploy migrations (production)
+npm run db:migrate:status   # Check migration status
+npm run db:studio          # Open Prisma Studio (database GUI)
+npm run db:reset           # Reset database (⚠️ deletes all data)
+```
 
 ## API Documentation
 
@@ -165,29 +232,33 @@ npx prisma studio
 
 ## Deployment
 
-### Vercel (Recommended)
+For production deployment, see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for platform-specific guides.
 
-1. Push your code to GitHub
-2. Import the project in Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy
+### Quick Deploy Options
 
-### Docker
-
-The easiest way to run AgentPipe Web is using Docker Compose:
-
+**Vercel (Recommended)**
 ```bash
-# Start all services (web app + database)
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
-docker-compose down
+npm i -g vercel
+vercel
 ```
 
-See [docker.md](docs/docker.md) for complete Docker setup and usage guide.
+**Netlify**
+```bash
+npm i -g netlify-cli
+netlify deploy --prod
+```
+
+**Railway**
+- Connect your GitHub repo
+- Add PostgreSQL database
+- Deploy automatically
+
+**Docker**
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for complete deployment instructions for each platform.
 
 ## Contributing
 
