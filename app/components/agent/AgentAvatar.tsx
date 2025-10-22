@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type AgentType = 'claude' | 'gemini' | 'gpt' | 'amp' | 'factory' | 'o1' | 'default';
+export type AgentType = 'amp' | 'claude' | 'copilot' | 'cursor' | 'factory' | 'gemini' | 'gpt' | 'o1' | 'opencode' | 'ollama' | 'qoder' | 'qwen' | 'codex' | 'default';
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 interface AgentAvatarProps {
@@ -11,22 +11,36 @@ interface AgentAvatarProps {
 }
 
 const agentLabels: Record<AgentType, string> = {
+  amp: 'AM',
   claude: 'CL',
+  copilot: 'CP',
+  cursor: 'CR',
+  factory: 'FA',
   gemini: 'GM',
   gpt: 'GP',
-  amp: 'AM',
-  factory: 'FA',
   o1: 'O1',
+  opencode: 'OC',
+  ollama: 'OL',
+  qoder: 'QD',
+  qwen: 'QW',
+  codex: 'CD',
   default: 'DF',
 };
 
 const agentNames: Record<AgentType, string> = {
+  amp: 'Amp',
   claude: 'Claude',
+  copilot: 'Copilot',
+  cursor: 'Cursor',
+  factory: 'Factory',
   gemini: 'Gemini',
   gpt: 'GPT',
-  amp: 'AMP',
-  factory: 'Factory',
   o1: 'O1',
+  opencode: 'OpenCode',
+  ollama: 'Ollama',
+  qoder: 'Qoder',
+  qwen: 'Qwen',
+  codex: 'Codex',
   default: 'Default',
 };
 
@@ -52,6 +66,13 @@ export function AgentAvatar({
     amp: 'bg-agent-amp-bg text-agent-amp border-agent-amp-border hover:bg-agent-amp-border',
     factory: 'bg-agent-factory-bg text-agent-factory border-agent-factory-border hover:bg-agent-factory-border',
     o1: 'bg-agent-o1-bg text-agent-o1 border-agent-o1-border hover:bg-agent-o1-border',
+    copilot: 'bg-agent-copilot-bg text-agent-copilot border-agent-copilot-border hover:bg-agent-copilot-border',
+    cursor: 'bg-agent-cursor-bg text-agent-cursor border-agent-cursor-border hover:bg-agent-cursor-border',
+    qoder: 'bg-agent-qoder-bg text-agent-qoder border-agent-qoder-border hover:bg-agent-qoder-border',
+    qwen: 'bg-agent-qwen-bg text-agent-qwen border-agent-qwen-border hover:bg-agent-qwen-border',
+    codex: 'bg-agent-codex-bg text-agent-codex border-agent-codex-border hover:bg-agent-codex-border',
+    opencode: 'bg-agent-opencode-bg text-agent-opencode border-agent-opencode-border hover:bg-agent-opencode-border',
+    ollama: 'bg-agent-ollama-bg text-agent-ollama border-agent-ollama-border hover:bg-agent-ollama-border',
     default: 'bg-agent-default-bg text-agent-default border-agent-default-border hover:bg-agent-default-border',
   };
 

@@ -1,0 +1,464 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { MessageBubble } from '@/app/components/agent/MessageBubble';
+import { AgentAvatar, type AgentType } from '@/app/components/agent/AgentAvatar';
+import { StatusDot, type StatusType } from '@/app/components/status/StatusDot';
+import { Badge } from '@/app/components/ui/Badge';
+import { Button } from '@/app/components/ui/Button';
+import { Skeleton } from '@/app/components/status/Skeleton';
+import { MetricCard } from '@/app/components/metrics/MetricCard';
+import { WebSocketStatus } from '@/app/components/status/WebSocketStatus';
+import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
+
+interface Participant {
+  id: string;
+  agentId: string;
+  agentType: string;
+  agentName: string;
+  agentVersion: string | null;
+  model: string | null;
+  prompt: string | null;
+  announcement: string | null;
+  cliVersion: string | null;
+}
+
+interface Message {
+  id: string;
+  agentId: string;
+  agentName: string;
+  agentType: string;
+  agentVersion: string | null;
+  content: string;
+  role: string;
+  timestamp: string;
+  sequenceNumber: number | null;
+  turnNumber: number | null;
+  duration: number | null;
+  inputTokens: number | null;
+  outputTokens: number | null;
+  totalTokens: number | null;
+  model: string | null;
+  cost: number | null;
+}
+
+interface SessionDetail {
+  id: string;
+  name: string;
+  mode: string;
+  status: string;
+  source: string;
+  startedAt: string;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  initialPrompt: string;
+  maxTurns: number | null;
+  totalMessages: number;
+  totalTokens: number;
+  totalCost: number;
+  totalDuration: number;
+  containerId: string | null;
+  containerStatus: string | null;
+  errorMessage: string | null;
+  errorStack: string | null;
+  agentpipeVersion: string | null;
+  systemOS: string | null;
+  systemOSVersion: string | null;
+  systemGoVersion: string | null;
+  systemArchitecture: string | null;
+  participants: Participant[];
+  messages: Message[];
+}
+
+export default function SessionDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const sessionId = params.id as string;
+
+  const [session, setSession] = useState<SessionDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Fetch session details
+  const fetchSession = useCallback(async (showLoading = true) => {
+    try {
+      if (showLoading) {
+        setIsLoading(true);
+      } else {
+        setIsUpdating(true);
+      }
+      setError(null);
+
+      const response = await fetch(`/api/sessions/${sessionId}`);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Session not found');
+        }
+        throw new Error('Failed to fetch session');
+      }
+
+      const data: SessionDetail = await response.json();
+      setSession(data);
+    } catch (err) {
+      console.error('Error fetching session:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load session');
+    } finally {
+      if (showLoading) {
+        setIsLoading(false);
+      } else {
+        setIsUpdating(false);
+      }
+    }
+  }, [sessionId]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchSession();
+  }, [fetchSession]);
+
+  // Real-time updates - subscribe to events for this specific conversation
+  const { isConnected } = useRealtimeEvents({
+    conversationId: sessionId,
+    onMessageCreated: (data) => {
+      console.log('[SessionDetail] New message received:', data);
+      // Refetch session to get the new message (without showing loading state)
+      fetchSession(false);
+    },
+    onConversationCompleted: (data) => {
+      console.log('[SessionDetail] Conversation completed:', data);
+      // Refetch session to get final status and metrics (without showing loading state)
+      fetchSession(false);
+    },
+    onConversationInterrupted: (data) => {
+      console.log('[SessionDetail] Conversation interrupted:', data);
+      // Refetch session to get updated status (without showing loading state)
+      fetchSession(false);
+    },
+    onError: (data) => {
+      console.log('[SessionDetail] Error occurred:', data);
+      // Refetch session to get error state (without showing loading state)
+      fetchSession(false);
+    },
+  });
+
+  // Helper functions
+  const mapStatusToStatusType = (status: string): StatusType => {
+    const statusMap: Record<string, StatusType> = {
+      ACTIVE: 'active',
+      COMPLETED: 'completed',
+      ERROR: 'error',
+      INTERRUPTED: 'interrupted',
+    };
+    return statusMap[status] || 'pending';
+  };
+
+  const mapAgentTypeToAgentType = (agentType: string): AgentType => {
+    const agentMap: Record<string, AgentType> = {
+      claude: 'claude',
+      gemini: 'gemini',
+      gpt: 'gpt',
+      'gpt-4': 'gpt',
+      'gpt-3.5': 'gpt',
+      amp: 'amp',
+      o1: 'o1',
+      copilot: 'copilot',
+      cursor: 'cursor',
+      qoder: 'qoder',
+      qwen: 'qwen',
+      codex: 'codex',
+      opencode: 'opencode',
+      ollama: 'ollama',
+      factory: 'factory',
+    };
+    return agentMap[agentType.toLowerCase()] || 'default';
+  };
+
+  const formatDuration = (ms: number): string => {
+    const seconds = ms / 1000;
+    if (seconds < 60) return `${seconds.toFixed(1)}s`;
+    const minutes = seconds / 60;
+    if (minutes < 60) return `${minutes.toFixed(1)}m`;
+    const hours = minutes / 60;
+    return `${hours.toFixed(1)}h`;
+  };
+
+  const formatTokens = (tokens: number): string => {
+    if (tokens >= 1_000_000) return `${(tokens / 1_000_000).toFixed(2)}M`;
+    if (tokens >= 1_000) return `${(tokens / 1_000).toFixed(1)}K`;
+    return tokens.toString();
+  };
+
+  const getSourceBadgeVariant = (source: string) => {
+    const variants: Record<string, 'default' | 'success' | 'info' | 'warning' | 'error'> = {
+      web: 'info',
+      'cli-stream': 'success',
+      'cli-upload': 'default',
+    };
+    return variants[source] || 'default';
+  };
+
+  const getStatusBadgeVariant = (status: string) => {
+    const variants: Record<string, 'default' | 'success' | 'info' | 'warning' | 'error'> = {
+      ACTIVE: 'success',
+      COMPLETED: 'info',
+      INTERRUPTED: 'warning',
+      ERROR: 'error',
+    };
+    return variants[status] || 'default';
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-5xl">
+          <Skeleton className="h-8 w-48 mb-4" />
+          <Skeleton className="h-32 mb-6" />
+          <Skeleton className="h-96" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !session) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 max-w-5xl">
+          <div className="bg-error/10 border border-error rounded-lg p-8 text-center">
+            <h2 className="text-2xl font-bold text-error mb-2">
+              {error === 'Session not found' ? 'Session Not Found' : 'Error Loading Session'}
+            </h2>
+            <p className="text-muted-foreground mb-4">{error}</p>
+            <Button onClick={() => router.push('/sessions')} variant="outline">
+              Back to Sessions
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              onClick={() => router.push('/sessions')}
+              variant="ghost"
+              size="sm"
+            >
+              ← Back to Sessions
+            </Button>
+            <div className="flex items-center gap-3">
+              {isUpdating && (
+                <span className="text-xs text-muted-foreground animate-pulse">
+                  Updating...
+                </span>
+              )}
+              <WebSocketStatus status={isConnected ? 'connected' : 'disconnected'} />
+            </div>
+          </div>
+
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold mb-2">{session.name}</h1>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <StatusDot status={mapStatusToStatusType(session.status)} pulse={session.status === 'ACTIVE'} />
+                  <span>{session.status}</span>
+                </div>
+                <span>•</span>
+                <span>{session.mode}</span>
+                <span>•</span>
+                <span>Started {new Date(session.startedAt).toLocaleString()}</span>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Badge variant={getSourceBadgeVariant(session.source)}>
+                {session.source}
+              </Badge>
+              <Badge variant={getStatusBadgeVariant(session.status)}>
+                {session.status}
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Initial Prompt */}
+        <div className="bg-card border border-border rounded-lg p-4 mb-6">
+          <h3 className="text-sm font-semibold text-muted-foreground mb-2">Initial Prompt</h3>
+          <p className="text-sm leading-relaxed">{session.initialPrompt}</p>
+        </div>
+
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <MetricCard
+            label="Messages"
+            value={session.totalMessages.toString()}
+          />
+          <MetricCard
+            label="Tokens"
+            value={formatTokens(session.totalTokens)}
+          />
+          <MetricCard
+            label="Cost"
+            value={`$${session.totalCost.toFixed(4)}`}
+          />
+          <MetricCard
+            label="Duration"
+            value={formatDuration(session.totalDuration)}
+          />
+        </div>
+
+        {/* Participants */}
+        <div className="bg-card border border-border rounded-lg p-4 mb-6">
+          <h3 className="text-sm font-semibold mb-4">Participants</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {session.participants.map((participant) => (
+              <div
+                key={participant.id}
+                className="flex items-center gap-3 p-3 rounded-lg bg-muted/50"
+              >
+                <AgentAvatar
+                  agent={mapAgentTypeToAgentType(participant.agentType)}
+                  size="sm"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm truncate">
+                    {participant.agentName}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {participant.model || participant.agentType}
+                    {participant.cliVersion && (
+                      <span className="ml-1">• CLI v{participant.cliVersion}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* System Information */}
+        {(session.agentpipeVersion || session.systemOS) && (
+          <div className="bg-card border border-border rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-semibold mb-4">System Information</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {session.agentpipeVersion && (
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">AgentPipe Version</div>
+                  <div className="font-mono text-sm font-medium">{session.agentpipeVersion}</div>
+                </div>
+              )}
+              {session.systemOS && session.systemOSVersion && (
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Operating System</div>
+                  <div className="font-mono text-sm font-medium">
+                    {session.systemOS} {session.systemOSVersion}
+                  </div>
+                </div>
+              )}
+              {session.systemGoVersion && (
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Go Version</div>
+                  <div className="font-mono text-sm font-medium">{session.systemGoVersion}</div>
+                </div>
+              )}
+              {session.systemArchitecture && (
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Architecture</div>
+                  <div className="font-mono text-sm font-medium">{session.systemArchitecture}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {session.errorMessage && (
+          <div className="bg-error/10 border border-error rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-semibold text-error mb-2">Error</h3>
+            <p className="text-sm text-error">{session.errorMessage}</p>
+          </div>
+        )}
+
+        {/* Messages */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">
+              Conversation ({session.messages.length} messages)
+            </h3>
+            {session.status === 'ACTIVE' && isConnected && (
+              <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Live updates
+              </span>
+            )}
+          </div>
+
+          {session.messages.length === 0 ? (
+            <div className="bg-card border border-border rounded-lg p-8 text-center">
+              <p className="text-muted-foreground">No messages in this conversation yet</p>
+              {session.status === 'ACTIVE' && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Messages will appear here as they arrive
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {session.messages.map((message) => (
+                <MessageBubble
+                  key={message.id}
+                  agent={mapAgentTypeToAgentType(message.agentType)}
+                  agentName={message.agentName}
+                  agentVersion={message.agentVersion}
+                  content={message.content}
+                  timestamp={new Date(message.timestamp)}
+                  tokens={message.totalTokens || undefined}
+                  inputTokens={message.inputTokens || undefined}
+                  outputTokens={message.outputTokens || undefined}
+                  cost={message.cost || undefined}
+                  model={message.model}
+                  duration={message.duration || undefined}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Metadata Footer */}
+        <div className="bg-muted/30 border border-border rounded-lg p-4 text-xs text-muted-foreground">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <div className="font-semibold mb-1">Session ID</div>
+              <div className="font-mono text-xs truncate">{session.id}</div>
+            </div>
+            <div>
+              <div className="font-semibold mb-1">Created</div>
+              <div>{new Date(session.createdAt).toLocaleString()}</div>
+            </div>
+            <div>
+              <div className="font-semibold mb-1">Updated</div>
+              <div>{new Date(session.updatedAt).toLocaleString()}</div>
+            </div>
+            {session.completedAt && (
+              <div>
+                <div className="font-semibold mb-1">Completed</div>
+                <div>{new Date(session.completedAt).toLocaleString()}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

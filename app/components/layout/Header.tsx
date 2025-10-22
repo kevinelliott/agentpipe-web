@@ -42,6 +42,12 @@ export function Header() {
               >
                 Dashboard
               </Link>
+              <Link
+                href="/settings"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Settings
+              </Link>
               <a
                 href="https://github.com/kevinelliott/agentpipe"
                 target="_blank"

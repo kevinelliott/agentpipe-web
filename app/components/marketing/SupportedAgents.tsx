@@ -133,6 +133,35 @@ const agents = [
     borderColor: 'border-[#e2e8f0]',
     description: 'Code generation with non-interactive mode support',
   },
+  {
+    name: 'OpenCode CLI',
+    provider: 'OpenCode',
+    url: 'https://opencode.dev',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    ),
+    color: 'text-[#06b6d4]',
+    bgColor: 'bg-[#ecfeff]',
+    borderColor: 'border-[#cffafe]',
+    description: 'Open-source code completion and generation',
+  },
+  {
+    name: 'Ollama CLI',
+    provider: 'Ollama',
+    url: 'https://ollama.ai',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
+        <circle cx="12" cy="12" r="9" strokeWidth="2"/>
+        <path d="M12 3v18M3 12h18" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    ),
+    color: 'text-[#f97316]',
+    bgColor: 'bg-[#fff7ed]',
+    borderColor: 'border-[#fed7aa]',
+    description: 'Run and orchestrate large language models locally',
+  },
 ];
 
 export function SupportedAgents() {

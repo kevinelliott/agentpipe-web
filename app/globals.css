@@ -32,6 +32,16 @@
   --color-agent-o1-border: var(--agent-o1-border);
   --color-agent-o1-hover: var(--agent-o1-hover);
 
+  --color-agent-opencode: var(--agent-opencode);
+  --color-agent-opencode-bg: var(--agent-opencode-bg);
+  --color-agent-opencode-border: var(--agent-opencode-border);
+  --color-agent-opencode-hover: var(--agent-opencode-hover);
+
+  --color-agent-ollama: var(--agent-ollama);
+  --color-agent-ollama-bg: var(--agent-ollama-bg);
+  --color-agent-ollama-border: var(--agent-ollama-border);
+  --color-agent-ollama-hover: var(--agent-ollama-hover);
+
   --color-agent-default: var(--agent-default);
   --color-agent-default-bg: var(--agent-default-bg);
   --color-agent-default-border: var(--agent-default-border);
@@ -100,6 +110,8 @@
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-message-appear: message-appear 300ms ease-out;
   --animate-connection-pulse: connection-pulse 2s ease-in-out infinite;
+  --animate-toast-enter: toast-enter 300ms ease-out;
+  --animate-toast-exit: toast-exit 300ms ease-in;
 }
 
 @layer base {
@@ -165,6 +177,16 @@
     --agent-o1-bg: #fef2f2;
     --agent-o1-border: #fecaca;
     --agent-o1-hover: #b91c1c;
+
+    --agent-opencode: #06b6d4;
+    --agent-opencode-bg: #ecfeff;
+    --agent-opencode-border: #cffafe;
+    --agent-opencode-hover: #0891b2;
+
+    --agent-ollama: #f97316;
+    --agent-ollama-bg: #fff7ed;
+    --agent-ollama-border: #fed7aa;
+    --agent-ollama-hover: #ea580c;
 
     --agent-default: #64748b;
     --agent-default-bg: #f8fafc;
@@ -416,6 +438,16 @@
     --agent-o1-border: #4f2626;
     --agent-o1-hover: #fca5a5;
 
+    --agent-opencode: #22d3ee;
+    --agent-opencode-bg: #1a2e32;
+    --agent-opencode-border: #2a4a4f;
+    --agent-opencode-hover: #67e8f9;
+
+    --agent-ollama: #fb923c;
+    --agent-ollama-bg: #322114;
+    --agent-ollama-border: #4f2f1a;
+    --agent-ollama-hover: #fdba74;
+
     --agent-default: #94a3b8;
     --agent-default-bg: #1e293b;
     --agent-default-border: #334155;
@@ -592,6 +624,29 @@
     }
     50% {
       box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+  }
+
+  /* Toast animations */
+  @keyframes toast-enter {
+    0% {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes toast-exit {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(1rem);
     }
   }
 }

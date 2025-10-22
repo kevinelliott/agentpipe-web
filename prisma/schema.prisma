@@ -33,6 +33,16 @@ model Conversation {
   maxTurns        Int?
   initialPrompt   String               @db.Text
 
+  // Streaming source tracking
+  source          String               @default("web") // "web", "cli-stream", "cli-upload"
+
+  // System information (from CLI streaming)
+  agentpipeVersion    String?
+  systemOS            String?
+  systemOSVersion     String?
+  systemGoVersion     String?
+  systemArchitecture  String?
+
   // Docker container tracking
   containerId     String?
   containerStatus String?              // "starting", "running", "stopped", "error"
@@ -75,6 +85,10 @@ model Message {
   role            String       // "agent", "user", "system"
   timestamp       DateTime     @default(now())
 
+  // Message ordering (for streaming sessions)
+  sequenceNumber  Int?         // Explicit ordering within conversation
+  turnNumber      Int?         // Which turn in the conversation (1, 2, 3...)
+
   // Performance metrics
   duration        Int?         // milliseconds
   inputTokens     Int?
@@ -84,6 +98,7 @@ model Message {
   cost            Float?
 
   @@index([conversationId, timestamp])
+  @@index([conversationId, sequenceNumber])
   @@index([agentType])
   @@index([model])             // Index for filtering by AI model
   @@index([timestamp])
@@ -103,6 +118,7 @@ model ConversationAgent {
   model           String?      // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
   prompt          String?      @db.Text
   announcement    String?
+  cliVersion      String?      // CLI version used to invoke this agent
 
   // Additional agent settings (JSON field for custom settings)
   settings        Json?
@@ -133,4 +149,32 @@ model Event {
   @@index([type])
   @@index([conversationId])
   @@map("events")
+}
+
+model Setting {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Setting identification
+  key         String    // e.g., "agentpipe.binary_path"
+  value       String    @db.Text
+
+  // Metadata
+  description String?   @db.Text
+  category    String?   // "system", "agentpipe", "ui", etc.
+  dataType    String    @default("string") // "string", "number", "boolean", "json", "path"
+
+  // Multi-tenancy support (null = system-wide)
+  userId      String?
+
+  // Validation tracking
+  isValid     Boolean   @default(true)
+  validatedAt DateTime?
+
+  @@unique([key, userId])
+  @@index([category])
+  @@index([userId])
+  @@index([key])
+  @@map("settings")
 }

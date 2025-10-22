@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/Input';
 import { MetricCard } from '../components/metrics/MetricCard';
@@ -10,70 +11,142 @@ import { WebSocketStatus } from '../components/status/WebSocketStatus';
 import { EmptyState } from '../components/status/EmptyState';
 import { ConversationCardSkeleton, MessageBubbleSkeleton } from '../components/status/Skeleton';
 import { Footer } from '../components/layout/Footer';
+import { isLocalCLIAvailable } from '../lib/environment';
+import { useRealtimeEvents } from '../hooks/useRealtimeEvents';
+import {
+  transformConversation,
+  transformMessage,
+  formatMetrics,
+  formatNumber,
+} from '../lib/formatters';
 
 export default function Dashboard() {
-  const [isLoading] = useState(false);
-  const [wsStatus] = useState<'connected' | 'connecting' | 'disconnected'>('disconnected');
+  const router = useRouter();
+  const [cliAvailable, setCliAvailable] = useState(false);
 
-  // Mock data for demonstration
-  const mockConversations = [
-    {
-      id: '1',
-      title: 'Product Analysis Discussion',
-      participants: [
-        { type: 'claude' as const, name: 'Claude' },
-        { type: 'gpt' as const, name: 'GPT-4' },
-      ],
-      status: 'active' as const,
-      statusLabel: 'Active',
-      lastActivity: '5m ago',
-      preview: 'Claude and GPT-4 are analyzing user metrics and discussing optimization strategies for the product dashboard...',
-      messageCount: 12,
-      tokenCount: '5.2K',
-    },
-    {
-      id: '2',
-      title: 'Multi-Agent Code Review',
-      participants: [
-        { type: 'gemini' as const, name: 'Gemini' },
-        { type: 'amp' as const, name: 'AMP' },
-        { type: 'o1' as const, name: 'O1' },
-      ],
-      status: 'completed' as const,
-      statusLabel: 'Completed',
-      lastActivity: '2h ago',
-      preview: 'Three agents collaborated on reviewing the authentication module, identifying security improvements...',
-      messageCount: 28,
-      tokenCount: '12.4K',
-    },
-  ];
+  // Data state
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [recentMessages, setRecentMessages] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<any>(null);
 
-  const mockMessages = [
-    {
-      agent: 'claude' as const,
-      agentName: 'Claude',
-      content: "I'll help you analyze that dataset. Let me break down the key metrics and trends I'm seeing in the data.\n\nThe conversion rate has improved by 12% over the last quarter, which suggests our optimization efforts are working well.",
-      timestamp: new Date(Date.now() - 5 * 60 * 1000),
-      tokens: 1234,
-      cost: 0.0123,
+  // Loading state
+  const [isLoadingConversations, setIsLoadingConversations] = useState(true);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(true);
+  const [isLoadingMetrics, setIsLoadingMetrics] = useState(true);
+
+  // Error state
+  const [error, setError] = useState<string | null>(null);
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Real-time events
+  const { isConnected: wsConnected } = useRealtimeEvents({
+    onConversationStarted: (data) => {
+      // Refetch conversations when a new one starts
+      fetchConversations();
+      fetchMetrics();
     },
-    {
-      agent: 'gpt' as const,
-      agentName: 'GPT-4',
-      content: "Based on Claude's analysis, I'd add that we should also look at the user retention metrics. The data shows strong engagement patterns in the first 30 days.",
-      timestamp: new Date(Date.now() - 3 * 60 * 1000),
-      tokens: 892,
-      cost: 0.0089,
+    onMessageCreated: (data) => {
+      // Add new message to recent messages
+      fetchRecentMessages();
+      // Update the conversation that received the message
+      fetchConversations();
+      fetchMetrics();
     },
-    {
-      agent: 'gemini' as const,
-      agentName: 'Gemini',
-      content: "Excellent points from both of you. I'll create a visualization to help illustrate these trends more clearly.",
-      timestamp: new Date(Date.now() - 1 * 60 * 1000),
-      tokens: 456,
-      cost: 0.0045,
+    onConversationCompleted: (data) => {
+      // Update conversation status
+      fetchConversations();
+      fetchMetrics();
     },
-  ];
+  });
+
+  // Check if local CLI is available (not on production domain)
+  useEffect(() => {
+    setCliAvailable(isLocalCLIAvailable());
+  }, []);
+
+  // Fetch conversations
+  const fetchConversations = async () => {
+    try {
+      setIsLoadingConversations(true);
+      const response = await fetch('/api/sessions?status=ACTIVE&pageSize=10&sortBy=updatedAt&sortOrder=desc');
+      if (!response.ok) throw new Error('Failed to fetch conversations');
+
+      const data = await response.json();
+      setConversations(data.conversations || []);
+    } catch (err) {
+      console.error('Error fetching conversations:', err);
+      setError('Failed to load conversations');
+    } finally {
+      setIsLoadingConversations(false);
+    }
+  };
+
+  // Fetch recent messages
+  const fetchRecentMessages = async () => {
+    try {
+      setIsLoadingMessages(true);
+      const response = await fetch('/api/messages/recent?limit=10&status=ACTIVE');
+      if (!response.ok) throw new Error('Failed to fetch messages');
+
+      const data = await response.json();
+      setRecentMessages(data.messages || []);
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+      setError('Failed to load recent messages');
+    } finally {
+      setIsLoadingMessages(false);
+    }
+  };
+
+  // Fetch metrics
+  const fetchMetrics = async () => {
+    try {
+      setIsLoadingMetrics(true);
+      const response = await fetch('/api/metrics/summary');
+      if (!response.ok) throw new Error('Failed to fetch metrics');
+
+      const data = await response.json();
+      setMetrics(data);
+    } catch (err) {
+      console.error('Error fetching metrics:', err);
+      setError('Failed to load metrics');
+    } finally {
+      setIsLoadingMetrics(false);
+    }
+  };
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchConversations();
+    fetchRecentMessages();
+    fetchMetrics();
+  }, []);
+
+  // Filter conversations based on search
+  const filteredConversations = conversations.filter((conv) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      conv.name.toLowerCase().includes(query) ||
+      conv.initialPrompt.toLowerCase().includes(query) ||
+      conv.participants.some((p: any) =>
+        p.agentName.toLowerCase().includes(query) ||
+        p.agentType.toLowerCase().includes(query)
+      )
+    );
+  });
+
+  // Transform data for components
+  const transformedConversations = filteredConversations.map(transformConversation);
+  const transformedMessages = recentMessages.map(transformMessage);
+
+  // Get WebSocket status
+  const wsStatus = wsConnected ? 'connected' : 'disconnected';
+
+  // Format metrics
+  const formattedMetrics = metrics ? formatMetrics(metrics) : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -89,12 +162,14 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center gap-3">
               <WebSocketStatus status={wsStatus} />
-              <Button
-                variant="primary"
-                onClick={() => window.location.href = '/conversations/new'}
-              >
-                New Conversation
-              </Button>
+              {cliAvailable && (
+                <Button
+                  variant="primary"
+                  onClick={() => window.location.href = '/conversations/new'}
+                >
+                  New Conversation
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -109,26 +184,39 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard
-              label="Total Conversations"
-              value="1,234"
-              change={{ value: '12.5% vs last month', type: 'positive' }}
-            />
-            <MetricCard
-              label="Active Agents"
-              value="6"
-              change={{ value: 'No change', type: 'neutral' }}
-            />
-            <MetricCard
-              label="Total Tokens"
-              value="2.4M"
-              change={{ value: '8.3% vs last month', type: 'positive' }}
-            />
-            <MetricCard
-              label="Total Cost"
-              value="$156.23"
-              change={{ value: '3.2% vs last month', type: 'negative' }}
-            />
+            {isLoadingMetrics ? (
+              <>
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-card border border-border rounded-lg p-4 animate-pulse">
+                    <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
+                    <div className="h-8 bg-muted rounded w-3/4"></div>
+                  </div>
+                ))}
+              </>
+            ) : formattedMetrics ? (
+              <>
+                <MetricCard
+                  label="Total Conversations"
+                  value={formattedMetrics.totalConversations}
+                />
+                <MetricCard
+                  label="Active Agents"
+                  value={formattedMetrics.activeAgents}
+                />
+                <MetricCard
+                  label="Total Tokens"
+                  value={formattedMetrics.totalTokens}
+                />
+                <MetricCard
+                  label="Total Cost"
+                  value={formattedMetrics.totalCost}
+                />
+              </>
+            ) : (
+              <div className="col-span-4 text-center text-muted-foreground py-8">
+                Unable to load metrics
+              </div>
+            )}
           </div>
         </section>
 
@@ -140,24 +228,43 @@ export default function Dashboard() {
               <SearchInput
                 placeholder="Search conversations..."
                 className="w-full sm:w-80"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
 
-          {isLoading ? (
+          {isLoadingConversations ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <ConversationCardSkeleton />
               <ConversationCardSkeleton />
             </div>
-          ) : mockConversations.length > 0 ? (
+          ) : transformedConversations.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {mockConversations.map((conversation) => (
+              {transformedConversations.map((conversation) => (
                 <ConversationCard
                   key={conversation.id}
                   {...conversation}
-                  onClick={() => console.log('Open conversation:', conversation.id)}
+                  onClick={() => router.push(`/sessions/${conversation.id}`)}
                 />
               ))}
+            </div>
+          ) : searchQuery ? (
+            <div className="bg-card border border-border rounded-lg">
+              <EmptyState
+                icon={
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                }
+                title="No conversations found"
+                description={`No conversations match "${searchQuery}". Try a different search term.`}
+              />
             </div>
           ) : (
             <div className="bg-card border border-border rounded-lg">
@@ -173,11 +280,19 @@ export default function Dashboard() {
                   </svg>
                 }
                 title="No active conversations"
-                description="Start a new conversation to see realtime messages from multiple AI agents collaborating together."
-                action={{
-                  label: 'Start Conversation',
-                  onClick: () => console.log('Start new conversation'),
-                }}
+                description={
+                  cliAvailable
+                    ? "Start a new conversation to see realtime messages from multiple AI agents collaborating together."
+                    : "Conversations started via the AgentPipe CLI will appear here in real-time."
+                }
+                action={
+                  cliAvailable
+                    ? {
+                        label: 'Start Conversation',
+                        onClick: () => console.log('Start new conversation'),
+                      }
+                    : undefined
+                }
               />
             </div>
           )}
@@ -187,20 +302,20 @@ export default function Dashboard() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">Recent Messages</h2>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => router.push('/sessions')}>
               View All
             </Button>
           </div>
 
-          {isLoading ? (
+          {isLoadingMessages ? (
             <div className="space-y-3">
               <MessageBubbleSkeleton />
               <MessageBubbleSkeleton />
               <MessageBubbleSkeleton />
             </div>
-          ) : mockMessages.length > 0 ? (
+          ) : transformedMessages.length > 0 ? (
             <div className="space-y-0">
-              {mockMessages.map((message, i) => (
+              {transformedMessages.map((message, i) => (
                 <MessageBubble
                   key={i}
                   agent={message.agent}

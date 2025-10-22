@@ -1,6 +1,6 @@
 {
   "name": "agentpipe-web",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,11 +20,14 @@
   "dependencies": {
     "@prisma/client": "^6.17.1",
     "@supabase/supabase-js": "^2.75.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/ws": "^8.18.1",
     "next": "^15.5.5",
     "prisma": "^6.17.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "ws": "^8.18.3",
     "zod": "^4.1.12"
   },
