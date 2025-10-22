@@ -8,6 +8,10 @@ This Next.js 15+ application serves as both the main website introducing AgentPi
 
 - **Marketing Hero**: Beautiful landing page introducing AgentPipe with GitHub CTA
 - **Realtime Dashboard**: View active multi-agent conversations as they happen
+- **AI Summaries**: AI-generated conversation summaries with metadata (tokens, cost, duration)
+  - Full summary cards on session detail pages
+  - 2-line summary previews on session cards
+  - Graceful fallback to initial prompt when summary not available
 - **Historical Search**: Search and filter through past conversations
 - **Metrics & Analytics**: Track token usage, costs, and agent performance
 - **API Documentation**: Well-documented REST and WebSocket APIs

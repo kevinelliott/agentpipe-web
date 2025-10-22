@@ -10,6 +10,7 @@ import { Button } from '@/app/components/ui/Button';
 import { Skeleton } from '@/app/components/status/Skeleton';
 import { MetricCard } from '@/app/components/metrics/MetricCard';
 import { WebSocketStatus } from '@/app/components/status/WebSocketStatus';
+import { SummaryCard } from '@/app/components/conversation/SummaryCard';
 import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
 
 interface Participant {
@@ -68,6 +69,17 @@ interface SessionDetail {
   systemOSVersion: string | null;
   systemGoVersion: string | null;
   systemArchitecture: string | null;
+  // Conversation Summary
+  summaryText: string | null;
+  summaryAgentType: string | null;
+  summaryModel: string | null;
+  summaryInputTokens: number | null;
+  summaryOutputTokens: number | null;
+  summaryTotalTokens: number | null;
+  summaryCost: number | null;
+  summaryDuration: number | null;
+  summaryGeneratedAt: string | null;
+  summaryData: Record<string, any> | null;
   participants: Participant[];
   messages: Message[];
 }
@@ -314,6 +326,22 @@ export default function SessionDetailPage() {
             value={formatDuration(session.totalDuration)}
           />
         </div>
+
+        {/* AI Summary */}
+        {session.summaryText && (
+          <div className="mb-6">
+            <SummaryCard
+              text={session.summaryText}
+              agentType={session.summaryAgentType || undefined}
+              model={session.summaryModel || undefined}
+              inputTokens={session.summaryInputTokens || undefined}
+              outputTokens={session.summaryOutputTokens || undefined}
+              totalTokens={session.summaryTotalTokens || undefined}
+              cost={session.summaryCost || undefined}
+              duration={session.summaryDuration || undefined}
+            />
+          </div>
+        )}
 
         {/* Participants */}
         <div className="bg-card border border-border rounded-lg p-4 mb-6">

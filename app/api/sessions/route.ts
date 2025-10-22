@@ -118,6 +118,10 @@ export async function GET(request: NextRequest) {
         totalCost: conv.totalCost,
         totalDuration: conv.totalDuration,
         errorMessage: conv.errorMessage,
+        // Summary preview for card display
+        summaryText: conv.summaryText,
+        summaryAgentType: conv.summaryAgentType,
+        summaryModel: conv.summaryModel,
         participants: conv.participants.map((p) => ({
           agentId: p.agentId,
           agentType: p.agentType,

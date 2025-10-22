@@ -56,6 +56,18 @@ model Conversation {
   totalCost       Float                @default(0)
   totalDuration   Int                  @default(0) // milliseconds
 
+  // Conversation Summary (AI-generated)
+  summaryText         String?   @db.Text
+  summaryAgentType    String?
+  summaryModel        String?
+  summaryInputTokens  Int?
+  summaryOutputTokens Int?
+  summaryTotalTokens  Int?
+  summaryCost         Float?
+  summaryDuration     Int?      // milliseconds
+  summaryGeneratedAt  DateTime?
+  summaryData         Json?     // Full summary JSON for extensibility
+
   // Relations
   messages        Message[]
   participants    ConversationAgent[]

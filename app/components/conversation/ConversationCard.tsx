@@ -16,6 +16,7 @@ interface ConversationCardProps {
   statusLabel: string;
   lastActivity: string;
   preview: string;
+  summaryText?: string; // Optional AI-generated summary
   messageCount: number;
   tokenCount: string;
   onClick?: () => void;
@@ -30,6 +31,7 @@ export function ConversationCard({
   statusLabel,
   lastActivity,
   preview,
+  summaryText,
   messageCount,
   tokenCount,
   onClick,
@@ -88,10 +90,36 @@ export function ConversationCard({
         </div>
       </div>
 
-      {/* Preview */}
-      <p className="text-sm text-muted-foreground leading-relaxed mb-3 line-clamp-2">
-        {preview}
-      </p>
+      {/* Preview - Show summary if available, otherwise show initial prompt */}
+      {summaryText ? (
+        <div className="mb-3">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-primary flex-shrink-0"
+              aria-label="AI Summary"
+            >
+              <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
+              <path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z" />
+            </svg>
+            <span className="text-xs text-primary font-medium">AI Summary</span>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 pl-5">
+            {summaryText}
+          </p>
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3 line-clamp-2">
+          {preview}
+        </p>
+      )}
 
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-border">

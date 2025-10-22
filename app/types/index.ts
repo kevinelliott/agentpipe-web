@@ -28,6 +28,17 @@ export interface ResponseMetrics {
   cost?: number;            // USD
 }
 
+export interface ConversationSummaryData {
+  text: string;
+  agent_type: string;
+  model: string;
+  input_tokens: number;
+  output_tokens: number;
+  total_tokens: number;
+  cost: number;
+  duration_ms: number;
+}
+
 export interface Message {
   id: string;
   conversationId: string;
@@ -67,6 +78,19 @@ export interface Conversation {
   totalTokens: number;
   totalCost: number;
   totalDuration: number;    // milliseconds
+
+  // Conversation Summary (AI-generated)
+  summaryText?: string;
+  summaryAgentType?: string;
+  summaryModel?: string;
+  summaryInputTokens?: number;
+  summaryOutputTokens?: number;
+  summaryTotalTokens?: number;
+  summaryCost?: number;
+  summaryDuration?: number; // milliseconds
+  summaryGeneratedAt?: Date;
+  summaryData?: Record<string, any>; // Full summary JSON
+
   messages?: Message[];
   participants?: ConversationAgent[];
   metadata?: Record<string, any>;
@@ -166,4 +190,5 @@ export interface ConversationCompletedEvent {
   totalTokens: number;
   totalCost: number;
   totalDuration: number;
+  summary?: ConversationSummaryData;
 }

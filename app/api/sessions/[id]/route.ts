@@ -62,6 +62,17 @@ export async function GET(
       systemOSVersion: conversation.systemOSVersion,
       systemGoVersion: conversation.systemGoVersion,
       systemArchitecture: conversation.systemArchitecture,
+      // Conversation Summary
+      summaryText: conversation.summaryText,
+      summaryAgentType: conversation.summaryAgentType,
+      summaryModel: conversation.summaryModel,
+      summaryInputTokens: conversation.summaryInputTokens,
+      summaryOutputTokens: conversation.summaryOutputTokens,
+      summaryTotalTokens: conversation.summaryTotalTokens,
+      summaryCost: conversation.summaryCost,
+      summaryDuration: conversation.summaryDuration,
+      summaryGeneratedAt: conversation.summaryGeneratedAt?.toISOString() || null,
+      summaryData: conversation.summaryData,
       participants: conversation.participants.map((p) => ({
         id: p.id,
         agentId: p.agentId,

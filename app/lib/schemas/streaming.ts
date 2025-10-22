@@ -61,6 +61,18 @@ export const messageCreatedSchema = z.object({
   }),
 });
 
+// Conversation summary schema
+export const conversationSummarySchema = z.object({
+  text: z.string().max(10000), // 10KB limit for summary text
+  agent_type: z.string(),
+  model: z.string(),
+  input_tokens: z.number(),
+  output_tokens: z.number(),
+  total_tokens: z.number(),
+  cost: z.number(),
+  duration_ms: z.number(),
+});
+
 // Conversation completed event
 export const conversationCompletedSchema = z.object({
   type: z.literal('conversation.completed'),
@@ -73,6 +85,7 @@ export const conversationCompletedSchema = z.object({
     total_tokens: z.number().optional(),
     total_cost: z.number().optional(),
     duration_seconds: z.number().optional(),
+    summary: conversationSummarySchema.optional(),
   }),
 });
 

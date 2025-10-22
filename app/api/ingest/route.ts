@@ -171,6 +171,20 @@ export async function POST(request: NextRequest) {
           'error': 'ERROR'
         } as const;
 
+        // Prepare summary data if present
+        const summaryData = data.summary ? {
+          summaryText: data.summary.text,
+          summaryAgentType: data.summary.agent_type,
+          summaryModel: data.summary.model,
+          summaryInputTokens: data.summary.input_tokens,
+          summaryOutputTokens: data.summary.output_tokens,
+          summaryTotalTokens: data.summary.total_tokens,
+          summaryCost: data.summary.cost,
+          summaryDuration: data.summary.duration_ms,
+          summaryGeneratedAt: new Date(event.timestamp),
+          summaryData: data.summary, // Store full JSON for extensibility
+        } : {};
+
         // Update conversation status
         await prisma.conversation.update({
           where: { id: data.conversation_id },
@@ -181,6 +195,7 @@ export async function POST(request: NextRequest) {
             totalTokens: data.total_tokens ?? undefined,
             totalCost: data.total_cost ?? undefined,
             totalDuration: data.duration_seconds ? data.duration_seconds * 1000 : undefined,
+            ...summaryData, // Include summary fields if present
           },
         });
 

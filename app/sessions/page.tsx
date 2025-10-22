@@ -20,6 +20,7 @@ interface Session {
   startedAt: string;
   completedAt: string | null;
   initialPrompt: string;
+  summaryText?: string; // Optional AI-generated summary
   totalMessages: number;
   totalTokens: number;
   totalCost: number;
@@ -370,6 +371,7 @@ export default function SessionsPage() {
                 statusLabel={session.status}
                 lastActivity={formatRelativeTime(session.startedAt)}
                 preview={session.initialPrompt}
+                summaryText={session.summaryText}
                 messageCount={session.totalMessages}
                 tokenCount={formatTokens(session.totalTokens)}
                 onClick={() => router.push(`/sessions/${session.id}`)}
