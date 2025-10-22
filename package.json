@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.17.1",
-    "@supabase/supabase-js": "^2.75.0",
+    "@supabase/supabase-js": "^2.76.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/ws": "^8.18.1",
     "next": "^15.5.5",
