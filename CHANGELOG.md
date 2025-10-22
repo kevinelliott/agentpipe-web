@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2025-10-22
+
+### Added
+- **Vercel Analytics** integration for page view tracking and web vitals monitoring
+- **SSE Debugging Tools**:
+  - `/api/test/emit-event` endpoint to manually emit test events
+  - `/api/debug/sse-status` endpoint to check EventManager stats and connected clients
+- **Real-Time Debugging Documentation** (`docs/REALTIME_DEBUGGING.md`):
+  - Comprehensive guide for diagnosing SSE connection issues
+  - Testing procedures for local and production environments
+  - Common fixes and troubleshooting steps
+- **Migration Documentation** (`docs/MIGRATION_GUIDE.md`):
+  - Guide for deploying v0.0.2 database schema changes
+  - Manual and automated deployment instructions
+
+### Changed
+- **Event Stream Debug Page**: `connection.established` events now hidden by default
+  - Added checkbox control to show/hide connection events
+  - Reduces noise while debugging
+  - Optional visibility when needed for connection diagnostics
+
+### Fixed
+- **Database Migration**: Created proper migration file for conversation summary fields
+  - Migration: `20251022150000_add_conversation_summary`
+  - Fixes "column does not exist" error in production
+  - Includes all 10 summary fields (text, metadata, tokens, cost, duration)
+- **Production Deployment**: Migration now runs automatically during build via `prisma migrate deploy`
+
+### Documentation
+- Added comprehensive real-time event debugging guide
+- Added database migration guide for v0.0.2 schema changes
+- Documented SSE diagnostic endpoints and usage
+
+### Technical
+- Server-side SSE pipeline verified 100% functional
+- Event buffer replay working correctly
+- EventManager broadcasting to all connected clients
+- Issue identified: Dashboard client-side SSE connection not establishing (see docs/REALTIME_DEBUGGING.md)
+
 ## [0.0.2] - 2025-10-22
 
 ### Added
