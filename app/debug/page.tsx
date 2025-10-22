@@ -12,6 +12,7 @@ export default function DebugPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [maxEvents, setMaxEvents] = useState(100);
   const [filter, setFilter] = useState('');
+  const [hideConnectionEvents, setHideConnectionEvents] = useState(true);
   const [bufferStats, setBufferStats] = useState<any>(null);
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const [copiedEvent, setCopiedEvent] = useState<string | null>(null);
@@ -29,10 +30,18 @@ export default function DebugPage() {
     },
   });
 
-  // Filter events based on type
-  const filteredEvents = filter
-    ? events.filter((e) => e.type.toLowerCase().includes(filter.toLowerCase()))
-    : events;
+  // Filter events based on type and connection filter
+  const filteredEvents = events.filter((e) => {
+    // Hide connection.established events if filter is enabled
+    if (hideConnectionEvents && e.type === 'connection.established') {
+      return false;
+    }
+    // Apply text filter if present
+    if (filter && !e.type.toLowerCase().includes(filter.toLowerCase())) {
+      return false;
+    }
+    return true;
+  });
 
   // Clear all events
   const handleClear = () => {
@@ -235,6 +244,15 @@ export default function DebugPage() {
                 className="px-3 py-1 text-sm bg-background text-foreground border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50"
               />
             </div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={hideConnectionEvents}
+                onChange={(e) => setHideConnectionEvents(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-2 focus:ring-primary-500/50"
+              />
+              <span className="text-sm text-muted-foreground">Hide connection events</span>
+            </label>
             <div className="flex items-center gap-2">
               <label className="text-sm text-muted-foreground">Max:</label>
               <select
