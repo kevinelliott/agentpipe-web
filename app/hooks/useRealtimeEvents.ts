@@ -40,6 +40,25 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isManualCloseRef = useRef(false);
 
+  // Store callbacks in refs to avoid dependency issues
+  // Update ref on every render without triggering effects
+  const callbacksRef = useRef({
+    onEvent,
+    onConversationStarted,
+    onMessageCreated,
+    onConversationCompleted,
+    onConversationInterrupted,
+    onError,
+  });
+  callbacksRef.current = {
+    onEvent,
+    onConversationStarted,
+    onMessageCreated,
+    onConversationCompleted,
+    onConversationInterrupted,
+    onError,
+  };
+
   const connect = useCallback(() => {
     // Clear any existing connection
     if (eventSourceRef.current) {
@@ -76,26 +95,26 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
         setLastEvent(event);
         setEventCount((count) => count + 1);
 
-        // Call generic event handler
-        onEvent?.(event);
+        // Call generic event handler using ref
+        callbacksRef.current.onEvent?.(event);
 
-        // Call specific event handlers
+        // Call specific event handlers using refs
         switch (event.type) {
           case 'conversation.started':
-            onConversationStarted?.(event.data);
+            callbacksRef.current.onConversationStarted?.(event.data);
             break;
           case 'message.created':
-            onMessageCreated?.(event.data);
+            callbacksRef.current.onMessageCreated?.(event.data);
             break;
           case 'conversation.completed':
-            onConversationCompleted?.(event.data);
+            callbacksRef.current.onConversationCompleted?.(event.data);
             break;
           case 'conversation.interrupted':
-            onConversationInterrupted?.(event.data);
+            callbacksRef.current.onConversationInterrupted?.(event.data);
             break;
           case 'conversation.error':
           case 'error.occurred':
-            onError?.(event.data);
+            callbacksRef.current.onError?.(event.data);
             break;
         }
       } catch (error) {
@@ -121,7 +140,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
 
       eventSource.close();
     };
-  }, [conversationId, onEvent, onConversationStarted, onMessageCreated, onConversationCompleted, onConversationInterrupted, onError, autoReconnect, reconnectInterval]);
+  }, [conversationId, autoReconnect, reconnectInterval]);
 
   const disconnect = useCallback(() => {
     console.log('[SSE Client] Disconnecting manually');
