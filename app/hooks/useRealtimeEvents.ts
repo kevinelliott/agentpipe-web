@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface RealtimeEvent {
   type: string;
@@ -40,7 +40,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isManualCloseRef = useRef(false);
 
-  const connect = () => {
+  const connect = useCallback(() => {
     // Clear any existing connection
     if (eventSourceRef.current) {
       console.log('[SSE Client] Closing existing connection');
@@ -121,9 +121,9 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
 
       eventSource.close();
     };
-  };
+  }, [conversationId, onEvent, onConversationStarted, onMessageCreated, onConversationCompleted, onConversationInterrupted, onError, autoReconnect, reconnectInterval]);
 
-  const disconnect = () => {
+  const disconnect = useCallback(() => {
     console.log('[SSE Client] Disconnecting manually');
     isManualCloseRef.current = true;
 
@@ -138,7 +138,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     }
 
     setIsConnected(false);
-  };
+  }, []);
 
   // Connect on mount
   useEffect(() => {
@@ -151,7 +151,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
       console.log('[SSE Client] Component unmounting, cleaning up');
       disconnect();
     };
-  }, [conversationId]); // Reconnect if conversationId changes
+  }, [conversationId, connect, disconnect]); // Reconnect if conversationId changes
 
   return {
     isConnected,

@@ -503,3 +503,4 @@ For questions or issues:
 - Review API routes in `app/api/` for implementation patterns
 - See Makefile for available commands
 - Refer to AgentPipe repo: https://github.com/kevinelliott/agentpipe
+- Before releasing, be sure all lints pass, all tests pass, and the application builds cleanly. This is not optional.

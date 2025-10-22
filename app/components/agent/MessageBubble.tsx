@@ -163,7 +163,7 @@ export function MessageBubble({
               <span>{tokens.toLocaleString()} tokens</span>
             </div>
           )}
-          {duration !== undefined && (
+          {duration != null && (
             <div className="flex items-center gap-1">
               <span>⏱ {formatDuration(duration)}</span>
             </div>

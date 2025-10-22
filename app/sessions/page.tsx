@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ConversationCard } from '@/app/components/conversation/ConversationCard';
 import { EmptyState } from '@/app/components/status/EmptyState';
@@ -64,7 +64,7 @@ export default function SessionsPage() {
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
 
   // Fetch sessions
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -99,18 +99,19 @@ export default function SessionsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, pageSize, sortBy, sortOrder, statusFilter, modeFilter, sourceFilter]);
 
   // Fetch sessions on mount and when filters/pagination change
   useEffect(() => {
     fetchSessions();
-  }, [page, statusFilter, modeFilter, sourceFilter, sortBy, sortOrder]);
+  }, [fetchSessions, page, statusFilter, modeFilter, sourceFilter, sortBy, sortOrder]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
     if (page !== 1) {
       setPage(1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter, modeFilter, sourceFilter, sortBy, sortOrder]);
 
   // Helper functions

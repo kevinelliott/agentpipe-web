@@ -21,7 +21,7 @@ export function ThemeToggle() {
         <svg
           width="20"
           height="20"
-          viewBox="0 0 20 20"
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -35,7 +35,7 @@ export function ThemeToggle() {
         <svg
           width="20"
           height="20"
-          viewBox="0 0 20 20"
+          viewBox="0 0 24 24"
           fill="currentColor"
         >
           <path

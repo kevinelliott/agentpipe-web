@@ -66,6 +66,14 @@ export async function POST(request: NextRequest) {
         // Support both 'participants' (new) and 'agents' (old) field names
         const agentList = data.participants || data.agents;
 
+        // This should never happen due to Zod validation, but TypeScript needs the check
+        if (!agentList) {
+          return NextResponse.json(
+            { error: 'Invalid event format', details: 'Missing participants or agents field' },
+            { status: 400 }
+          );
+        }
+
         // Create conversation in database
         const conversation = await prisma.conversation.create({
           data: {

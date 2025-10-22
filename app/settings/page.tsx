@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { PathInput } from '@/app/components/settings/PathInput';
 import { Toggle } from '@/app/components/settings/Toggle';
@@ -54,12 +54,12 @@ export default function SettingsPage() {
     setCliAvailable(isLocalCLIAvailable());
   }, []);
 
-  // Load settings on mount
-  useEffect(() => {
-    loadSettings();
+  const showToast = useCallback((message: string, type: ToastNotification['type']) => {
+    const id = Math.random().toString(36).substring(7);
+    setToasts((prev) => [...prev, { id, message, type }]);
   }, []);
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
       const response = await fetch('/api/settings?category=agentpipe');
       const data = await response.json();
@@ -101,7 +101,12 @@ export default function SettingsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
+
+  // Load settings on mount
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   const handleChange = async (key: string, value: string) => {
     setSettings((prev) => ({
@@ -292,11 +297,6 @@ export default function SettingsPage() {
     setDoctorResult(null);
     setDoctorResultMessage('');
     showToast('Settings reset to saved values', 'info');
-  };
-
-  const showToast = (message: string, type: ToastNotification['type']) => {
-    const id = Math.random().toString(36).substring(7);
-    setToasts((prev) => [...prev, { id, message, type }]);
   };
 
   const removeToast = (id: string) => {

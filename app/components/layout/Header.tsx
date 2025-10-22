@@ -15,7 +15,7 @@ export function Header() {
               <svg
                 width="20"
                 height="20"
-                viewBox="0 0 20 20"
+                viewBox="0 0 24 24"
                 fill="none"
                 stroke="white"
                 strokeWidth="2"
