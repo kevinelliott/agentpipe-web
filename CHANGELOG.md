@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2025-10-22
+
+### Fixed
+- **UI Consistency**: Changed page title from "Sessions" to "Conversations" on `/conversations` page
+- **Markdown Rendering**: AI Summary now properly renders Markdown formatting
+  - Added `ReactMarkdown` with `remarkGfm` support to `SummaryCard` component
+  - Summaries now display headings, lists, code blocks, links, bold/italic text, blockquotes, and horizontal rules
+  - Consistent formatting with message bubble Markdown rendering
+  - Improved readability for structured AI-generated summaries
+
+### Changed
+- Updated grid section comment for clarity ("Sessions Grid" → "Conversations Grid")
+
 ## [0.0.5] - 2025-10-22
 
 ### Added
