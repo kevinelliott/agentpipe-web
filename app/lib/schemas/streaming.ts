@@ -11,6 +11,7 @@ export const systemInfoSchema = z.object({
 
 // Agent participant schema
 export const agentParticipantSchema = z.object({
+  agent_id: z.string().optional(), // Unique ID for this agent in the conversation
   agent_type: z.string(),
   agent_version: z.string().optional(),
   model: z.string().optional(),

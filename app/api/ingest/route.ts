@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
             systemArchitecture: data.system_info.architecture,
             participants: {
               create: agentList.map((agent: any) => ({
-                agentId: `${data.conversation_id}-${agent.agent_type}`,
+                agentId: agent.agent_id || `${data.conversation_id}-${agent.agent_type}`,
                 agentType: agent.agent_type,
                 agentName: agent.name || agent.agent_type,
                 agentVersion: agent.agent_version ?? null,
