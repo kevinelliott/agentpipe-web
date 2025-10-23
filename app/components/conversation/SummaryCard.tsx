@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Badge } from '../ui/Badge';
 
 interface SummaryCardProps {
@@ -84,13 +86,59 @@ export function SummaryCard({
 
       {/* Summary Text */}
       <div className="mb-4">
-        <p
+        <div
           className={`text-sm text-foreground leading-relaxed ${
             !isExpanded && shouldShowToggle ? 'line-clamp-3' : ''
           }`}
         >
-          {text}
-        </p>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              // Customize paragraph spacing
+              p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+              // Style headings
+              h1: ({ children }) => <h1 className="text-xl font-bold mb-2 mt-4 first:mt-0">{children}</h1>,
+              h2: ({ children }) => <h2 className="text-lg font-bold mb-2 mt-3 first:mt-0">{children}</h2>,
+              h3: ({ children }) => <h3 className="text-base font-bold mb-2 mt-3 first:mt-0">{children}</h3>,
+              // Style lists
+              ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
+              ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
+              li: ({ children }) => <li className="ml-2">{children}</li>,
+              // Style code blocks
+              code: ({ inline, children, ...props }: any) =>
+                inline ? (
+                  <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono" {...props}>
+                    {children}
+                  </code>
+                ) : (
+                  <code className="block bg-muted p-3 rounded text-xs font-mono overflow-x-auto mb-3 whitespace-pre" {...props}>
+                    {children}
+                  </code>
+                ),
+              pre: ({ children }) => <pre className="mb-3">{children}</pre>,
+              // Style blockquotes
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-primary/30 pl-4 italic my-3">
+                  {children}
+                </blockquote>
+              ),
+              // Style links
+              a: ({ children, href }) => (
+                <a href={href} className="text-primary-600 dark:text-primary-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                  {children}
+                </a>
+              ),
+              // Style horizontal rules
+              hr: () => <hr className="my-4 border-t border-primary/20" />,
+              // Style strong/bold
+              strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+              // Style emphasis/italic
+              em: ({ children }) => <em className="italic">{children}</em>,
+            }}
+          >
+            {text}
+          </ReactMarkdown>
+        </div>
 
         {shouldShowToggle && (
           <button

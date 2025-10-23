@@ -168,7 +168,7 @@ export default function SessionsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Sessions</h1>
+          <h1 className="text-3xl font-bold mb-2">Conversations</h1>
           <p className="text-muted-foreground">
             Browse all AgentPipe conversations from web, CLI streams, and uploads
           </p>
@@ -355,7 +355,7 @@ export default function SessionsPage() {
           />
         )}
 
-        {/* Sessions Grid */}
+        {/* Conversations Grid */}
         {!isLoading && !error && sessions.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sessions.map((session) => (
