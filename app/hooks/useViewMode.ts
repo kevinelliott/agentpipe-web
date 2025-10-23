@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export type ViewMode = 'normal' | 'slim';
+export type ViewMode = 'normal' | 'compact' | 'slim';
 
 /**
  * Hook to manage conversation view mode with localStorage persistence
@@ -16,7 +16,7 @@ export function useViewMode(): [ViewMode, (mode: ViewMode) => void] {
   useEffect(() => {
     setIsClient(true);
     const stored = localStorage.getItem('conversationViewMode');
-    if (stored === 'normal' || stored === 'slim') {
+    if (stored === 'normal' || stored === 'compact' || stored === 'slim') {
       setViewModeState(stored);
     }
   }, []);

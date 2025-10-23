@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { MessageBubble } from '@/app/components/agent/MessageBubble';
+import { MessageBubbleCompact } from '@/app/components/agent/MessageBubbleCompact';
 import { MessageBubbleSlim } from '@/app/components/agent/MessageBubbleSlim';
 import { TurnSeparator } from './TurnSeparator';
 import type { AgentType } from '@/app/components/agent/AgentAvatar';
@@ -67,6 +68,25 @@ export function ConversationMessages({
           <React.Fragment key={message.id}>
             {isTurnChange && index > 0 && <TurnSeparator timeDiff={timeDiff} />}
             <MessageBubbleSlim
+              agent={mapAgentTypeToAgentType(message.agentType)}
+              agentName={message.agentName}
+              content={message.content}
+              timestamp={new Date(message.timestamp)}
+              onClick={onMessageClick ? () => onMessageClick(message) : undefined}
+            />
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  if (viewMode === 'compact') {
+    return (
+      <div className="space-y-0">
+        {messagesWithMetadata.map(({ message, timeDiff, isTurnChange }, index) => (
+          <React.Fragment key={message.id}>
+            {isTurnChange && index > 0 && <TurnSeparator timeDiff={timeDiff} />}
+            <MessageBubbleCompact
               agent={mapAgentTypeToAgentType(message.agentType)}
               agentName={message.agentName}
               content={message.content}
