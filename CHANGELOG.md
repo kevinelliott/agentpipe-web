@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-10-22
+
+### Fixed
+- **Unique Constraint Violation**: Fixed P2002 error when conversations have multiple participants with the same agent type
+  - Added support for optional `agent_id` field from AgentPipe CLI
+  - Updated `agentParticipantSchema` to accept `agent_id`
+  - Modified ingest API to use CLI-provided `agent_id` when available
+  - Falls back to legacy format for backward compatibility
+  - Resolves: "Unique constraint failed on the fields: (`conversationId`,`agentId`)"
+
+### Changed
+- Ingest API now accepts and honors `agent_id` field in participant data
+- AgentPipe CLI can now provide unique IDs for each participant to prevent collisions
+
 ## [0.0.3] - 2025-10-22
 
 ### Added
