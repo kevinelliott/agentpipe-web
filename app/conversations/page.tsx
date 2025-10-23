@@ -81,7 +81,7 @@ export default function SessionsPage() {
       if (modeFilter) params.append('mode', modeFilter);
       if (sourceFilter) params.append('source', sourceFilter);
 
-      const response = await fetch(`/api/sessions?${params.toString()}`);
+      const response = await fetch(`/api/conversations?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch sessions');
@@ -374,7 +374,7 @@ export default function SessionsPage() {
                 summaryText={session.summaryText}
                 messageCount={session.totalMessages}
                 tokenCount={formatTokens(session.totalTokens)}
-                onClick={() => router.push(`/sessions/${session.id}`)}
+                onClick={() => router.push(`/conversations/${session.id}`)}
               />
             ))}
           </div>

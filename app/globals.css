@@ -42,6 +42,31 @@
   --color-agent-ollama-border: var(--agent-ollama-border);
   --color-agent-ollama-hover: var(--agent-ollama-hover);
 
+  --color-agent-copilot: var(--agent-copilot);
+  --color-agent-copilot-bg: var(--agent-copilot-bg);
+  --color-agent-copilot-border: var(--agent-copilot-border);
+  --color-agent-copilot-hover: var(--agent-copilot-hover);
+
+  --color-agent-cursor: var(--agent-cursor);
+  --color-agent-cursor-bg: var(--agent-cursor-bg);
+  --color-agent-cursor-border: var(--agent-cursor-border);
+  --color-agent-cursor-hover: var(--agent-cursor-hover);
+
+  --color-agent-qoder: var(--agent-qoder);
+  --color-agent-qoder-bg: var(--agent-qoder-bg);
+  --color-agent-qoder-border: var(--agent-qoder-border);
+  --color-agent-qoder-hover: var(--agent-qoder-hover);
+
+  --color-agent-qwen: var(--agent-qwen);
+  --color-agent-qwen-bg: var(--agent-qwen-bg);
+  --color-agent-qwen-border: var(--agent-qwen-border);
+  --color-agent-qwen-hover: var(--agent-qwen-hover);
+
+  --color-agent-codex: var(--agent-codex);
+  --color-agent-codex-bg: var(--agent-codex-bg);
+  --color-agent-codex-border: var(--agent-codex-border);
+  --color-agent-codex-hover: var(--agent-codex-hover);
+
   --color-agent-default: var(--agent-default);
   --color-agent-default-bg: var(--agent-default-bg);
   --color-agent-default-border: var(--agent-default-border);
@@ -187,6 +212,31 @@
     --agent-ollama-bg: #fff7ed;
     --agent-ollama-border: #fed7aa;
     --agent-ollama-hover: #ea580c;
+
+    --agent-copilot: #8b5cf6;
+    --agent-copilot-bg: #faf5ff;
+    --agent-copilot-border: #e9d5ff;
+    --agent-copilot-hover: #7c3aed;
+
+    --agent-cursor: #14b8a6;
+    --agent-cursor-bg: #f0fdfa;
+    --agent-cursor-border: #ccfbf1;
+    --agent-cursor-hover: #0d9488;
+
+    --agent-qoder: #ec4899;
+    --agent-qoder-bg: #fdf2f8;
+    --agent-qoder-border: #fbcfe8;
+    --agent-qoder-hover: #db2777;
+
+    --agent-qwen: #f59e0b;
+    --agent-qwen-bg: #fffbeb;
+    --agent-qwen-border: #fef3c7;
+    --agent-qwen-hover: #d97706;
+
+    --agent-codex: #6366f1;
+    --agent-codex-bg: #eef2ff;
+    --agent-codex-border: #e0e7ff;
+    --agent-codex-hover: #4f46e5;
 
     --agent-default: #64748b;
     --agent-default-bg: #f8fafc;
@@ -448,6 +498,31 @@
     --agent-ollama-border: #4f2f1a;
     --agent-ollama-hover: #fdba74;
 
+    --agent-copilot: #a78bfa;
+    --agent-copilot-bg: #231d32;
+    --agent-copilot-border: #3a2f4f;
+    --agent-copilot-hover: #c4b5fd;
+
+    --agent-cursor: #2dd4bf;
+    --agent-cursor-bg: #1a2e2d;
+    --agent-cursor-border: #2a4a47;
+    --agent-cursor-hover: #5eead4;
+
+    --agent-qoder: #f472b6;
+    --agent-qoder-bg: #2d1a27;
+    --agent-qoder-border: #4f2640;
+    --agent-qoder-hover: #f9a8d4;
+
+    --agent-qwen: #fbbf24;
+    --agent-qwen-bg: #322614;
+    --agent-qwen-border: #4f3d1a;
+    --agent-qwen-hover: #fcd34d;
+
+    --agent-codex: #818cf8;
+    --agent-codex-bg: #1e1f32;
+    --agent-codex-border: #2e2f4f;
+    --agent-codex-hover: #a5b4fc;
+
     --agent-default: #94a3b8;
     --agent-default-bg: #1e293b;
     --agent-default-border: #334155;
@@ -654,5 +729,67 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Border Width Utilities */
+  .border-l-3 {
+    border-left-width: 3px;
+  }
+
+  /* Agent-Specific Left Border Colors */
+  .border-l-agent-claude {
+    border-left-color: var(--agent-claude);
+  }
+
+  .border-l-agent-gemini {
+    border-left-color: var(--agent-gemini);
+  }
+
+  .border-l-agent-gpt {
+    border-left-color: var(--agent-gpt);
+  }
+
+  .border-l-agent-amp {
+    border-left-color: var(--agent-amp);
+  }
+
+  .border-l-agent-factory {
+    border-left-color: var(--agent-factory);
+  }
+
+  .border-l-agent-o1 {
+    border-left-color: var(--agent-o1);
+  }
+
+  .border-l-agent-copilot {
+    border-left-color: var(--agent-copilot);
+  }
+
+  .border-l-agent-cursor {
+    border-left-color: var(--agent-cursor);
+  }
+
+  .border-l-agent-qoder {
+    border-left-color: var(--agent-qoder);
+  }
+
+  .border-l-agent-qwen {
+    border-left-color: var(--agent-qwen);
+  }
+
+  .border-l-agent-codex {
+    border-left-color: var(--agent-codex);
+  }
+
+  .border-l-agent-opencode {
+    border-left-color: var(--agent-opencode);
+  }
+
+  .border-l-agent-ollama {
+    border-left-color: var(--agent-ollama);
+  }
+
+  .border-l-border-strong {
+    border-left-color: var(--border-strong);
   }
 }

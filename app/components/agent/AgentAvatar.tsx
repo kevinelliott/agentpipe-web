@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type AgentType = 'amp' | 'claude' | 'copilot' | 'cursor' | 'factory' | 'gemini' | 'gpt' | 'o1' | 'opencode' | 'ollama' | 'qoder' | 'qwen' | 'codex' | 'default';
-type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface AgentAvatarProps {
   agent: AgentType;
@@ -53,6 +53,7 @@ export function AgentAvatar({
   const baseClasses = 'inline-flex items-center justify-center rounded-full font-semibold border-2 flex-shrink-0 transition-all duration-fast';
 
   const sizeClasses: Record<AvatarSize, string> = {
+    xs: 'w-5 h-5 text-[0.625rem]',
     sm: 'w-6 h-6 text-[0.6875rem]',
     md: 'w-8 h-8 text-xs',
     lg: 'w-10 h-10 text-sm',

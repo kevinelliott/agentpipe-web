@@ -22,27 +22,37 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // Pagination
+    // Pagination (support both 'limit' and 'pageSize' parameters)
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20')));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || searchParams.get('limit') || '20')));
     const skip = (page - 1) * limit;
 
     // Filters
     const status = searchParams.get('status') as ConversationStatus | null;
+    const mode = searchParams.get('mode');
+    const source = searchParams.get('source');
     const agentType = searchParams.get('agentType');
     const model = searchParams.get('model');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
 
-    // Sorting
-    const sort = searchParams.get('sort') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    // Sorting (support both 'sort'/'order' and 'sortBy'/'sortOrder' parameters)
+    const sort = searchParams.get('sortBy') || searchParams.get('sort') || 'createdAt';
+    const order = searchParams.get('sortOrder') || searchParams.get('order') || 'desc';
 
     // Build where clause
     const where: any = {};
 
     if (status && Object.values(ConversationStatus).includes(status)) {
       where.status = status;
+    }
+
+    if (mode) {
+      where.mode = mode;
+    }
+
+    if (source) {
+      where.source = source;
     }
 
     if (startDate || endDate) {
@@ -88,33 +98,37 @@ export async function GET(request: NextRequest) {
       prisma.conversation.count({ where }),
     ]);
 
-    // Format response
-    const data = conversations.map((conv) => ({
+    // Format response to match frontend expectations
+    const formattedConversations = conversations.map((conv) => ({
       id: conv.id,
       name: conv.name,
-      createdAt: conv.createdAt,
-      updatedAt: conv.updatedAt,
-      startedAt: conv.startedAt,
-      completedAt: conv.completedAt,
-      status: conv.status,
       mode: conv.mode,
-      containerId: conv.containerId,
-      containerStatus: conv.containerStatus,
-      errorMessage: conv.errorMessage,
+      status: conv.status,
+      source: conv.source,
+      startedAt: conv.startedAt.toISOString(),
+      completedAt: conv.completedAt?.toISOString() || null,
+      initialPrompt: conv.initialPrompt,
+      summaryText: conv.summaryText,
+      summaryAgentType: conv.summaryAgentType,
+      summaryModel: conv.summaryModel,
       totalMessages: conv.totalMessages,
       totalTokens: conv.totalTokens,
       totalCost: conv.totalCost,
       totalDuration: conv.totalDuration,
-      participants: conv.participants.map((p) => p.agentType),
+      errorMessage: conv.errorMessage,
+      participants: conv.participants,
+      messageCount: conv._count.messages,
     }));
 
     return NextResponse.json({
-      data,
+      conversations: formattedConversations,
       pagination: {
         page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
+        pageSize: limit,
+        totalCount: total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPreviousPage: page > 1,
       },
     });
   } catch (error) {

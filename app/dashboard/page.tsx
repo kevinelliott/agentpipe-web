@@ -70,7 +70,7 @@ export default function Dashboard() {
   const fetchConversations = async () => {
     try {
       setIsLoadingConversations(true);
-      const response = await fetch('/api/sessions?status=ACTIVE&pageSize=10&sortBy=updatedAt&sortOrder=desc');
+      const response = await fetch('/api/conversations?status=ACTIVE&pageSize=10&sortBy=updatedAt&sortOrder=desc');
       if (!response.ok) throw new Error('Failed to fetch conversations');
 
       const data = await response.json();
@@ -223,7 +223,16 @@ export default function Dashboard() {
         {/* Live Conversations Section */}
         <section className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Live Conversations</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-foreground">Live Conversations</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push('/conversations')}
+              >
+                View All
+              </Button>
+            </div>
             <div className="flex items-center gap-3">
               <SearchInput
                 placeholder="Search conversations..."
@@ -245,7 +254,7 @@ export default function Dashboard() {
                 <ConversationCard
                   key={conversation.id}
                   {...conversation}
-                  onClick={() => router.push(`/sessions/${conversation.id}`)}
+                  onClick={() => router.push(`/conversations/${conversation.id}`)}
                 />
               ))}
             </div>
@@ -302,7 +311,7 @@ export default function Dashboard() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">Recent Messages</h2>
-            <Button variant="ghost" size="sm" onClick={() => router.push('/sessions')}>
+            <Button variant="ghost" size="sm" onClick={() => router.push('/conversations')}>
               View All
             </Button>
           </div>

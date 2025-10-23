@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { MessageBubble } from '@/app/components/agent/MessageBubble';
 import { AgentAvatar, type AgentType } from '@/app/components/agent/AgentAvatar';
 import { StatusDot, type StatusType } from '@/app/components/status/StatusDot';
 import { Badge } from '@/app/components/ui/Badge';
@@ -11,7 +10,10 @@ import { Skeleton } from '@/app/components/status/Skeleton';
 import { MetricCard } from '@/app/components/metrics/MetricCard';
 import { WebSocketStatus } from '@/app/components/status/WebSocketStatus';
 import { SummaryCard } from '@/app/components/conversation/SummaryCard';
+import { ConversationMessages } from '@/app/components/conversation/ConversationMessages';
+import { ViewToggle } from '@/app/components/conversation/ViewToggle';
 import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
+import { useViewMode } from '@/app/hooks/useViewMode';
 
 interface Participant {
   id: string;
@@ -93,6 +95,7 @@ export default function SessionDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [viewMode, setViewMode] = useViewMode();
 
   // Fetch session details
   const fetchSession = useCallback(async (showLoading = true) => {
@@ -104,7 +107,7 @@ export default function SessionDetailPage() {
       }
       setError(null);
 
-      const response = await fetch(`/api/sessions/${sessionId}`);
+      const response = await fetch(`/api/conversations/${sessionId}`);
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -244,7 +247,7 @@ export default function SessionDetailPage() {
               {error === 'Session not found' ? 'Session Not Found' : 'Error Loading Session'}
             </h2>
             <p className="text-muted-foreground mb-4">{error}</p>
-            <Button onClick={() => router.push('/sessions')} variant="outline">
+            <Button onClick={() => router.push('/conversations')} variant="outline">
               Back to Sessions
             </Button>
           </div>
@@ -260,7 +263,7 @@ export default function SessionDetailPage() {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <Button
-              onClick={() => router.push('/sessions')}
+              onClick={() => router.push('/conversations')}
               variant="ghost"
               size="sm"
             >
@@ -372,6 +375,51 @@ export default function SessionDetailPage() {
           </div>
         </div>
 
+        {/* Error Message */}
+        {session.errorMessage && (
+          <div className="bg-error/10 border border-error rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-semibold text-error mb-2">Error</h3>
+            <p className="text-sm text-error">{session.errorMessage}</p>
+          </div>
+        )}
+
+        {/* Messages */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">
+              Conversation ({session.messages.length} messages)
+            </h3>
+            <div className="flex items-center gap-3">
+              <ViewToggle value={viewMode} onChange={setViewMode} />
+              {session.status === 'ACTIVE' && isConnected && (
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  Live updates
+                </span>
+              )}
+            </div>
+          </div>
+
+          <ConversationMessages
+            messages={session.messages}
+            viewMode={viewMode}
+            mapAgentTypeToAgentType={mapAgentTypeToAgentType}
+            emptyState={
+              <div className="bg-card border border-border rounded-lg p-8 text-center">
+                <p className="text-muted-foreground">No messages in this conversation yet</p>
+                {session.status === 'ACTIVE' && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Messages will appear here as they arrive
+                  </p>
+                )}
+              </div>
+            }
+          />
+        </div>
+
         {/* System Information */}
         {(session.agentpipeVersion || session.systemOS) && (
           <div className="bg-card border border-border rounded-lg p-4 mb-6">
@@ -406,62 +454,6 @@ export default function SessionDetailPage() {
             </div>
           </div>
         )}
-
-        {/* Error Message */}
-        {session.errorMessage && (
-          <div className="bg-error/10 border border-error rounded-lg p-4 mb-6">
-            <h3 className="text-sm font-semibold text-error mb-2">Error</h3>
-            <p className="text-sm text-error">{session.errorMessage}</p>
-          </div>
-        )}
-
-        {/* Messages */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">
-              Conversation ({session.messages.length} messages)
-            </h3>
-            {session.status === 'ACTIVE' && isConnected && (
-              <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                Live updates
-              </span>
-            )}
-          </div>
-
-          {session.messages.length === 0 ? (
-            <div className="bg-card border border-border rounded-lg p-8 text-center">
-              <p className="text-muted-foreground">No messages in this conversation yet</p>
-              {session.status === 'ACTIVE' && (
-                <p className="text-xs text-muted-foreground mt-2">
-                  Messages will appear here as they arrive
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {session.messages.map((message) => (
-                <MessageBubble
-                  key={message.id}
-                  agent={mapAgentTypeToAgentType(message.agentType)}
-                  agentName={message.agentName}
-                  agentVersion={message.agentVersion}
-                  content={message.content}
-                  timestamp={new Date(message.timestamp)}
-                  tokens={message.totalTokens || undefined}
-                  inputTokens={message.inputTokens || undefined}
-                  outputTokens={message.outputTokens || undefined}
-                  cost={message.cost || undefined}
-                  model={message.model}
-                  duration={message.duration || undefined}
-                />
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* Metadata Footer */}
         <div className="bg-muted/30 border border-border rounded-lg p-4 text-xs text-muted-foreground">

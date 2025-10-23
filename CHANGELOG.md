@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2025-10-22
+
+### Added
+- **Slim View Feature**: New compact conversation view for easier reading
+  - `ViewToggle` component: Segmented control to switch between Normal and Slim views
+  - `MessageBubbleSlim` component: Minimalist message display with:
+    - 3px left border in agent-specific colors
+    - Extra-small avatar (20px)
+    - Single-line truncated plain text (no Markdown)
+    - No metrics footer for reduced visual noise
+  - `TurnSeparator` component: Visual dividers between agent turns with time gap labels
+  - `ConversationMessages` wrapper: Conditionally renders Normal or Slim view
+  - `useViewMode` hook: Manages view state with localStorage persistence
+  - CSS utilities: `.border-l-3` and agent-specific border colors (`.border-l-agent-*`)
+  - Extra-small (`xs`) avatar size support: 20px avatars for compact displays
+- **Navigation Improvements**:
+  - "View All" button on dashboard next to "Live Conversations" heading
+  - Easy access to archived/completed conversations from the dashboard
+- **Agent Support Expansion**:
+  - Added color definitions for Copilot, Cursor, QoDer, Qwen, and Codex agents
+  - Support for both light and dark mode color schemes
+
+### Changed
+- **Route Consolidation**: Renamed `/sessions` to `/conversations` throughout the application
+  - Updated all route references in dashboard, navigation, and API calls
+  - Consolidated duplicate API routes for cleaner structure
+  - Enhanced `/api/conversations` to support dual parameter styles for backward compatibility
+- **UI Layout Improvements**:
+  - Moved System Information section below Conversation block on detail pages
+  - Improved information hierarchy for better user flow
+
+### Technical
+- Added localStorage persistence for user view mode preference
+- Turn detection and grouping in conversation messages
+- Time gap calculation and display between agent turns
+- CSS utility layer extensions for slim view styling
+- TypeScript type definitions for ViewMode, ConversationMessages props
+
 ## [0.0.4] - 2025-10-22
 
 ### Fixed
