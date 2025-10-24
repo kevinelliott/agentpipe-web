@@ -1,6 +1,6 @@
 {
   "name": "agentpipe-web",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.17.1",
     "@supabase/supabase-js": "^2.75.0",

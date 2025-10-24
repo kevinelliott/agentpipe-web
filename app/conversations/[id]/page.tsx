@@ -248,7 +248,7 @@ export default function SessionDetailPage() {
             </h2>
             <p className="text-muted-foreground mb-4">{error}</p>
             <Button onClick={() => router.push('/conversations')} variant="outline">
-              Back to Sessions
+              Back to Conversations
             </Button>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function SessionDetailPage() {
               variant="ghost"
               size="sm"
             >
-              ← Back to Sessions
+              ← Back to Conversations
             </Button>
             <div className="flex items-center gap-3">
               {isUpdating && (
@@ -281,7 +281,7 @@ export default function SessionDetailPage() {
 
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{session.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">{session.initialPrompt}</h1>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <StatusDot status={mapStatusToStatusType(session.status)} pulse={session.status === 'ACTIVE'} />
