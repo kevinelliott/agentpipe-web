@@ -3,6 +3,16 @@ export { Button } from './ui/Button';
 export { Card, CardHeader, CardTitle, CardDescription, CardFooter } from './ui/Card';
 export { Badge } from './ui/Badge';
 export { Input, SearchInput } from './ui/Input';
+export { SectionHeader } from './ui/SectionHeader';
+export {
+  MessagesIcon,
+  ConversationsIcon,
+  TokensIcon,
+  CostIcon,
+  AgentsIcon,
+  SearchIcon,
+  RadioIcon,
+} from './ui/Icon';
 
 // Agent Components
 export { AgentAvatar } from './agent/AgentAvatar';

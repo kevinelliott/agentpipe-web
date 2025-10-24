@@ -4,6 +4,14 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/Input';
+import { SectionHeader } from '../components/ui/SectionHeader';
+import {
+  MessagesIcon,
+  TokensIcon,
+  CostIcon,
+  AgentsIcon,
+  RadioIcon,
+} from '../components/ui/Icon';
 import { MetricCard } from '../components/metrics/MetricCard';
 import { ConversationCard } from '../components/conversation/ConversationCard';
 import { MessageBubble } from '../components/agent/MessageBubble';
@@ -13,6 +21,7 @@ import { ConversationCardSkeleton, MessageBubbleSkeleton } from '../components/s
 import { Footer } from '../components/layout/Footer';
 import { isLocalCLIAvailable } from '../lib/environment';
 import { useRealtimeEvents } from '../hooks/useRealtimeEvents';
+import { useDebounce } from '../hooks/useDebounce';
 import {
   transformConversation,
   transformMessage,
@@ -39,6 +48,8 @@ export default function Dashboard() {
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
+  const [messageSearchQuery, setMessageSearchQuery] = useState('');
+  const debouncedMessageSearch = useDebounce(messageSearchQuery, 300);
 
   // Real-time events
   const { isConnected: wsConnected } = useRealtimeEvents({
@@ -138,9 +149,21 @@ export default function Dashboard() {
     );
   });
 
+  // Filter messages based on search
+  const filteredMessages = recentMessages.filter((msg) => {
+    if (!debouncedMessageSearch) return true;
+    const query = debouncedMessageSearch.toLowerCase();
+    return (
+      msg.content.toLowerCase().includes(query) ||
+      msg.agentName.toLowerCase().includes(query) ||
+      msg.agentType.toLowerCase().includes(query) ||
+      (msg.conversation?.name?.toLowerCase().includes(query) || false)
+    );
+  });
+
   // Transform data for components
   const transformedConversations = filteredConversations.map(transformConversation);
-  const transformedMessages = recentMessages.map(transformMessage);
+  const transformedMessages = filteredMessages.map(transformMessage);
 
   // Get WebSocket status
   const wsStatus = wsConnected ? 'connected' : 'disconnected';
@@ -198,18 +221,23 @@ export default function Dashboard() {
                 <MetricCard
                   label="Total Conversations"
                   value={formattedMetrics.totalConversations}
+                  icon={<RadioIcon size={24} />}
+                  onClick={() => router.push('/conversations')}
                 />
                 <MetricCard
                   label="Active Agents"
                   value={formattedMetrics.activeAgents}
+                  icon={<AgentsIcon size={24} />}
                 />
                 <MetricCard
                   label="Total Tokens"
                   value={formattedMetrics.totalTokens}
+                  icon={<TokensIcon size={24} />}
                 />
                 <MetricCard
                   label="Total Cost"
                   value={formattedMetrics.totalCost}
+                  icon={<CostIcon size={24} />}
                 />
               </>
             ) : (
@@ -222,26 +250,24 @@ export default function Dashboard() {
 
         {/* Live Conversations Section */}
         <section className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-foreground">Live Conversations</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push('/conversations')}
-              >
-                View All
-              </Button>
-            </div>
-            <div className="flex items-center gap-3">
-              <SearchInput
-                placeholder="Search conversations..."
-                className="w-full sm:w-80"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
+          <SectionHeader
+            icon={<RadioIcon size={20} className="animate-pulse" />}
+            title="Live Conversations"
+          >
+            <SearchInput
+              placeholder="Search conversations..."
+              className="w-full sm:w-80"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push('/conversations')}
+            >
+              View All
+            </Button>
+          </SectionHeader>
 
           {isLoadingConversations ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -309,12 +335,24 @@ export default function Dashboard() {
 
         {/* Recent Messages Section */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Recent Messages</h2>
-            <Button variant="ghost" size="sm" onClick={() => router.push('/conversations')}>
+          <SectionHeader
+            icon={<MessagesIcon size={20} />}
+            title="Recent Messages"
+          >
+            <SearchInput
+              placeholder="Search messages..."
+              className="w-full sm:w-80"
+              value={messageSearchQuery}
+              onChange={(e) => setMessageSearchQuery(e.target.value)}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push('/conversations')}
+            >
               View All
             </Button>
-          </div>
+          </SectionHeader>
 
           {isLoadingMessages ? (
             <div className="space-y-3">
@@ -335,6 +373,23 @@ export default function Dashboard() {
                   cost={message.cost}
                 />
               ))}
+            </div>
+          ) : messageSearchQuery ? (
+            <div className="bg-card border border-border rounded-lg">
+              <EmptyState
+                icon={
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                }
+                title="No messages found"
+                description={`No messages match "${messageSearchQuery}". Try a different search term.`}
+              />
             </div>
           ) : (
             <div className="bg-card border border-border rounded-lg">

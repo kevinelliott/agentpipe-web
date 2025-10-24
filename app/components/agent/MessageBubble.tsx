@@ -32,23 +32,23 @@ export function MessageBubble({
   duration,
   className = '',
 }: MessageBubbleProps) {
-  const baseClasses = 'p-4 rounded-lg border mb-3 transition-all duration-base hover:shadow-md hover:-translate-y-px focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 animate-message-appear';
+  const baseClasses = 'p-4 rounded-lg border border-l-4 mb-3 transition-all duration-200 hover:scale-[1.01] hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 animate-message-appear';
 
   const agentClasses: Record<AgentType, string> = {
-    claude: 'bg-agent-claude-bg border-agent-claude-border',
-    gemini: 'bg-agent-gemini-bg border-agent-gemini-border',
-    gpt: 'bg-agent-gpt-bg border-agent-gpt-border',
-    amp: 'bg-agent-amp-bg border-agent-amp-border',
-    factory: 'bg-agent-factory-bg border-agent-factory-border',
-    o1: 'bg-agent-o1-bg border-agent-o1-border',
-    copilot: 'bg-agent-copilot-bg border-agent-copilot-border',
-    cursor: 'bg-agent-cursor-bg border-agent-cursor-border',
-    qoder: 'bg-agent-qoder-bg border-agent-qoder-border',
-    qwen: 'bg-agent-qwen-bg border-agent-qwen-border',
-    codex: 'bg-agent-codex-bg border-agent-codex-border',
-    opencode: 'bg-agent-opencode-bg border-agent-opencode-border',
-    ollama: 'bg-agent-ollama-bg border-agent-ollama-border',
-    default: 'bg-agent-default-bg border-agent-default-border',
+    claude: 'bg-agent-claude-bg border-agent-claude-border border-l-agent-claude',
+    gemini: 'bg-agent-gemini-bg border-agent-gemini-border border-l-agent-gemini',
+    gpt: 'bg-agent-gpt-bg border-agent-gpt-border border-l-agent-gpt',
+    amp: 'bg-agent-amp-bg border-agent-amp-border border-l-agent-amp',
+    factory: 'bg-agent-factory-bg border-agent-factory-border border-l-agent-factory',
+    o1: 'bg-agent-o1-bg border-agent-o1-border border-l-agent-o1',
+    copilot: 'bg-agent-copilot-bg border-agent-copilot-border border-l-agent-copilot',
+    cursor: 'bg-agent-cursor-bg border-agent-cursor-border border-l-agent-cursor',
+    qoder: 'bg-agent-qoder-bg border-agent-qoder-border border-l-agent-qoder',
+    qwen: 'bg-agent-qwen-bg border-agent-qwen-border border-l-agent-qwen',
+    codex: 'bg-agent-codex-bg border-agent-codex-border border-l-agent-codex',
+    opencode: 'bg-agent-opencode-bg border-agent-opencode-border border-l-agent-opencode',
+    ollama: 'bg-agent-ollama-bg border-agent-ollama-border border-l-agent-ollama',
+    default: 'bg-agent-default-bg border-agent-default-border border-l-agent-default',
   };
 
   const formattedTime = timestamp.toLocaleTimeString('en-US', {
