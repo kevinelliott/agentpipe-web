@@ -74,6 +74,7 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
+          DIRECT_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -124,9 +125,15 @@ jobs:
 
       - name: Validate Prisma schema
         run: npx prisma validate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
+          DIRECT_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
 
       - name: Check Prisma format
         run: npx prisma format --check
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
+          DIRECT_URL: postgresql://postgres:postgres@localhost:5432/agentpipe
 
   security:
     name: Security Audit
