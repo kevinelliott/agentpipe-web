@@ -45,9 +45,12 @@ export function ConversationCard({
     pending: 'default' as const,
   };
 
+  // Get primary agent for color theming
+  const primaryAgent = participants[0]?.type;
+
   return (
     <div
-      className={`bg-card border border-border rounded-lg p-4 transition-all duration-base cursor-pointer hover:border-strong hover:shadow-md hover:-translate-y-0.5 ${className}`.trim()}
+      className={`bg-card border border-border rounded-xl p-5 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-primary/30 group overflow-hidden ${primaryAgent ? `shadow-agent-${primaryAgent}` : ''} ${className}`.trim()}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -58,33 +61,44 @@ export function ConversationCard({
         }
       }}
     >
+      {/* Background Accent */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
+        style={{
+          background: primaryAgent ? `var(--agent-${primaryAgent})` : 'var(--primary-500)',
+        }}
+      />
+
       {/* Header */}
-      <div className="flex items-start gap-3 mb-3">
-        <div className="flex gap-2">
-          {participants.slice(0, 3).map((participant, i) => (
-            <AgentAvatar
+      <div className="flex items-start gap-4 mb-4 relative z-10">
+        <div className="flex -space-x-2">
+          {participants.slice(0, 4).map((participant, i) => (
+            <div
               key={i}
-              agent={participant.type}
-              size="sm"
-            />
+              className="ring-2 ring-card transition-transform duration-300 group-hover:ring-2 group-hover:ring-primary/50"
+            >
+              <AgentAvatar
+                agent={participant.type}
+                size="md"
+              />
+            </div>
           ))}
-          {participants.length > 3 && (
-            <div className="w-6 h-6 rounded-full bg-muted border-2 border-border flex items-center justify-center text-[0.6875rem] font-semibold">
-              +{participants.length - 3}
+          {participants.length > 4 && (
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border-2 border-card ring-2 ring-card flex items-center justify-center text-[0.625rem] font-bold text-primary">
+              +{participants.length - 4}
             </div>
           )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <h4 className="text-base font-semibold leading-snug mb-1 truncate">
+        <div className="flex-1 min-w-0 pt-1">
+          <h4 className="text-base font-bold leading-snug mb-2 truncate group-hover:text-primary transition-colors">
             {title}
           </h4>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <StatusDot status={status} pulse={status === 'active'} />
-              <span>{statusLabel}</span>
+              <span className="font-medium">{statusLabel}</span>
             </div>
-            <span>•</span>
+            <span className="opacity-50">•</span>
             <span>{lastActivity}</span>
           </div>
         </div>
@@ -122,16 +136,18 @@ export function ConversationCard({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-3 border-t border-border">
-        <div className="flex gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <span>{messageCount} messages</span>
+      <div className="flex items-center justify-between pt-4 border-t border-border/50 relative z-10">
+        <div className="flex gap-5 text-xs">
+          <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-accent/40">
+            <span className="font-semibold text-foreground">{messageCount}</span>
+            <span className="text-muted-foreground">msgs</span>
           </div>
-          <div className="flex items-center gap-1">
-            <span>{tokenCount} tokens</span>
+          <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-accent/40">
+            <span className="font-semibold text-foreground">{tokenCount}</span>
+            <span className="text-muted-foreground">tokens</span>
           </div>
         </div>
-        <Badge variant={statusBadgeVariant[status]}>
+        <Badge variant={statusBadgeVariant[status]} className="font-semibold">
           {statusLabel}
         </Badge>
       </div>

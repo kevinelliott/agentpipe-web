@@ -249,10 +249,11 @@ export default function Dashboard() {
         </section>
 
         {/* Live Conversations Section */}
-        <section className="mb-8">
+        <section className="mb-12">
           <SectionHeader
-            icon={<RadioIcon size={20} className="animate-pulse" />}
+            icon={<RadioIcon />}
             title="Live Conversations"
+            animated={true}
           >
             <SearchInput
               placeholder="Search conversations..."
@@ -334,9 +335,9 @@ export default function Dashboard() {
         </section>
 
         {/* Recent Messages Section */}
-        <section>
+        <section className="mt-12">
           <SectionHeader
-            icon={<MessagesIcon size={20} />}
+            icon={<MessagesIcon />}
             title="Recent Messages"
           >
             <SearchInput
