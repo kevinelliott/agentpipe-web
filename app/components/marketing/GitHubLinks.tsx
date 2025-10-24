@@ -50,9 +50,19 @@ export function GitHubLinks() {
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-      {/* AgentPipe Button */}
+      {/* Dashboard Button - Primary CTA */}
       <Button
         variant="primary"
+        size="lg"
+        onClick={() => (window.location.href = '/dashboard')}
+        className="w-full sm:w-auto"
+      >
+        See Live Dashboard
+      </Button>
+
+      {/* AgentPipe Button */}
+      <Button
+        variant="outline"
         size="lg"
         onClick={() => window.open('https://github.com/kevinelliott/agentpipe', '_blank')}
         className="w-full sm:w-auto flex items-center gap-2"
@@ -100,16 +110,6 @@ export function GitHubLinks() {
           AgentPipe Web
           <span className="ml-2 text-xs opacity-75">{agentpipeWebVersion.version}</span>
         </span>
-      </Button>
-
-      {/* Dashboard Button */}
-      <Button
-        variant="outline"
-        size="lg"
-        onClick={() => (window.location.href = '/dashboard')}
-        className="w-full sm:w-auto"
-      >
-        See Live Dashboard
       </Button>
     </div>
   );
