@@ -3,8 +3,8 @@ import React from 'react';
 const agents = [
   {
     name: 'Amp CLI',
-    provider: 'Optimized',
-    url: 'https://amp.dev',
+    provider: 'Sourcegraph',
+    url: 'https://ampcode.com',
     logo: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

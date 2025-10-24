@@ -19,7 +19,7 @@ interface Agent {
 }
 
 const AGENT_TYPES = [
-  { value: 'amp', label: 'Amp CLI', provider: 'Optimized' },
+  { value: 'amp', label: 'Amp CLI', provider: 'Sourcegraph' },
   { value: 'claude', label: 'Claude CLI', provider: 'Anthropic' },
   { value: 'copilot', label: 'GitHub Copilot CLI', provider: 'GitHub' },
   { value: 'cursor', label: 'Cursor CLI', provider: 'Cursor' },
