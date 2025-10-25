@@ -162,6 +162,49 @@ const agents = [
     borderColor: 'border-[#fed7aa]',
     description: 'Run and orchestrate large language models locally',
   },
+  {
+    name: 'Groq Code CLI',
+    provider: 'Groq',
+    url: 'https://groq.com',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
+        <path d="M13 2L8 14h6l-2 8 8-12h-6l2-8Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+    color: 'text-[#7c3aed]',
+    bgColor: 'bg-[#f5f3ff]',
+    borderColor: 'border-[#e9d5ff]',
+    description: 'Lightning-fast code generation using Groq\'s LPUs',
+  },
+  {
+    name: 'Kimi CLI',
+    provider: 'Moonshot AI',
+    url: 'https://kimi.moonshot.cn',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-12 h-12">
+        <circle cx="12" cy="12" r="9" strokeWidth="2"/>
+        <path d="M12 7v10M7 12h10" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    ),
+    color: 'text-[#0891b2]',
+    bgColor: 'bg-[#ecfeff]',
+    borderColor: 'border-[#cffafe]',
+    description: 'Chinese AI coding assistant with enhanced capabilities',
+  },
+  {
+    name: 'Crush CLI',
+    provider: 'Charmbracelet',
+    url: 'https://charm.sh',
+    logo: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+    ),
+    color: 'text-[#ec4899]',
+    bgColor: 'bg-[#fce7f3]',
+    borderColor: 'border-[#fbcfe8]',
+    description: 'Terminal-first AI assistant with beautiful TUI and multi-provider support',
+  },
 ];
 
 export function SupportedAgents() {
