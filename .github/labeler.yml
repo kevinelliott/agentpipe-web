@@ -1,60 +1,64 @@
 # Labeler configuration for automatic PR labeling based on file paths
+# Format: Each label maps to an array of glob patterns
+# Files matching any pattern will receive the label
 
-# Frontend
-"frontend":
-  - "app/components/**/*"
-  - "app/page.tsx"
-  - "app/dashboard/**/*"
-  - "app/conversations/**/*"
-  - "app/globals.css"
+frontend:
+  - any:
+      - app/components/**/*
+      - app/page.tsx
+      - app/dashboard/**/*
+      - app/conversations/**/*
+      - app/globals.css
 
-# Backend/API
-"backend":
-  - "app/api/**/*"
-  - "app/lib/**/*"
+backend:
+  - any:
+      - app/api/**/*
+      - app/lib/**/*
 
-# Database
-"database":
-  - "prisma/**/*"
+database:
+  - any:
+      - prisma/**/*
 
-# Docker
-"docker":
-  - "Dockerfile"
-  - "docker-compose.yaml"
-  - ".dockerignore"
+docker:
+  - any:
+      - Dockerfile
+      - docker-compose.yml
+      - docker-compose.yaml
+      - .dockerignore
 
-# CI/CD
 "ci/cd":
-  - ".github/workflows/**/*"
-  - "Makefile"
+  - any:
+      - .github/workflows/**/*
+      - Makefile
 
-# Documentation
-"documentation":
-  - "**/*.md"
-  - "docs/**/*"
+documentation:
+  - any:
+      - "*.md"
+      - docs/**/*
 
-# Configuration
-"config":
-  - "package.json"
-  - "package-lock.json"
-  - "tsconfig.json"
-  - "next.config.ts"
-  - "tailwind.config.ts"
-  - ".env.example"
+config:
+  - any:
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - next.config.ts
+      - tailwind.config.ts
+      - .env.example
+      - .nvmrc
 
-# Dependencies
-"dependencies":
-  - "package.json"
-  - "package-lock.json"
+dependencies:
+  - any:
+      - package.json
+      - package-lock.json
 
-# Tests
-"tests":
-  - "**/*.test.ts"
-  - "**/*.test.tsx"
-  - "**/*.spec.ts"
-  - "**/*.spec.tsx"
+tests:
+  - any:
+      - "**/*.test.ts"
+      - "**/*.test.tsx"
+      - "**/*.spec.ts"
+      - "**/*.spec.tsx"
 
-# Types
-"types":
-  - "app/types/**/*"
-  - "**/*.d.ts"
+types:
+  - any:
+      - app/types/**/*
+      - "**/*.d.ts"
