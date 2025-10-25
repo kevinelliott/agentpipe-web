@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.15] - 2025-10-25
+
+### Added
+- **Agent Showcase Page**: New dedicated `/agents` page showcasing all 14 supported AI agents
+  - Expandable agent cards with detailed metadata (description, provider, category, models)
+  - Real-time statistics for each agent (conversation count, message count, token usage, costs)
+  - Links to official websites, GitHub repositories, and documentation
+  - Agent cards grouped by category (Commercial and Open Source)
+  - Summary statistics dashboard showing total agents, conversations, tokens, and costs
+  - ISR (Incremental Static Regeneration) with 5-minute revalidation for optimal performance
+
+- **Agent Logos**: Professional SVG logos for all 14 agents in `/public/logos/`
+  - Each agent has a custom, visually distinct logo design
+  - Logos: amp, claude, codex, copilot, crush, cursor, factory, gemini, groq, kimi, ollama, opencode, qoder, qwen
+
+- **Agent Statistics Service**: New `app/lib/agentStats.ts` service for aggregating agent metrics
+  - Database queries grouped by agent type
+  - In-memory caching with 5-minute TTL to prevent repeated queries
+  - Calculates conversation count, message count, token usage, costs per agent
+  - Cache invalidation on new ingested events
+
+- **Agent Metadata Configuration**: New `app/lib/agentMetadata.ts` with static agent configurations
+  - Centralized source of truth for agent information
+  - Includes name, description, tagline, provider, category, links, models
+  - Helper functions for retrieving agent data by category or individual lookup
+
+- **Agent Showcase API Endpoint**: New `GET /api/agents/showcase` endpoint
+  - Returns all agents with combined metadata and real-time statistics
+  - HTTP caching headers for edge/CDN optimization
+  - Efficient response structure with summary statistics
+
+### Changed
+- **Conversation Card Design**: Improved UI/UX for better information hierarchy
+  - Title now displays the conversation prompt instead of generic "Conversation" label
+  - Agent avatars repositioned to right side of card header with smaller size (sm)
+  - Removed redundant status label text from header (only shows dot + status)
+  - Move last activity time from header to footer, left of metrics
+  - Improved visual balance and mobile responsiveness
+
+- **Front Page Hero Section**: Updated to showcase more agents
+  - Displays 8 agent avatars instead of 5
+  - Updated description to mention "14 supported agents"
+  - Added "View All Agents" button linking to new `/agents` page
+
+### Technical
+- New API endpoint for agent showcase data aggregation
+- Database query optimization with agent type grouping
+- Efficient caching strategy for statistics to prevent performance degradation
+- Component-based card design for expandable agent information
+- ISR for static page generation with 5-minute revalidation
+- Full TypeScript type safety for agent metadata and statistics
+
+### Performance
+- Agent showcase statistics cached in-memory for 5 minutes
+- ISR revalidation prevents unnecessary database queries on every request
+- Minimal database impact with optimized aggregation queries
+- Efficient component rendering with React 19 features
+
 ## [0.0.14] - 2025-10-25
 
 ### Added

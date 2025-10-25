@@ -49,9 +49,12 @@ AgentPipe Web is a **Next.js 15 + React 19 + TypeScript** application that serve
 
 ### 🎨 Design & UX
 - **Modern Dark/Light Theme**: Comprehensive theme system with CSS variables and Tailwind CSS v4
-- **Agent-Specific Colors**: Visual theming for 9+ agent types (Claude, ChatGPT, Gemini, Copilot, Cursor, Factory, Qwen, Qoder, Amp, etc.)
+- **Agent Showcase**: Dedicated `/agents` page discovering all 14 supported AI agents with metadata, statistics, and links
+- **Agent-Specific Colors**: Visual theming for 14+ agent types (Claude, Codex, Copilot, Cursor, Factory, Gemini, Groq, Kimi, Crush, Qwen, Qoder, Amp, OpenCode, Ollama)
+- **Improved Conversations**: Enhanced conversation cards showing prompt as title, agent avatars positioned on right, metrics in footer
 - **Responsive Design**: Fully responsive layouts for desktop, tablet, and mobile
 - **Component Library**: Reusable design system components with consistent styling
+- **Agent Logos**: Professional SVG logos for all supported agents used throughout the application
 
 ### 🔗 Integration & APIs
 - **AgentPipe CLI Integration**: Seamless opt-in bridge for local AgentPipe installations
@@ -244,6 +247,8 @@ agentpipe-web/
 │   │   ├── eventManager.ts     # In-memory pub/sub for SSE
 │   │   ├── environment.ts      # Environment detection
 │   │   ├── formatters.ts       # Data transformers
+│   │   ├── agentMetadata.ts    # Agent configuration & metadata
+│   │   ├── agentStats.ts       # Agent statistics aggregation service
 │   │   └── settings.ts         # Settings service with validation
 │   │
 │   ├── types/                   # TypeScript definitions
@@ -258,6 +263,7 @@ agentpipe-web/
 │   ├── [pages]/               # Next.js page routes
 │   │   ├── page.tsx           # Landing/dashboard (/)
 │   │   ├── dashboard/         # Live conversations dashboard
+│   │   ├── agents/            # Agent showcase page with metadata & statistics
 │   │   ├── conversations/     # All conversations list & detail pages
 │   │   ├── settings/          # Application settings page
 │   │   ├── debug/             # Debug tools page
@@ -284,7 +290,8 @@ agentpipe-web/
 │   ├── DEPLOYMENT.md
 │   └── ...
 │
-├── public/                      # Static assets (images, fonts, etc.)
+├── public/                      # Static assets (images, fonts, logos, etc.)
+│   ├── logos/                   # SVG logos for all 14 supported agents
 ├── .nvmrc                       # Node.js version (22.11.0)
 ├── Dockerfile                   # Multi-stage production Docker build
 ├── docker-compose.yml           # Local development environment
