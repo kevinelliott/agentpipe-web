@@ -569,7 +569,7 @@ Images are automatically built and published on version tags:
 ```bash
 # GitHub Container Registry (ghcr.io)
 docker pull ghcr.io/kevinelliott/agentpipe-web:latest
-docker pull ghcr.io/kevinelliott/agentpipe-web:v0.0.12
+docker pull ghcr.io/kevinelliott/agentpipe-web:v0.0.13
 
 # Multi-architecture support
 # - linux/amd64 (Intel, AMD)

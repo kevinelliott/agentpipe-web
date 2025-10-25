@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.13] - 2025-10-25
+
+### Fixed
+- **Docker Build Workflow**: Fixed registry authentication to exclusively use ghcr.io
+  - Changed `docker/login-action` from using environment variable to explicit 'ghcr.io' registry
+  - Prevents Docker daemon from attempting fallback authentication to Docker Hub
+  - Ensures credentials are only used for GitHub Container Registry
+  - Resolves: "Error: Username and password required" when pushing to Docker Hub was not intended
+
+### Technical
+- Updated docker-build.yml for explicit ghcr.io authentication
+- Guarantees all image pushes go exclusively to GitHub Container Registry
+
 ## [0.0.12] - 2025-10-25
 
 ### Added
