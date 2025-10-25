@@ -66,39 +66,39 @@ export function ConversationCard({
         }}
       />
 
-      {/* Header */}
-      <div className="flex items-start gap-4 mb-4 relative z-10">
-        <div className="flex -space-x-2">
-          {participants.slice(0, 4).map((participant, i) => (
+      {/* Header with Agents on Right */}
+      <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
+        <div className="flex-1 min-w-0">
+          {/* Title: Use prompt text instead of generic title */}
+          <h4 className="text-base font-bold leading-snug mb-1 line-clamp-2 group-hover:text-primary transition-colors pr-2">
+            {title}
+          </h4>
+          {/* Status indicator with dot only - no redundant text */}
+          <div className="flex items-center gap-1.5">
+            <StatusDot status={status} pulse={status === 'active'} />
+            <span className="text-xs text-muted-foreground font-medium">{statusLabel}</span>
+          </div>
+        </div>
+
+        {/* Agent Avatars Positioned on Right */}
+        <div className="flex -space-x-2 flex-shrink-0">
+          {participants.slice(0, 3).map((participant, i) => (
             <div
               key={i}
               className="ring-2 ring-card transition-transform duration-300 group-hover:ring-2 group-hover:ring-primary/50"
+              title={participant.name}
             >
               <AgentAvatar
                 agent={participant.type}
-                size="md"
+                size="sm"
               />
             </div>
           ))}
-          {participants.length > 4 && (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border-2 border-card ring-2 ring-card flex items-center justify-center text-[0.625rem] font-bold text-primary">
-              +{participants.length - 4}
+          {participants.length > 3 && (
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border-2 border-card ring-2 ring-card flex items-center justify-center text-[0.5rem] font-bold text-primary flex-shrink-0">
+              +{participants.length - 3}
             </div>
           )}
-        </div>
-
-        <div className="flex-1 min-w-0 pt-1">
-          <h4 className="text-base font-bold leading-snug mb-2 truncate group-hover:text-primary transition-colors">
-            {title}
-          </h4>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <StatusDot status={status} pulse={status === 'active'} />
-              <span className="font-medium">{statusLabel}</span>
-            </div>
-            <span className="opacity-50">•</span>
-            <span>{lastActivity}</span>
-          </div>
         </div>
       </div>
 
@@ -134,18 +134,26 @@ export function ConversationCard({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-border/50 relative z-10">
-        <div className="flex gap-5 text-xs">
-          <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-accent/40">
-            <span className="font-semibold text-foreground">{messageCount}</span>
-            <span className="text-muted-foreground">msgs</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-accent/40">
-            <span className="font-semibold text-foreground">{tokenCount}</span>
-            <span className="text-muted-foreground">tokens</span>
+      <div className="flex items-center justify-between pt-3 border-t border-border/50 relative z-10">
+        <div className="flex items-center gap-3 text-xs">
+          {/* Last Activity Time */}
+          <span className="text-muted-foreground">{lastActivity}</span>
+
+          {/* Metrics */}
+          <div className="flex gap-3">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-accent/40">
+              <span className="font-semibold text-foreground">{messageCount}</span>
+              <span className="text-muted-foreground">msgs</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-accent/40">
+              <span className="font-semibold text-foreground">{tokenCount}</span>
+              <span className="text-muted-foreground">tokens</span>
+            </div>
           </div>
         </div>
-        <Badge variant={statusBadgeVariant[status]} className="font-semibold">
+
+        {/* Status Badge Only (the text in header is sufficient as indicator) */}
+        <Badge variant={statusBadgeVariant[status]} className="font-semibold text-xs">
           {statusLabel}
         </Badge>
       </div>
