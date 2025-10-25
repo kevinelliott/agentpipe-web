@@ -16,7 +16,7 @@ export function GitHubLinks() {
     error: false,
   });
 
-  const [agentpipeWebVersion, _setAgentpipeWebVersion] = useState<GitHubVersion>({
+  const [agentpipeWebVersion] = useState<GitHubVersion>({
     version: 'v0.0.7',
     loading: false,
     error: false,

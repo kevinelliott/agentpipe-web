@@ -274,7 +274,7 @@ class SettingsService {
     try {
       await access(value, constants.F_OK);
       return { key, isValid: true };
-    } catch (_error) {
+    } catch {
       // Path doesn't exist - not necessarily invalid if it's just a command name
       if (!value.includes('/')) {
         // Might be a command in PATH
@@ -380,7 +380,7 @@ class SettingsService {
       try {
         JSON.parse(value);
         return { key, isValid: true };
-      } catch (_error) {
+      } catch {
         return {
           key,
           isValid: false,

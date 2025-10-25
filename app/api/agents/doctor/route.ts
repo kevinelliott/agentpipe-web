@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { settingsService } from '@/app/lib/settings';
@@ -53,7 +53,7 @@ export interface DoctorOutput {
  * This endpoint runs the agentpipe doctor command to check system
  * environment, configuration, and agent availability.
  */
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // Get AgentPipe binary path and timeout from settings
     const binaryPath = await settingsService.get<string>(
@@ -82,7 +82,7 @@ export async function GET(_request: NextRequest) {
     let doctorOutput: DoctorOutput;
     try {
       doctorOutput = JSON.parse(stdout);
-    } catch (_parseError) {
+    } catch {
       console.error('Failed to parse agentpipe doctor output:', stdout);
       return NextResponse.json(
         { error: 'Invalid JSON from agentpipe doctor', details: stdout },

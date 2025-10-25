@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from './components/theme/ThemeProvider';
 import { Header } from './components/layout/Header';
+import { ToastProvider } from './components/ui/ToastProvider';
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
@@ -44,8 +45,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased min-h-screen bg-background text-foreground">
         <ThemeProvider>
-          <Header />
-          {children}
+          <ToastProvider>
+            <Header />
+            {children}
+          </ToastProvider>
         </ThemeProvider>
         <Analytics />
       </body>

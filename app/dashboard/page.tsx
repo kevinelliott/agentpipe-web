@@ -15,7 +15,6 @@ import {
 import { MetricCard } from '../components/metrics/MetricCard';
 import { ConversationCard } from '../components/conversation/ConversationCard';
 import { MessageBubble } from '../components/agent/MessageBubble';
-import { WebSocketStatus } from '../components/status/WebSocketStatus';
 import { EmptyState } from '../components/status/EmptyState';
 import { ConversationCardSkeleton, MessageBubbleSkeleton } from '../components/status/Skeleton';
 import { Footer } from '../components/layout/Footer';
@@ -42,8 +41,6 @@ export default function Dashboard() {
   const [isLoadingMessages, setIsLoadingMessages] = useState(true);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(true);
 
-  // Error state
-  const [_error, _setError] = useState<string | null>(null);
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,20 +48,20 @@ export default function Dashboard() {
   const debouncedMessageSearch = useDebounce(messageSearchQuery, 300);
 
   // Real-time events
-  const { isConnected: wsConnected } = useRealtimeEvents({
-    onConversationStarted: (_data) => {
+  useRealtimeEvents({
+    onConversationStarted: () => {
       // Refetch conversations when a new one starts
       fetchConversations();
       fetchMetrics();
     },
-    onMessageCreated: (_data) => {
+    onMessageCreated: () => {
       // Add new message to recent messages
       fetchRecentMessages();
       // Update the conversation that received the message
       fetchConversations();
       fetchMetrics();
     },
-    onConversationCompleted: (_data) => {
+    onConversationCompleted: () => {
       // Update conversation status
       fetchConversations();
       fetchMetrics();
@@ -161,9 +158,6 @@ export default function Dashboard() {
   const transformedConversations = filteredConversations.map(transformConversation);
   const transformedMessages = filteredMessages.map(transformMessage);
 
-  // Get WebSocket status
-  const wsStatus = wsConnected ? 'connected' : 'disconnected';
-
   // Format metrics
   const formattedMetrics = metrics ? formatMetrics(metrics) : null;
 
@@ -179,17 +173,14 @@ export default function Dashboard() {
                 Real-time monitoring of multi-agent conversations
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <WebSocketStatus status={wsStatus} />
-              {cliAvailable && (
-                <Button
-                  variant="primary"
-                  onClick={() => window.location.href = '/conversations/new'}
-                >
-                  New Conversation
-                </Button>
-              )}
-            </div>
+            {cliAvailable && (
+              <Button
+                variant="primary"
+                onClick={() => window.location.href = '/conversations/new'}
+              >
+                New Conversation
+              </Button>
+            )}
           </div>
         </div>
       </div>

@@ -113,7 +113,7 @@ export async function getContainerStatus(containerId: string): Promise<string> {
       ['inspect', '--format={{.State.Status}}', containerId]
     );
     return stdout.trim();
-  } catch (_error) {
+  } catch {
     return 'error';
   }
 }
@@ -144,7 +144,7 @@ export async function getContainerLogs(
       ['logs', '--tail', tail.toString(), containerId]
     );
     return stdout;
-  } catch (_error) {
+  } catch {
     return '';
   }
 }

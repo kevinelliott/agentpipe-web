@@ -1,10 +1,36 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { Button } from '../ui/Button';
+import { WebSocketStatus } from '../status/WebSocketStatus';
+import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
+import { useToast } from '../ui/ToastProvider';
 
 export function Header() {
+  const router = useRouter();
+  const { addToast } = useToast();
+  const { isConnected } = useRealtimeEvents({
+    onConversationStarted: (data) => {
+      const conversationId = data?.id;
+      if (conversationId) {
+        addToast(
+          'New conversation started',
+          'success',
+          5000
+        );
+        // Navigate to the conversation after a brief delay to show the toast
+        setTimeout(() => {
+          router.push(`/conversations/${conversationId}`);
+        }, 500);
+      }
+    },
+  });
+
+  // Determine connection status for display
+  const connectionStatus = isConnected ? 'connected' : 'connecting';
+
   return (
     <header className="sticky top-0 z-sticky bg-background/95 backdrop-blur-lg border-b border-border">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,6 +83,7 @@ export function Header() {
                 GitHub
               </a>
             </nav>
+            <WebSocketStatus status={connectionStatus} className="hidden sm:inline-flex" />
             <ThemeToggle />
             <Button
               variant="primary"

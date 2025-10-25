@@ -151,7 +151,7 @@ export default function SettingsPage() {
           error: result.error,
         },
       }));
-    } catch (_error) {
+    } catch {
       setSettings((prev) => ({
         ...prev,
         [key]: {

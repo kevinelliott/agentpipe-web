@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { useRealtimeEvents, type RealtimeEvent } from '../hooks/useRealtimeEvents';
-import { WebSocketStatus } from '../components/status/WebSocketStatus';
 
 export default function DebugPage() {
   const [events, setEvents] = useState<RealtimeEvent[]>([]);
@@ -127,7 +126,7 @@ export default function DebugPage() {
     console.log('EventSource support:', typeof EventSource !== 'undefined' ? 'YES' : 'NO');
 
     // Fetch buffer stats
-    const _stats = await fetchBufferStats();
+    await fetchBufferStats();
 
     // Try to fetch the stream endpoint directly
     fetch('/api/stream')
@@ -176,12 +175,9 @@ export default function DebugPage() {
               </Link>
               <h1 className="text-2xl font-bold text-foreground">Event Stream Debug</h1>
             </div>
-            <div className="flex items-center gap-3">
-              <WebSocketStatus status={isConnected ? 'connected' : 'disconnected'} />
-              <span className="text-sm text-muted-foreground">
-                {eventCount} events received
-              </span>
-            </div>
+            <span className="text-sm text-muted-foreground">
+              {eventCount} events received
+            </span>
           </div>
         </div>
       </header>

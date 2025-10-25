@@ -8,7 +8,6 @@ import { Badge } from '@/app/components/ui/Badge';
 import { Button } from '@/app/components/ui/Button';
 import { Skeleton } from '@/app/components/status/Skeleton';
 import { MetricCard } from '@/app/components/metrics/MetricCard';
-import { WebSocketStatus } from '@/app/components/status/WebSocketStatus';
 import { SummaryCard } from '@/app/components/conversation/SummaryCard';
 import { ConversationMessages } from '@/app/components/conversation/ConversationMessages';
 import { ViewToggle } from '@/app/components/conversation/ViewToggle';
@@ -136,7 +135,7 @@ export default function SessionDetailPage() {
   }, [fetchSession]);
 
   // Real-time updates - subscribe to events for this specific conversation
-  const { isConnected } = useRealtimeEvents({
+  useRealtimeEvents({
     conversationId: sessionId,
     onMessageCreated: (data) => {
       console.log('[SessionDetail] New message received:', data);
@@ -268,14 +267,11 @@ export default function SessionDetailPage() {
             >
               ← Back to Conversations
             </Button>
-            <div className="flex items-center gap-3">
-              {isUpdating && (
-                <span className="text-xs text-muted-foreground animate-pulse">
-                  Updating...
-                </span>
-              )}
-              <WebSocketStatus status={isConnected ? 'connected' : 'disconnected'} />
-            </div>
+            {isUpdating && (
+              <span className="text-xs text-muted-foreground animate-pulse">
+                Updating...
+              </span>
+            )}
           </div>
 
           <div className="flex items-start justify-between mb-4">
@@ -390,7 +386,7 @@ export default function SessionDetailPage() {
             </h3>
             <div className="flex items-center gap-3">
               <ViewToggle value={viewMode} onChange={setViewMode} />
-              {session.status === 'ACTIVE' && isConnected && (
+              {session.status === 'ACTIVE' && (
                 <span className="text-xs text-muted-foreground flex items-center gap-1.5">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
