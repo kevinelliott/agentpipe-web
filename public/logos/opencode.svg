@@ -1,0 +1,18 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="opencode-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#opencode-gradient)" opacity="0.1"/>
+  <!-- Open brackets with code dots -->
+  <path d="M 40 40 L 30 64 L 40 88" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 88 40 L 98 64 L 88 88" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center dots (code representation) -->
+  <circle cx="55" cy="50" r="2.5" fill="#10b981"/>
+  <circle cx="64" cy="64" r="2.5" fill="#10b981"/>
+  <circle cx="73" cy="78" r="2.5" fill="#10b981"/>
+  <!-- Open source indicator: curved lines -->
+  <path d="M 55 60 Q 64 50 73 60" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+</svg>

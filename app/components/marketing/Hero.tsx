@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { AgentAvatar } from '../agent/AgentAvatar';
 import { GitHubLinks } from './GitHubLinks';
 
@@ -11,12 +12,16 @@ export function Hero() {
       <div className="relative max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">
           {/* Agent Avatars */}
-          <div className="flex items-center justify-center gap-2 mb-8">
+          <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
             <AgentAvatar agent="claude" size="lg" />
             <AgentAvatar agent="codex" size="lg" />
+            <AgentAvatar agent="copilot" size="lg" />
             <AgentAvatar agent="gemini" size="lg" />
-            <AgentAvatar agent="amp" size="lg" />
             <AgentAvatar agent="groq" size="lg" />
+            <AgentAvatar agent="kimi" size="lg" />
+            <AgentAvatar agent="crush" size="lg" />
+            <AgentAvatar agent="amp" size="lg" />
+            <span className="text-sm text-muted-foreground px-2">+ 6 more</span>
           </div>
 
           {/* Headline */}
@@ -29,12 +34,22 @@ export function Hero() {
 
           {/* Description */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-            Run and monitor real-time conversations between Claude, GPT, Gemini, and other AI agents.
+            Run and monitor real-time conversations between Claude, Gemini, Groq, Copilot, and 10+ other AI agents.
             Open source, self-hosted, and built for developers.
           </p>
 
           {/* CTA Buttons */}
-          <GitHubLinks />
+          <div className="mb-8">
+            <GitHubLinks />
+            <div className="mt-4">
+              <Link
+                href="/agents"
+                className="inline-block px-6 py-2 rounded-lg bg-muted hover:bg-muted/80 text-foreground font-medium transition-colors"
+              >
+                View All Agents
+              </Link>
+            </div>
+          </div>
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">

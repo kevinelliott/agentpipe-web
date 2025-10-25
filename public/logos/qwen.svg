@@ -1,0 +1,18 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="qwen-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#qwen-gradient)" opacity="0.1"/>
+  <!-- Stylized Chinese/Asian inspired shape (Qwen character-inspired) -->
+  <rect x="35" y="35" width="58" height="58" fill="none" stroke="#ef4444" stroke-width="3" rx="8"/>
+  <!-- Inner grid pattern (Asian aesthetic) -->
+  <line x1="50" y1="35" x2="50" y2="93" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+  <line x1="78" y1="35" x2="78" y2="93" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+  <line x1="35" y1="50" x2="93" y2="50" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+  <line x1="35" y1="78" x2="93" y2="78" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+  <!-- Center ornament -->
+  <circle cx="64" cy="64" r="6" fill="#ef4444" opacity="0.7"/>
+</svg>
