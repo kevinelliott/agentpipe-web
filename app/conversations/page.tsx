@@ -360,7 +360,6 @@ export default function SessionsPage() {
             {sessions.map((session) => (
               <ConversationCard
                 key={session.id}
-                id={session.id}
                 title={session.name}
                 participants={session.participants.map((p) => ({
                   type: mapAgentTypeToAgentType(p.agentType),

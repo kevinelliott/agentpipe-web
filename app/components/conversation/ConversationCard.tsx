@@ -9,7 +9,6 @@ interface Participant {
 }
 
 interface ConversationCardProps {
-  id: string;
   title: string;
   participants: Participant[];
   status: StatusType;
@@ -24,7 +23,6 @@ interface ConversationCardProps {
 }
 
 export function ConversationCard({
-  _id,
   title,
   participants,
   status,
