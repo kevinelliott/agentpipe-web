@@ -991,6 +991,46 @@
             margin-top: var(--space-3);
         }
 
+        /* AI Summary Section */
+        .ai-summary {
+            margin-top: var(--space-3);
+            padding: var(--space-3);
+            background-color: var(--muted);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .ai-summary-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .ai-summary-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--primary-600);
+        }
+
+        .ai-summary-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ai-summary-text {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -1768,37 +1808,177 @@ import { AgentBadge } from '@/app/components';
             <!-- Conversation Cards -->
             <section id="conversation-cards" class="section">
                 <h2 class="section-title">Conversation Cards</h2>
-                <p class="section-description">Cards displaying conversation information with agent participants.</p>
+                <p class="section-description">Cards displaying conversation information with agent participants. Cards can optionally include an AI-generated summary for quick context.</p>
 
-                <div class="component-example">
-                    <div class="example-label">Conversation Card Example</div>
-                    <div class="conversation-card">
-                        <div class="conversation-header">
-                            <div>
-                                <div class="conversation-title">Multi-Agent Code Review</div>
-                                <div class="conversation-meta">Started 2 hours ago • 45 messages</div>
+                <div class="subsection">
+                    <h3 class="subsection-title">Card with AI Summary</h3>
+                    <div class="component-example">
+                        <div class="example-label">Conversation Card with AI Summary</div>
+                        <div class="conversation-card">
+                            <div class="conversation-header">
+                                <div>
+                                    <div class="conversation-title">Multi-Agent Code Review</div>
+                                    <div class="conversation-meta">Started 2 hours ago • 45 messages</div>
+                                </div>
+                                <span class="badge badge-success">Active</span>
                             </div>
-                            <span class="badge badge-success">Active</span>
+
+                            <div class="ai-summary">
+                                <div class="ai-summary-header">
+                                    <svg class="ai-summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span class="ai-summary-label">AI Summary</span>
+                                </div>
+                                <div class="ai-summary-text">
+                                    Three agents collaborated on a comprehensive code review of the authentication system, identifying security improvements and suggesting best practices for session management and token validation.
+                                </div>
+                            </div>
+
+                            <div class="conversation-agents">
+                                <div class="agent-avatar agent-avatar-sm agent-claude">CL</div>
+                                <div class="agent-avatar agent-avatar-sm agent-gemini">GM</div>
+                                <div class="agent-avatar agent-avatar-sm agent-cursor">CR</div>
+                            </div>
                         </div>
-                        <div class="conversation-agents">
-                            <div class="agent-avatar agent-avatar-sm agent-claude">CL</div>
-                            <div class="agent-avatar agent-avatar-sm agent-gemini">GM</div>
-                            <div class="agent-avatar agent-avatar-sm agent-cursor">CR</div>
-                        </div>
-                    </div>
-                    <div class="code-block">
-                        <code>&lt;div class="conversation-card"&gt;
+                        <div class="code-block">
+                            <code>&lt;div class="conversation-card"&gt;
   &lt;div class="conversation-header"&gt;
     &lt;div&gt;
-      &lt;div class="conversation-title"&gt;Title&lt;/div&gt;
-      &lt;div class="conversation-meta"&gt;Metadata&lt;/div&gt;
+      &lt;div class="conversation-title"&gt;Multi-Agent Code Review&lt;/div&gt;
+      &lt;div class="conversation-meta"&gt;Started 2 hours ago • 45 messages&lt;/div&gt;
     &lt;/div&gt;
     &lt;span class="badge badge-success"&gt;Active&lt;/span&gt;
   &lt;/div&gt;
+
+  &lt;div class="ai-summary"&gt;
+    &lt;div class="ai-summary-header"&gt;
+      &lt;svg class="ai-summary-icon"&gt;...&lt;/svg&gt;
+      &lt;span class="ai-summary-label"&gt;AI Summary&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="ai-summary-text"&gt;
+      Three agents collaborated on a comprehensive code review...
+    &lt;/div&gt;
+  &lt;/div&gt;
+
   &lt;div class="conversation-agents"&gt;
-    &lt;!-- Agent avatars --&gt;
+    &lt;div class="agent-avatar agent-avatar-sm agent-claude"&gt;CL&lt;/div&gt;
+    &lt;div class="agent-avatar agent-avatar-sm agent-gemini"&gt;GM&lt;/div&gt;
+    &lt;div class="agent-avatar agent-avatar-sm agent-cursor"&gt;CR&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Card without AI Summary</h3>
+                    <div class="component-example">
+                        <div class="example-label">Basic Conversation Card</div>
+                        <div class="conversation-card">
+                            <div class="conversation-header">
+                                <div>
+                                    <div class="conversation-title">Database Migration Planning</div>
+                                    <div class="conversation-meta">Started yesterday • 12 messages</div>
+                                </div>
+                                <span class="badge badge-info">Completed</span>
+                            </div>
+                            <div class="conversation-agents">
+                                <div class="agent-avatar agent-avatar-sm agent-codex">CX</div>
+                                <div class="agent-avatar agent-avatar-sm agent-copilot">CP</div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <code>&lt;div class="conversation-card"&gt;
+  &lt;div class="conversation-header"&gt;
+    &lt;div&gt;
+      &lt;div class="conversation-title"&gt;Database Migration Planning&lt;/div&gt;
+      &lt;div class="conversation-meta"&gt;Started yesterday • 12 messages&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;span class="badge badge-info"&gt;Completed&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="conversation-agents"&gt;
+    &lt;div class="agent-avatar agent-avatar-sm agent-codex"&gt;CX&lt;/div&gt;
+    &lt;div class="agent-avatar agent-avatar-sm agent-copilot"&gt;CP&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Additional Examples</h3>
+                    <div style="display: grid; gap: var(--space-6);">
+                        <!-- Example with long AI summary (shows truncation) -->
+                        <div class="conversation-card">
+                            <div class="conversation-header">
+                                <div>
+                                    <div class="conversation-title">Performance Optimization Strategy</div>
+                                    <div class="conversation-meta">3 days ago • 128 messages</div>
+                                </div>
+                                <span class="badge badge-info">Completed</span>
+                            </div>
+
+                            <div class="ai-summary">
+                                <div class="ai-summary-header">
+                                    <svg class="ai-summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span class="ai-summary-label">AI Summary</span>
+                                </div>
+                                <div class="ai-summary-text">
+                                    The team analyzed application performance bottlenecks and developed a comprehensive optimization strategy including database query improvements, caching implementation, code splitting, and lazy loading. Implementation resulted in 60% faster page load times and significantly improved user experience metrics.
+                                </div>
+                            </div>
+
+                            <div class="conversation-agents">
+                                <div class="agent-avatar agent-avatar-sm agent-factory">FC</div>
+                                <div class="agent-avatar agent-avatar-sm agent-amp">AM</div>
+                                <div class="agent-avatar agent-avatar-sm agent-qwen">QW</div>
+                                <div class="agent-avatar agent-avatar-sm agent-claude">CL</div>
+                            </div>
+                        </div>
+
+                        <!-- Example with error status -->
+                        <div class="conversation-card">
+                            <div class="conversation-header">
+                                <div>
+                                    <div class="conversation-title">API Integration Debugging</div>
+                                    <div class="conversation-meta">Just now • 5 messages</div>
+                                </div>
+                                <span class="badge badge-error">Error</span>
+                            </div>
+
+                            <div class="ai-summary">
+                                <div class="ai-summary-header">
+                                    <svg class="ai-summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span class="ai-summary-label">AI Summary</span>
+                                </div>
+                                <div class="ai-summary-text">
+                                    Investigation into API authentication failures revealed CORS configuration issues and expired OAuth tokens. Agents proposed solutions but conversation was interrupted due to rate limiting.
+                                </div>
+                            </div>
+
+                            <div class="conversation-agents">
+                                <div class="agent-avatar agent-avatar-sm agent-gemini">GM</div>
+                                <div class="agent-avatar agent-avatar-sm agent-qoder">QD</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="a11y-note">
+                    <div class="a11y-note-title">AI Summary Design Notes</div>
+                    <div class="a11y-note-content">
+                        <ul style="margin-left: var(--space-4); margin-top: var(--space-2);">
+                            <li><strong>Sparkle Icon:</strong> Indicates AI-generated content, using primary color for visual consistency</li>
+                            <li><strong>Text Truncation:</strong> Uses -webkit-line-clamp: 2 to limit summary to 2 lines, maintaining card height consistency</li>
+                            <li><strong>Visual Hierarchy:</strong> AI Summary appears between metadata and agent avatars for logical reading flow</li>
+                            <li><strong>Responsive Design:</strong> Summary container has background, border, and padding to clearly separate it from other card content</li>
+                            <li><strong>Theme Support:</strong> Uses semantic color tokens (--muted, --border, --primary-600) that adapt to light and dark modes</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -1806,6 +1986,7 @@ import { AgentBadge } from '@/app/components';
                     <code>/* React component usage */
 import { ConversationCard } from '@/app/components';
 
+// With AI Summary
 &lt;ConversationCard
   title="Multi-Agent Code Review"
   participants={[
@@ -1819,6 +2000,23 @@ import { ConversationCard } from '@/app/components';
   preview="Started 2 hours ago • 45 messages"
   messageCount={45}
   tokenCount="8.2K"
+  aiSummary="Three agents collaborated on a comprehensive code review..."
+  onClick={handleClick}
+/&gt;
+
+// Without AI Summary
+&lt;ConversationCard
+  title="Database Migration Planning"
+  participants={[
+    { type: 'codex', name: 'Codex' },
+    { type: 'copilot', name: 'Copilot' }
+  ]}
+  status="completed"
+  statusLabel="Completed"
+  lastActivity="1d ago"
+  preview="Started yesterday • 12 messages"
+  messageCount={12}
+  tokenCount="3.1K"
   onClick={handleClick}
 /&gt;</code>
                 </div>

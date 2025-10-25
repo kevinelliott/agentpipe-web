@@ -120,6 +120,7 @@ export function transformConversation(conversation: any) {
     statusLabel: getStatusLabel(conversation.status),
     lastActivity: formatRelativeTime(conversation.updatedAt || conversation.startedAt),
     preview,
+    aiSummary: conversation.summaryText,
     messageCount: conversation.totalMessages || conversation.messageCount || 0,
     tokenCount: formatTokenCount(conversation.totalTokens || 0),
   };

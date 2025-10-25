@@ -125,6 +125,10 @@ export default function SessionsPage() {
     return tokens.toString();
   };
 
+  const formatCost = (cost: number): string => {
+    return `$${cost.toFixed(4)}`;
+  };
+
   const formatRelativeTime = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
@@ -367,7 +371,7 @@ export default function SessionsPage() {
             {sessions.map((session) => (
               <ConversationCard
                 key={session.id}
-                title={session.name}
+                title={session.initialPrompt}
                 participants={session.participants.map((p) => ({
                   type: mapAgentTypeToAgentType(p.agentType),
                   name: p.agentName,
@@ -375,8 +379,8 @@ export default function SessionsPage() {
                 status={mapStatusToStatusType(session.status)}
                 statusLabel={session.status}
                 lastActivity={formatRelativeTime(session.startedAt)}
-                preview={session.initialPrompt}
-                summaryText={session.summaryText}
+                preview={`${session.totalMessages} messages • ${formatCost(session.totalCost)}`}
+                aiSummary={session.summaryText}
                 messageCount={session.totalMessages}
                 tokenCount={formatTokens(session.totalTokens)}
                 onClick={() => router.push(`/conversations/${session.id}`)}
