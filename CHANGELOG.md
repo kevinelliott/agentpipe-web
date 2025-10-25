@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.11] - 2025-10-24
+
+### Added
+- **MIT License**: Added MIT License file to the project
+
+### Changed
+- **Conversation Detail Page**: Initial prompt now displayed as the main page title instead of session name
+- **Primary Call-to-Action**: "Live Dashboard" button is now the primary CTA on the front page (changed from secondary to primary style)
+- **Terminology**: Updated "Back to Sessions" to "Back to Conversations" for consistency
+
+### Fixed
+- **Docker Build**: Fixed invalid Docker image tag format in GitHub Actions workflow
+  - Changed SHA tag prefix from `{{branch}}-` to `sha-` to prevent empty branch variable issues on pull requests
+  - Resolves: `invalid reference format` error in docker-build workflow
+- **CI Environment Variables**: Added missing `DIRECT_URL` environment variable for Prisma schema validation
+  - Required for proper database connection pooling configuration
+  - Added to build and validate-prisma jobs
+- **CI Scripts**: Made build and test scripts CI-friendly
+  - `npm run build`: Now gracefully handles missing database (skips `prisma migrate deploy` if no DB available)
+  - `npm test`: Changed to exit with 0 when no tests configured (was previously exiting with 1)
+  - Allows CI builds to succeed without a running database while still generating Prisma client
+
+### Dependencies
+- Bumped `github/codeql-action` from v3 to v4
+- Bumped `docker/build-push-action` from v5 to v6
+- Bumped `actions/setup-node` from v5 to v6
+
 ## [0.0.6] - 2025-10-22
 
 ### Fixed
