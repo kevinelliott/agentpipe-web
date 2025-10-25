@@ -19,42 +19,42 @@ enum ConversationStatus {
 }
 
 model Conversation {
-  id              String               @id @default(cuid())
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  startedAt       DateTime             @default(now())
-  completedAt     DateTime?
-  status          ConversationStatus   @default(ACTIVE)
+  id          String             @id @default(cuid())
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  startedAt   DateTime           @default(now())
+  completedAt DateTime?
+  status      ConversationStatus @default(ACTIVE)
 
   // Basic info
-  name            String
+  name String
 
   // Configuration
-  mode            String               // "round-robin", "reactive", "free-form"
-  maxTurns        Int?
-  initialPrompt   String               @db.Text
+  mode          String // "round-robin", "reactive", "free-form"
+  maxTurns      Int?
+  initialPrompt String @db.Text
 
   // Streaming source tracking
-  source          String               @default("web") // "web", "cli-stream", "cli-upload"
+  source String @default("web") // "web", "cli-stream", "cli-upload"
 
   // System information (from CLI streaming)
-  agentpipeVersion    String?
-  systemOS            String?
-  systemOSVersion     String?
-  systemGoVersion     String?
-  systemArchitecture  String?
+  agentpipeVersion   String?
+  systemOS           String?
+  systemOSVersion    String?
+  systemGoVersion    String?
+  systemArchitecture String?
 
   // Docker container tracking
   containerId     String?
-  containerStatus String?              // "starting", "running", "stopped", "error"
-  errorMessage    String?              @db.Text
-  errorStack      String?              @db.Text
+  containerStatus String? // "starting", "running", "stopped", "error"
+  errorMessage    String? @db.Text
+  errorStack      String? @db.Text
 
   // Aggregate metrics
-  totalMessages   Int                  @default(0)
-  totalTokens     Int                  @default(0)
-  totalCost       Float                @default(0)
-  totalDuration   Int                  @default(0) // milliseconds
+  totalMessages Int   @default(0)
+  totalTokens   Int   @default(0)
+  totalCost     Float @default(0)
+  totalDuration Int   @default(0) // milliseconds
 
   // Conversation Summary (AI-generated)
   summaryText         String?   @db.Text
@@ -64,16 +64,16 @@ model Conversation {
   summaryOutputTokens Int?
   summaryTotalTokens  Int?
   summaryCost         Float?
-  summaryDuration     Int?      // milliseconds
+  summaryDuration     Int? // milliseconds
   summaryGeneratedAt  DateTime?
-  summaryData         Json?     // Full summary JSON for extensibility
+  summaryData         Json? // Full summary JSON for extensibility
 
   // Relations
-  messages        Message[]
-  participants    ConversationAgent[]
+  messages     Message[]
+  participants ConversationAgent[]
 
   // Additional metadata (JSON field for flexibility)
-  metadata        Json?
+  metadata Json?
 
   @@index([createdAt])
   @@index([status])
@@ -83,80 +83,80 @@ model Conversation {
 }
 
 model Message {
-  id              String       @id @default(cuid())
-  conversationId  String
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   // Agent information
-  agentId         String
-  agentName       String
-  agentType       String       // Agent type: "claude", "gemini", "amp", "gpt", etc.
-  agentVersion    String?      // Agent software version: "1.2.0", "0.5.0", etc.
+  agentId      String
+  agentName    String
+  agentType    String // Agent type: "claude", "gemini", "amp", "gpt", etc.
+  agentVersion String? // Agent software version: "1.2.0", "0.5.0", etc.
 
   // Message content
-  content         String       @db.Text
-  role            String       // "agent", "user", "system"
-  timestamp       DateTime     @default(now())
+  content   String   @db.Text
+  role      String // "agent", "user", "system"
+  timestamp DateTime @default(now())
 
   // Message ordering (for streaming sessions)
-  sequenceNumber  Int?         // Explicit ordering within conversation
-  turnNumber      Int?         // Which turn in the conversation (1, 2, 3...)
+  sequenceNumber Int? // Explicit ordering within conversation
+  turnNumber     Int? // Which turn in the conversation (1, 2, 3...)
 
   // Performance metrics
-  duration        Int?         // milliseconds
-  inputTokens     Int?
-  outputTokens    Int?
-  totalTokens     Int?
-  model           String?      // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
-  cost            Float?
+  duration     Int? // milliseconds
+  inputTokens  Int?
+  outputTokens Int?
+  totalTokens  Int?
+  model        String? // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
+  cost         Float?
 
   @@index([conversationId, timestamp])
   @@index([conversationId, sequenceNumber])
   @@index([agentType])
-  @@index([model])             // Index for filtering by AI model
+  @@index([model]) // Index for filtering by AI model
   @@index([timestamp])
   @@map("messages")
 }
 
 model ConversationAgent {
-  id              String       @id @default(cuid())
-  conversationId  String
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   // Agent configuration
-  agentId         String
-  agentType       String       // Agent type: "claude", "gemini", "amp", "gpt", etc.
-  agentName       String
-  agentVersion    String?      // Agent software version: "1.2.0", "0.5.0", etc.
-  model           String?      // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
-  prompt          String?      @db.Text
-  announcement    String?
-  cliVersion      String?      // CLI version used to invoke this agent
+  agentId      String
+  agentType    String // Agent type: "claude", "gemini", "amp", "gpt", etc.
+  agentName    String
+  agentVersion String? // Agent software version: "1.2.0", "0.5.0", etc.
+  model        String? // AI model used: "claude-sonnet-4", "gpt-4-turbo", "gemini-pro-1.5", etc.
+  prompt       String? @db.Text
+  announcement String?
+  cliVersion   String? // CLI version used to invoke this agent
 
   // Additional agent settings (JSON field for custom settings)
-  settings        Json?
+  settings Json?
 
   @@unique([conversationId, agentId])
   @@index([agentType])
-  @@index([model])             // Index for filtering by AI model
-  @@index([agentVersion])      // Index for filtering by agent version
+  @@index([model]) // Index for filtering by AI model
+  @@index([agentVersion]) // Index for filtering by agent version
   @@map("conversation_agents")
 }
 
 model Event {
-  id              String       @id @default(cuid())
-  createdAt       DateTime     @default(now())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
   // Event details
-  type            String       // Event type (conversation.started, message.created, etc.)
-  conversationId  String?
+  type           String // Event type (conversation.started, message.created, etc.)
+  conversationId String?
 
   // Event data
-  data            Json
+  data Json
 
   // Error tracking
-  errorMessage    String?      @db.Text
-  errorStack      String?      @db.Text
+  errorMessage String? @db.Text
+  errorStack   String? @db.Text
 
   @@index([createdAt])
   @@index([type])
@@ -165,21 +165,21 @@ model Event {
 }
 
 model Setting {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Setting identification
-  key         String    // e.g., "agentpipe.binary_path"
-  value       String    @db.Text
+  key   String // e.g., "agentpipe.binary_path"
+  value String @db.Text
 
   // Metadata
-  description String?   @db.Text
-  category    String?   // "system", "agentpipe", "ui", etc.
-  dataType    String    @default("string") // "string", "number", "boolean", "json", "path"
+  description String? @db.Text
+  category    String? // "system", "agentpipe", "ui", etc.
+  dataType    String  @default("string") // "string", "number", "boolean", "json", "path"
 
   // Multi-tenancy support (null = system-wide)
-  userId      String?
+  userId String?
 
   // Validation tracking
   isValid     Boolean   @default(true)
