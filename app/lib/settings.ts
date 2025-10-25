@@ -11,7 +11,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { access, constants } from 'fs/promises';
 import {
@@ -23,7 +23,7 @@ import {
   SETTING_METADATA,
 } from '@/app/types/settings';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 // Singleton Prisma client instance
 const prisma = new PrismaClient();
@@ -255,6 +255,16 @@ class SettingsService {
       };
     }
 
+    // Sanitize: reject paths with null bytes or other suspicious characters
+    if (value.includes('\0') || value.includes('..')) {
+      return {
+        key,
+        isValid: false,
+        error: 'Invalid characters in path',
+        details: 'Path must not contain null bytes or ".." sequences',
+      };
+    }
+
     // Special handling for agentpipe binary path
     if (key === SettingKey.AGENTPIPE_BINARY_PATH) {
       return await this.validateBinaryPath(key, value);
@@ -285,8 +295,8 @@ class SettingsService {
    */
   private async validateBinaryPath(key: string, value: string): Promise<SettingValidationResult> {
     try {
-      // Execute agentpipe --version to verify it's the correct binary
-      const { stdout, stderr } = await execAsync(`${value} --version`, {
+      // Execute with execFile for safe argument passing (no shell injection)
+      const { stdout, stderr } = await execFileAsync(value, ['--version'], {
         timeout: 5000,
       });
 

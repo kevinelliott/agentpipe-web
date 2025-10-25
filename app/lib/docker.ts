@@ -1,7 +1,7 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export interface AgentConfig {
   type: string;
@@ -32,60 +32,48 @@ export async function spawnAgentPipeContainer(
   config: ConversationConfig
 ): Promise<DockerSpawnResult> {
   try {
-    // Build the AgentPipe command line arguments
-    const args: string[] = [];
-
-    // Add mode
-    args.push('--mode', config.mode);
-
-    // Add max turns if specified
-    if (config.maxTurns) {
-      args.push('--max-turns', config.maxTurns.toString());
-    }
-
-    // Add agents
-    for (const agent of config.agents) {
-      args.push('--agent', agent.type);
-
-      if (agent.model) {
-        args.push('--model', agent.model);
-      }
-
-      if (agent.name) {
-        args.push('--name', agent.name);
-      }
-
-      if (agent.prompt) {
-        // Escape the prompt for shell
-        const escapedPrompt = agent.prompt.replace(/"/g, '\\"');
-        args.push('--prompt', `"${escapedPrompt}"`);
-      }
-    }
-
-    // Add initial prompt (escaped)
-    const escapedInitialPrompt = config.initialPrompt.replace(/"/g, '\\"');
-    args.push('--initial-prompt', `"${escapedInitialPrompt}"`);
-
-    // Build the Docker command
-    // Note: Using detached mode (-d) to run in background
-    const dockerCmd = [
-      'docker run',
+    // Build the Docker command arguments (no shell escaping needed - passed as array)
+    const dockerArgs: string[] = [
+      'run',
       '-d', // Detached mode
       '--name', `agentpipe-${conversationId}`,
       '--label', `agentpipe.conversation.id=${conversationId}`,
       '--rm', // Remove container when it stops
-      // Mount volumes if needed (e.g., for config, logs)
-      // '-v', '/path/to/config:/config',
-      // Environment variables
       '-e', `CONVERSATION_ID=${conversationId}`,
-      // AgentPipe Docker image
       'kevinelliott/agentpipe:latest',
-      // AgentPipe arguments
-      ...args,
-    ].join(' ');
+    ];
 
-    // Execute the Docker command
-    const { stdout, stderr } = await execAsync(dockerCmd);
+    // Add mode
+    dockerArgs.push('--mode', config.mode);
+
+    // Add max turns if specified
+    if (config.maxTurns) {
+      dockerArgs.push('--max-turns', config.maxTurns.toString());
+    }
+
+    // Add agents - no escaping needed with execFile
+    for (const agent of config.agents) {
+      dockerArgs.push('--agent', agent.type);
+
+      if (agent.model) {
+        dockerArgs.push('--model', agent.model);
+      }
+
+      if (agent.name) {
+        dockerArgs.push('--name', agent.name);
+      }
+
+      if (agent.prompt) {
+        // No escaping needed - passed as separate argument
+        dockerArgs.push('--prompt', agent.prompt);
+      }
+    }
+
+    // Add initial prompt - no escaping needed with execFile
+    dockerArgs.push('--initial-prompt', config.initialPrompt);
+
+    // Execute the Docker command using execFile (safe from shell injection)
+    const { stdout, stderr } = await execFileAsync('docker', dockerArgs);
 
     if (stderr && !stdout) {
       throw new Error(stderr);
@@ -120,8 +108,9 @@ export async function spawnAgentPipeContainer(
  */
 export async function getContainerStatus(containerId: string): Promise<string> {
   try {
-    const { stdout } = await execAsync(
-      `docker inspect --format='{{.State.Status}}' ${containerId}`
+    const { stdout } = await execFileAsync(
+      'docker',
+      ['inspect', '--format={{.State.Status}}', containerId]
     );
     return stdout.trim();
   } catch (_error) {
@@ -134,7 +123,7 @@ export async function getContainerStatus(containerId: string): Promise<string> {
  */
 export async function stopContainer(containerId: string): Promise<boolean> {
   try {
-    await execAsync(`docker stop ${containerId}`);
+    await execFileAsync('docker', ['stop', containerId]);
     return true;
   } catch (error) {
     console.error(`Failed to stop container ${containerId}:`, error);
@@ -150,7 +139,10 @@ export async function getContainerLogs(
   tail: number = 100
 ): Promise<string> {
   try {
-    const { stdout } = await execAsync(`docker logs --tail ${tail} ${containerId}`);
+    const { stdout } = await execFileAsync(
+      'docker',
+      ['logs', '--tail', tail.toString(), containerId]
+    );
     return stdout;
   } catch (_error) {
     return '';
