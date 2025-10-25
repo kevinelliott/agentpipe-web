@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14] - 2025-10-25
+
+### Added
+- **New Agent Support**: Added support for 3 new AI agents from AgentPipe v0.4.6-v0.4.9
+  - **Groq Code CLI** (v0.4.6): Lightning-fast code generation using Groq's LPUs
+  - **Kimi by Moonshot AI** (v0.4.8): Chinese AI coding assistant with enhanced capabilities
+  - **Crush by Charmbracelet** (v0.4.9): Terminal-first AI assistant with beautiful TUI and multi-provider support
+- **Agent Type Definitions**: Extended AgentType union to include: `groq`, `kimi`, `crush`. Removed unsupported agents: `gpt`, `o1`. Total agent support: 14 agents + default fallback
+- **Color Theming**: Added comprehensive light and dark mode colors for new agents
+  - Groq: Deep purple theme (primary: #7c3aed, dark: #a78bfa)
+  - Kimi: Cyan/teal theme (primary: #0891b2, dark: #22d3ee)
+  - Crush: Pink theme (primary: #ec4899, dark: #f472b6)
+- **Component Updates**: Updated all agent-related components with new agent support
+  - AgentAvatar: Display labels and names for new agents
+  - AgentBadge: Styling and theming for badges
+  - MessageBubble: Agent-specific message styling
+  - MessageBubbleSlim: Compact view support
+  - MessageBubbleCompact: Icon-based view support
+- **CSS Utilities**: Added border and shadow utilities for all new agents
+  - Border utilities: `.border-l-agent-{name}`
+  - Shadow utilities: `.shadow-agent-{name}`
+  - Dark mode support for all new agent colors
+
+### Technical
+- Expanded agent color palette in globals.css with 12 new CSS variable definitions (light + dark modes)
+- Removed obsolete CSS variables and utilities for `gpt` and `o1` agents
+- AgentType now supports 14 agents: amp, claude, codex, copilot, crush, cursor, factory, gemini, groq, kimi, opencode, ollama, qoder, qwen (+ default fallback)
+- Updated Tailwind theme configuration for seamless agent rendering
+- Maintains full backward compatibility with existing conversations
+
+### Compatibility
+- Web app now synchronized with AgentPipe CLI v0.4.9
+- Supports all agents available in latest AgentPipe release
+- Existing conversations continue to work with legacy agents
+
 ## [0.0.13] - 2025-10-25
 
 ### Fixed

@@ -13,10 +13,10 @@ export function Hero() {
           {/* Agent Avatars */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <AgentAvatar agent="claude" size="lg" />
-            <AgentAvatar agent="gpt" size="lg" />
+            <AgentAvatar agent="codex" size="lg" />
             <AgentAvatar agent="gemini" size="lg" />
             <AgentAvatar agent="amp" size="lg" />
-            <AgentAvatar agent="o1" size="lg" />
+            <AgentAvatar agent="groq" size="lg" />
           </div>
 
           {/* Headline */}

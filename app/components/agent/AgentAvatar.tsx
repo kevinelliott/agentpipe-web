@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type AgentType = 'amp' | 'claude' | 'copilot' | 'cursor' | 'factory' | 'gemini' | 'gpt' | 'o1' | 'opencode' | 'ollama' | 'qoder' | 'qwen' | 'codex' | 'default';
+export type AgentType = 'amp' | 'claude' | 'codex' | 'copilot' | 'crush' | 'cursor' | 'factory' | 'gemini' | 'groq' | 'kimi' | 'opencode' | 'ollama' | 'qoder' | 'qwen' | 'default';
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface AgentAvatarProps {
@@ -13,34 +13,36 @@ interface AgentAvatarProps {
 const agentLabels: Record<AgentType, string> = {
   amp: 'AM',
   claude: 'CL',
+  codex: 'CD',
   copilot: 'CP',
-  cursor: 'CR',
+  crush: 'CR',
+  cursor: 'CU',
   factory: 'FA',
   gemini: 'GM',
-  gpt: 'GP',
-  o1: 'O1',
+  groq: 'GR',
+  kimi: 'KI',
   opencode: 'OC',
   ollama: 'OL',
   qoder: 'QD',
   qwen: 'QW',
-  codex: 'CD',
   default: 'DF',
 };
 
 const agentNames: Record<AgentType, string> = {
   amp: 'Amp',
   claude: 'Claude',
+  codex: 'Codex',
   copilot: 'Copilot',
+  crush: 'Crush',
   cursor: 'Cursor',
   factory: 'Factory',
   gemini: 'Gemini',
-  gpt: 'GPT',
-  o1: 'O1',
+  groq: 'Groq',
+  kimi: 'Kimi',
   opencode: 'OpenCode',
   ollama: 'Ollama',
   qoder: 'Qoder',
   qwen: 'Qwen',
-  codex: 'Codex',
   default: 'Default',
 };
 
@@ -61,19 +63,20 @@ export function AgentAvatar({
   };
 
   const agentClasses: Record<AgentType, string> = {
-    claude: 'bg-agent-claude-bg text-agent-claude border-agent-claude-border hover:bg-agent-claude-border',
-    gemini: 'bg-agent-gemini-bg text-agent-gemini border-agent-gemini-border hover:bg-agent-gemini-border',
-    gpt: 'bg-agent-gpt-bg text-agent-gpt border-agent-gpt-border hover:bg-agent-gpt-border',
     amp: 'bg-agent-amp-bg text-agent-amp border-agent-amp-border hover:bg-agent-amp-border',
-    factory: 'bg-agent-factory-bg text-agent-factory border-agent-factory-border hover:bg-agent-factory-border',
-    o1: 'bg-agent-o1-bg text-agent-o1 border-agent-o1-border hover:bg-agent-o1-border',
-    copilot: 'bg-agent-copilot-bg text-agent-copilot border-agent-copilot-border hover:bg-agent-copilot-border',
-    cursor: 'bg-agent-cursor-bg text-agent-cursor border-agent-cursor-border hover:bg-agent-cursor-border',
-    qoder: 'bg-agent-qoder-bg text-agent-qoder border-agent-qoder-border hover:bg-agent-qoder-border',
-    qwen: 'bg-agent-qwen-bg text-agent-qwen border-agent-qwen-border hover:bg-agent-qwen-border',
+    claude: 'bg-agent-claude-bg text-agent-claude border-agent-claude-border hover:bg-agent-claude-border',
     codex: 'bg-agent-codex-bg text-agent-codex border-agent-codex-border hover:bg-agent-codex-border',
+    copilot: 'bg-agent-copilot-bg text-agent-copilot border-agent-copilot-border hover:bg-agent-copilot-border',
+    crush: 'bg-agent-crush-bg text-agent-crush border-agent-crush-border hover:bg-agent-crush-border',
+    cursor: 'bg-agent-cursor-bg text-agent-cursor border-agent-cursor-border hover:bg-agent-cursor-border',
+    factory: 'bg-agent-factory-bg text-agent-factory border-agent-factory-border hover:bg-agent-factory-border',
+    gemini: 'bg-agent-gemini-bg text-agent-gemini border-agent-gemini-border hover:bg-agent-gemini-border',
+    groq: 'bg-agent-groq-bg text-agent-groq border-agent-groq-border hover:bg-agent-groq-border',
+    kimi: 'bg-agent-kimi-bg text-agent-kimi border-agent-kimi-border hover:bg-agent-kimi-border',
     opencode: 'bg-agent-opencode-bg text-agent-opencode border-agent-opencode-border hover:bg-agent-opencode-border',
     ollama: 'bg-agent-ollama-bg text-agent-ollama border-agent-ollama-border hover:bg-agent-ollama-border',
+    qoder: 'bg-agent-qoder-bg text-agent-qoder border-agent-qoder-border hover:bg-agent-qoder-border',
+    qwen: 'bg-agent-qwen-bg text-agent-qwen border-agent-qwen-border hover:bg-agent-qwen-border',
     default: 'bg-agent-default-bg text-agent-default border-agent-default-border hover:bg-agent-default-border',
   };
 

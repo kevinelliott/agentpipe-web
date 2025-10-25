@@ -12,11 +12,6 @@
   --color-agent-gemini-border: var(--agent-gemini-border);
   --color-agent-gemini-hover: var(--agent-gemini-hover);
 
-  --color-agent-gpt: var(--agent-gpt);
-  --color-agent-gpt-bg: var(--agent-gpt-bg);
-  --color-agent-gpt-border: var(--agent-gpt-border);
-  --color-agent-gpt-hover: var(--agent-gpt-hover);
-
   --color-agent-amp: var(--agent-amp);
   --color-agent-amp-bg: var(--agent-amp-bg);
   --color-agent-amp-border: var(--agent-amp-border);
@@ -26,11 +21,6 @@
   --color-agent-factory-bg: var(--agent-factory-bg);
   --color-agent-factory-border: var(--agent-factory-border);
   --color-agent-factory-hover: var(--agent-factory-hover);
-
-  --color-agent-o1: var(--agent-o1);
-  --color-agent-o1-bg: var(--agent-o1-bg);
-  --color-agent-o1-border: var(--agent-o1-border);
-  --color-agent-o1-hover: var(--agent-o1-hover);
 
   --color-agent-opencode: var(--agent-opencode);
   --color-agent-opencode-bg: var(--agent-opencode-bg);
@@ -66,6 +56,21 @@
   --color-agent-codex-bg: var(--agent-codex-bg);
   --color-agent-codex-border: var(--agent-codex-border);
   --color-agent-codex-hover: var(--agent-codex-hover);
+
+  --color-agent-groq: var(--agent-groq);
+  --color-agent-groq-bg: var(--agent-groq-bg);
+  --color-agent-groq-border: var(--agent-groq-border);
+  --color-agent-groq-hover: var(--agent-groq-hover);
+
+  --color-agent-kimi: var(--agent-kimi);
+  --color-agent-kimi-bg: var(--agent-kimi-bg);
+  --color-agent-kimi-border: var(--agent-kimi-border);
+  --color-agent-kimi-hover: var(--agent-kimi-hover);
+
+  --color-agent-crush: var(--agent-crush);
+  --color-agent-crush-bg: var(--agent-crush-bg);
+  --color-agent-crush-border: var(--agent-crush-border);
+  --color-agent-crush-hover: var(--agent-crush-hover);
 
   --color-agent-default: var(--agent-default);
   --color-agent-default-bg: var(--agent-default-bg);
@@ -183,11 +188,6 @@
     --agent-gemini-border: #d6e4ff;
     --agent-gemini-hover: #3b6bc8;
 
-    --agent-gpt: #0d8968;
-    --agent-gpt-bg: #ecfdf5;
-    --agent-gpt-border: #d1f4e8;
-    --agent-gpt-hover: #0a7355;
-
     --agent-amp: #7c3aed;
     --agent-amp-bg: #f5f3ff;
     --agent-amp-border: #e9d5ff;
@@ -197,11 +197,6 @@
     --agent-factory-bg: #ecfeff;
     --agent-factory-border: #cffafe;
     --agent-factory-hover: #0e7490;
-
-    --agent-o1: #dc2626;
-    --agent-o1-bg: #fef2f2;
-    --agent-o1-border: #fecaca;
-    --agent-o1-hover: #b91c1c;
 
     --agent-opencode: #06b6d4;
     --agent-opencode-bg: #ecfeff;
@@ -237,6 +232,21 @@
     --agent-codex-bg: #eef2ff;
     --agent-codex-border: #e0e7ff;
     --agent-codex-hover: #4f46e5;
+
+    --agent-groq: #7c3aed;
+    --agent-groq-bg: #f5f3ff;
+    --agent-groq-border: #e9d5ff;
+    --agent-groq-hover: #6d28d9;
+
+    --agent-kimi: #0891b2;
+    --agent-kimi-bg: #ecfeff;
+    --agent-kimi-border: #cffafe;
+    --agent-kimi-hover: #0e7490;
+
+    --agent-crush: #ec4899;
+    --agent-crush-bg: #fdf2f8;
+    --agent-crush-border: #fbcfe8;
+    --agent-crush-hover: #db2777;
 
     --agent-default: #64748b;
     --agent-default-bg: #f8fafc;
@@ -468,11 +478,6 @@
     --agent-gemini-border: #2a3a4f;
     --agent-gemini-hover: #a4c7fa;
 
-    --agent-gpt: #34d399;
-    --agent-gpt-bg: #1a2d27;
-    --agent-gpt-border: #264d3f;
-    --agent-gpt-hover: #6ee7b7;
-
     --agent-amp: #a78bfa;
     --agent-amp-bg: #231d32;
     --agent-amp-border: #3a2f4f;
@@ -482,11 +487,6 @@
     --agent-factory-bg: #1a2e32;
     --agent-factory-border: #2a4a4f;
     --agent-factory-hover: #67e8f9;
-
-    --agent-o1: #f87171;
-    --agent-o1-bg: #2d1a1a;
-    --agent-o1-border: #4f2626;
-    --agent-o1-hover: #fca5a5;
 
     --agent-opencode: #22d3ee;
     --agent-opencode-bg: #1a2e32;
@@ -522,6 +522,21 @@
     --agent-codex-bg: #1e1f32;
     --agent-codex-border: #2e2f4f;
     --agent-codex-hover: #a5b4fc;
+
+    --agent-groq: #a78bfa;
+    --agent-groq-bg: #231d32;
+    --agent-groq-border: #3a2f4f;
+    --agent-groq-hover: #c4b5fd;
+
+    --agent-kimi: #22d3ee;
+    --agent-kimi-bg: #1a2e32;
+    --agent-kimi-border: #2a4a4f;
+    --agent-kimi-hover: #67e8f9;
+
+    --agent-crush: #f472b6;
+    --agent-crush-bg: #2d1a27;
+    --agent-crush-border: #4f2640;
+    --agent-crush-hover: #f9a8d4;
 
     --agent-default: #94a3b8;
     --agent-default-bg: #1e293b;
@@ -806,20 +821,12 @@
     border-left-color: var(--agent-gemini);
   }
 
-  .border-l-agent-gpt {
-    border-left-color: var(--agent-gpt);
-  }
-
   .border-l-agent-amp {
     border-left-color: var(--agent-amp);
   }
 
   .border-l-agent-factory {
     border-left-color: var(--agent-factory);
-  }
-
-  .border-l-agent-o1 {
-    border-left-color: var(--agent-o1);
   }
 
   .border-l-agent-copilot {
@@ -848,6 +855,18 @@
 
   .border-l-agent-ollama {
     border-left-color: var(--agent-ollama);
+  }
+
+  .border-l-agent-groq {
+    border-left-color: var(--agent-groq);
+  }
+
+  .border-l-agent-kimi {
+    border-left-color: var(--agent-kimi);
+  }
+
+  .border-l-agent-crush {
+    border-left-color: var(--agent-crush);
   }
 
   .border-l-border-strong {
@@ -902,20 +921,12 @@
     box-shadow: 0 4px 12px -2px rgba(79, 127, 217, 0.25);
   }
 
-  .shadow-agent-gpt {
-    box-shadow: 0 4px 12px -2px rgba(13, 137, 104, 0.25);
-  }
-
   .shadow-agent-amp {
     box-shadow: 0 4px 12px -2px rgba(124, 58, 237, 0.25);
   }
 
   .shadow-agent-factory {
     box-shadow: 0 4px 12px -2px rgba(8, 145, 178, 0.25);
-  }
-
-  .shadow-agent-o1 {
-    box-shadow: 0 4px 12px -2px rgba(220, 38, 38, 0.25);
   }
 
   .shadow-agent-opencode {
@@ -946,6 +957,18 @@
     box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.25);
   }
 
+  .shadow-agent-groq {
+    box-shadow: 0 4px 12px -2px rgba(124, 58, 237, 0.25);
+  }
+
+  .shadow-agent-kimi {
+    box-shadow: 0 4px 12px -2px rgba(8, 145, 178, 0.25);
+  }
+
+  .shadow-agent-crush {
+    box-shadow: 0 4px 12px -2px rgba(236, 72, 153, 0.25);
+  }
+
   .dark .shadow-agent-claude {
     box-shadow: 0 4px 12px -2px rgba(232, 155, 125, 0.2);
   }
@@ -954,20 +977,12 @@
     box-shadow: 0 4px 12px -2px rgba(138, 180, 248, 0.2);
   }
 
-  .dark .shadow-agent-gpt {
-    box-shadow: 0 4px 12px -2px rgba(52, 211, 153, 0.2);
-  }
-
   .dark .shadow-agent-amp {
     box-shadow: 0 4px 12px -2px rgba(167, 139, 250, 0.2);
   }
 
   .dark .shadow-agent-factory {
     box-shadow: 0 4px 12px -2px rgba(34, 211, 238, 0.2);
-  }
-
-  .dark .shadow-agent-o1 {
-    box-shadow: 0 4px 12px -2px rgba(248, 113, 113, 0.2);
   }
 
   .dark .shadow-agent-opencode {
@@ -996,6 +1011,18 @@
 
   .dark .shadow-agent-codex {
     box-shadow: 0 4px 12px -2px rgba(129, 140, 248, 0.2);
+  }
+
+  .dark .shadow-agent-groq {
+    box-shadow: 0 4px 12px -2px rgba(167, 139, 250, 0.2);
+  }
+
+  .dark .shadow-agent-kimi {
+    box-shadow: 0 4px 12px -2px rgba(34, 211, 238, 0.2);
+  }
+
+  .dark .shadow-agent-crush {
+    box-shadow: 0 4px 12px -2px rgba(244, 114, 182, 0.2);
   }
 
   /* Glow shadow utilities */

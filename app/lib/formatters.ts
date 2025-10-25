@@ -71,19 +71,18 @@ export function mapAgentType(agentType: string): AgentType {
   const agentMap: Record<string, AgentType> = {
     claude: 'claude',
     gemini: 'gemini',
-    gpt: 'gpt',
-    'gpt-4': 'gpt',
-    'gpt-3.5': 'gpt',
-    amp: 'amp',
-    o1: 'o1',
+    codex: 'codex',
     copilot: 'copilot',
+    crush: 'crush',
     cursor: 'cursor',
     qoder: 'qoder',
     qwen: 'qwen',
-    codex: 'codex',
     opencode: 'opencode',
     ollama: 'ollama',
     factory: 'factory',
+    groq: 'groq',
+    kimi: 'kimi',
+    amp: 'amp',
   };
   return agentMap[agentType.toLowerCase()] || 'default';
 }

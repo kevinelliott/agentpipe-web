@@ -35,19 +35,20 @@ export function MessageBubble({
   const baseClasses = 'p-5 rounded-lg border border-l-5 mb-3 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 animate-message-appear group';
 
   const agentClasses: Record<AgentType, string> = {
-    claude: 'bg-agent-claude-bg/80 border-agent-claude-border border-l-agent-claude group-hover:bg-agent-claude-bg group-hover:shadow-agent-claude',
-    gemini: 'bg-agent-gemini-bg/80 border-agent-gemini-border border-l-agent-gemini group-hover:bg-agent-gemini-bg group-hover:shadow-agent-gemini',
-    gpt: 'bg-agent-gpt-bg/80 border-agent-gpt-border border-l-agent-gpt group-hover:bg-agent-gpt-bg group-hover:shadow-agent-gpt',
     amp: 'bg-agent-amp-bg/80 border-agent-amp-border border-l-agent-amp group-hover:bg-agent-amp-bg group-hover:shadow-agent-amp',
-    factory: 'bg-agent-factory-bg/80 border-agent-factory-border border-l-agent-factory group-hover:bg-agent-factory-bg group-hover:shadow-agent-factory',
-    o1: 'bg-agent-o1-bg/80 border-agent-o1-border border-l-agent-o1 group-hover:bg-agent-o1-bg group-hover:shadow-agent-o1',
-    copilot: 'bg-agent-copilot-bg/80 border-agent-copilot-border border-l-agent-copilot group-hover:bg-agent-copilot-bg group-hover:shadow-agent-copilot',
-    cursor: 'bg-agent-cursor-bg/80 border-agent-cursor-border border-l-agent-cursor group-hover:bg-agent-cursor-bg group-hover:shadow-agent-cursor',
-    qoder: 'bg-agent-qoder-bg/80 border-agent-qoder-border border-l-agent-qoder group-hover:bg-agent-qoder-bg group-hover:shadow-agent-qoder',
-    qwen: 'bg-agent-qwen-bg/80 border-agent-qwen-border border-l-agent-qwen group-hover:bg-agent-qwen-bg group-hover:shadow-agent-qwen',
+    claude: 'bg-agent-claude-bg/80 border-agent-claude-border border-l-agent-claude group-hover:bg-agent-claude-bg group-hover:shadow-agent-claude',
     codex: 'bg-agent-codex-bg/80 border-agent-codex-border border-l-agent-codex group-hover:bg-agent-codex-bg group-hover:shadow-agent-codex',
+    copilot: 'bg-agent-copilot-bg/80 border-agent-copilot-border border-l-agent-copilot group-hover:bg-agent-copilot-bg group-hover:shadow-agent-copilot',
+    crush: 'bg-agent-crush-bg/80 border-agent-crush-border border-l-agent-crush group-hover:bg-agent-crush-bg group-hover:shadow-agent-crush',
+    cursor: 'bg-agent-cursor-bg/80 border-agent-cursor-border border-l-agent-cursor group-hover:bg-agent-cursor-bg group-hover:shadow-agent-cursor',
+    factory: 'bg-agent-factory-bg/80 border-agent-factory-border border-l-agent-factory group-hover:bg-agent-factory-bg group-hover:shadow-agent-factory',
+    gemini: 'bg-agent-gemini-bg/80 border-agent-gemini-border border-l-agent-gemini group-hover:bg-agent-gemini-bg group-hover:shadow-agent-gemini',
+    groq: 'bg-agent-groq-bg/80 border-agent-groq-border border-l-agent-groq group-hover:bg-agent-groq-bg group-hover:shadow-agent-groq',
+    kimi: 'bg-agent-kimi-bg/80 border-agent-kimi-border border-l-agent-kimi group-hover:bg-agent-kimi-bg group-hover:shadow-agent-kimi',
     opencode: 'bg-agent-opencode-bg/80 border-agent-opencode-border border-l-agent-opencode group-hover:bg-agent-opencode-bg group-hover:shadow-agent-opencode',
     ollama: 'bg-agent-ollama-bg/80 border-agent-ollama-border border-l-agent-ollama group-hover:bg-agent-ollama-bg group-hover:shadow-agent-ollama',
+    qoder: 'bg-agent-qoder-bg/80 border-agent-qoder-border border-l-agent-qoder group-hover:bg-agent-qoder-bg group-hover:shadow-agent-qoder',
+    qwen: 'bg-agent-qwen-bg/80 border-agent-qwen-border border-l-agent-qwen group-hover:bg-agent-qwen-bg group-hover:shadow-agent-qwen',
     default: 'bg-agent-default-bg/80 border-agent-default-border border-l-agent-default group-hover:bg-agent-default-bg',
   };
 

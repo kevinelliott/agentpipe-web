@@ -154,12 +154,19 @@ export default function SessionsPage() {
     const agentMap: Record<string, AgentType> = {
       claude: 'claude',
       gemini: 'gemini',
-      gpt: 'gpt',
-      'gpt-4': 'gpt',
-      'gpt-3.5': 'gpt',
+      codex: 'codex',
+      copilot: 'copilot',
+      crush: 'crush',
+      cursor: 'cursor',
+      qoder: 'qoder',
+      qwen: 'qwen',
+      opencode: 'opencode',
+      ollama: 'ollama',
+      groq: 'groq',
+      kimi: 'kimi',
       amp: 'amp',
     };
-    return agentMap[agentType.toLowerCase()] || 'claude';
+    return agentMap[agentType.toLowerCase()] || 'default';
   };
 
   return (
