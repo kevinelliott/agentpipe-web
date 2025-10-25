@@ -1807,7 +1807,18 @@ import { AgentBadge } from '@/app/components';
 import { ConversationCard } from '@/app/components';
 
 &lt;ConversationCard
-  conversation={conversationData}
+  title="Multi-Agent Code Review"
+  participants={[
+    { type: 'claude', name: 'Claude' },
+    { type: 'gemini', name: 'Gemini' },
+    { type: 'cursor', name: 'Cursor' }
+  ]}
+  status="active"
+  statusLabel="Active"
+  lastActivity="2h ago"
+  preview="Started 2 hours ago • 45 messages"
+  messageCount={45}
+  tokenCount="8.2K"
   onClick={handleClick}
 /&gt;</code>
                 </div>
