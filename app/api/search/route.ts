@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
-import { ConversationStatus } from '@prisma/client';
 
 /**
  * POST /api/search

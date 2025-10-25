@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
         clearInterval(heartbeatInterval);
         try {
           controller.close();
-        } catch (error) {
+        } catch (_error) {
           // Controller might already be closed
         }
       });

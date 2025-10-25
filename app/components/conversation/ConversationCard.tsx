@@ -24,7 +24,7 @@ interface ConversationCardProps {
 }
 
 export function ConversationCard({
-  id,
+  _id,
   title,
   participants,
   status,

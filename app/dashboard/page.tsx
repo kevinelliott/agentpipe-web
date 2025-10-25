@@ -26,7 +26,6 @@ import {
   transformConversation,
   transformMessage,
   formatMetrics,
-  formatNumber,
 } from '../lib/formatters';
 
 export default function Dashboard() {
@@ -44,7 +43,7 @@ export default function Dashboard() {
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(true);
 
   // Error state
-  const [error, setError] = useState<string | null>(null);
+  const [_error, _setError] = useState<string | null>(null);
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,19 +52,19 @@ export default function Dashboard() {
 
   // Real-time events
   const { isConnected: wsConnected } = useRealtimeEvents({
-    onConversationStarted: (data) => {
+    onConversationStarted: (_data) => {
       // Refetch conversations when a new one starts
       fetchConversations();
       fetchMetrics();
     },
-    onMessageCreated: (data) => {
+    onMessageCreated: (_data) => {
       // Add new message to recent messages
       fetchRecentMessages();
       // Update the conversation that received the message
       fetchConversations();
       fetchMetrics();
     },
-    onConversationCompleted: (data) => {
+    onConversationCompleted: (_data) => {
       // Update conversation status
       fetchConversations();
       fetchMetrics();
@@ -88,7 +87,6 @@ export default function Dashboard() {
       setConversations(data.conversations || []);
     } catch (err) {
       console.error('Error fetching conversations:', err);
-      setError('Failed to load conversations');
     } finally {
       setIsLoadingConversations(false);
     }
@@ -105,7 +103,6 @@ export default function Dashboard() {
       setRecentMessages(data.messages || []);
     } catch (err) {
       console.error('Error fetching messages:', err);
-      setError('Failed to load recent messages');
     } finally {
       setIsLoadingMessages(false);
     }
@@ -122,7 +119,6 @@ export default function Dashboard() {
       setMetrics(data);
     } catch (err) {
       console.error('Error fetching metrics:', err);
-      setError('Failed to load metrics');
     } finally {
       setIsLoadingMetrics(false);
     }

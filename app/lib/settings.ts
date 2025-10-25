@@ -16,7 +16,6 @@ import { promisify } from 'util';
 import { access, constants } from 'fs/promises';
 import {
   Setting,
-  SettingInput,
   SettingKey,
   SettingDataType,
   SettingValidationResult,
@@ -265,7 +264,7 @@ class SettingsService {
     try {
       await access(value, constants.F_OK);
       return { key, isValid: true };
-    } catch (error) {
+    } catch (_error) {
       // Path doesn't exist - not necessarily invalid if it's just a command name
       if (!value.includes('/')) {
         // Might be a command in PATH
@@ -371,7 +370,7 @@ class SettingsService {
       try {
         JSON.parse(value);
         return { key, isValid: true };
-      } catch (error) {
+      } catch (_error) {
         return {
           key,
           isValid: false,

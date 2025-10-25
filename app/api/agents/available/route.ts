@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     let agentsListOutput: { agents: AgentInfo[] };
     try {
       agentsListOutput = JSON.parse(stdout);
-    } catch (parseError) {
+    } catch (_parseError) {
       console.error('Failed to parse agentpipe agents list output:', stdout);
       return NextResponse.json(
         { error: 'Invalid JSON from agentpipe agents list', details: stdout },

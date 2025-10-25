@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -127,7 +127,7 @@ export default function DebugPage() {
     console.log('EventSource support:', typeof EventSource !== 'undefined' ? 'YES' : 'NO');
 
     // Fetch buffer stats
-    const stats = await fetchBufferStats();
+    const _stats = await fetchBufferStats();
 
     // Try to fetch the stream endpoint directly
     fetch('/api/stream')

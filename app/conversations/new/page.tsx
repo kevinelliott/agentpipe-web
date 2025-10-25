@@ -18,20 +18,6 @@ interface Agent {
   prompt: string;
 }
 
-const AGENT_TYPES = [
-  { value: 'amp', label: 'Amp CLI', provider: 'Sourcegraph' },
-  { value: 'claude', label: 'Claude CLI', provider: 'Anthropic' },
-  { value: 'copilot', label: 'GitHub Copilot CLI', provider: 'GitHub' },
-  { value: 'cursor', label: 'Cursor CLI', provider: 'Cursor' },
-  { value: 'factory', label: 'Factory CLI', provider: 'Factory.ai' },
-  { value: 'gemini', label: 'Gemini CLI', provider: 'Google' },
-  { value: 'qoder', label: 'Qoder CLI', provider: 'Qoder' },
-  { value: 'qwen', label: 'Qwen CLI', provider: 'Alibaba Cloud' },
-  { value: 'codex', label: 'Codex CLI', provider: 'OpenAI' },
-  { value: 'opencode', label: 'OpenCode CLI', provider: 'OpenCode' },
-  { value: 'ollama', label: 'Ollama CLI', provider: 'Ollama' },
-];
-
 const MODEL_OPTIONS: Record<string, { value: string; label: string }[]> = {
   amp: [
     { value: 'amp-default', label: 'Amp Default' },

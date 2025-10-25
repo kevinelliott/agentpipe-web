@@ -124,7 +124,7 @@ export async function getContainerStatus(containerId: string): Promise<string> {
       `docker inspect --format='{{.State.Status}}' ${containerId}`
     );
     return stdout.trim();
-  } catch (error) {
+  } catch (_error) {
     return 'error';
   }
 }
@@ -152,7 +152,7 @@ export async function getContainerLogs(
   try {
     const { stdout } = await execAsync(`docker logs --tail ${tail} ${containerId}`);
     return stdout;
-  } catch (error) {
+  } catch (_error) {
     return '';
   }
 }

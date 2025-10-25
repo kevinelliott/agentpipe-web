@@ -53,7 +53,7 @@ export interface DoctorOutput {
  * This endpoint runs the agentpipe doctor command to check system
  * environment, configuration, and agent availability.
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Get AgentPipe binary path and timeout from settings
     const binaryPath = await settingsService.get<string>(
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     let doctorOutput: DoctorOutput;
     try {
       doctorOutput = JSON.parse(stdout);
-    } catch (parseError) {
+    } catch (_parseError) {
       console.error('Failed to parse agentpipe doctor output:', stdout);
       return NextResponse.json(
         { error: 'Invalid JSON from agentpipe doctor', details: stdout },

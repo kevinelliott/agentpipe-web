@@ -19,7 +19,7 @@ interface SummaryCardProps {
 
 export function SummaryCard({
   text,
-  agentType,
+  _agentType,
   model,
   inputTokens,
   outputTokens,

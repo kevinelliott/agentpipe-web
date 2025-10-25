@@ -45,7 +45,7 @@ export function MessageBubbleSlim({
 
   // Strip Markdown formatting for plain text preview
   const plainContent = content
-    .replace(/[#*`_~\[\]]/g, '') // Remove Markdown syntax
+    .replace(/[#*`_~[\]]/g, '') // Remove Markdown syntax
     .replace(/\n+/g, ' ') // Replace newlines with spaces
     .trim();
 
