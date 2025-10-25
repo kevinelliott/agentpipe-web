@@ -30,7 +30,7 @@ export function AgentsPageClient({ agents, stats }: AgentsPageClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Header */}
         <div className="mb-12 max-w-3xl">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mb-4">
