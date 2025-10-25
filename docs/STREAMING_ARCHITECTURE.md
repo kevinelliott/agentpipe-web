@@ -2324,7 +2324,7 @@ vercel env add AGENTPIPE_BRIDGE_API_KEY production
 ```dockerfile
 # Dockerfile
 
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 # Dependencies
 FROM base AS deps
