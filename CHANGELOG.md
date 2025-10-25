@@ -5,6 +5,122 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.18] - 2025-10-25
+
+### Added
+- **AI Summary in Conversation Cards**: Optional AI-generated summaries displayed with sparkle icon
+  - Summary text truncated to 2 lines using CSS line-clamping
+  - Light background container to visually distinguish from other content
+  - Positioned between title/metadata and agent avatars
+  - Works seamlessly in both light and dark modes
+
+### Changed
+- **Conversation Card Layout Redesign**:
+  - Title now displays the actual conversation prompt (initial user request)
+  - Preview section shows message count and total cost (`45 messages • $0.1234`)
+  - Improved information hierarchy for better scanning
+  - Added `formatCost()` helper function for USD cost display
+- **Design System Documentation**: Updated conversation card examples to show AI Summary variants
+  - Visual examples with and without summaries for comparison
+  - Comprehensive styling and usage documentation
+  - React component examples with `aiSummary` prop
+
+### Technical
+- Renamed `summaryText` prop to `aiSummary` for clarity
+- Updated `transformConversation()` function to map `conversation.summaryText` to `aiSummary`
+- Added CSS classes for AI Summary styling (`.ai-summary`, `.ai-summary-icon`, `.ai-summary-label`, `.ai-summary-text`)
+- Sparkle/star SVG icon in primary color (#3b82f6)
+
+### Quality
+- ESLint: 0 errors, 0 warnings
+- TypeScript: No compilation errors
+- Build: Production build successful
+
+## [0.0.17] - 2025-10-25
+
+### Changed
+- **Simplified ConversationCard Component**: Cleaner, more focused design
+  - Removed complex hover effects (shadow lift, border color change, transform)
+  - Removed background accent on hover
+  - Removed AI summary section (re-added in v0.0.18)
+  - Removed footer metrics (messages and tokens display)
+  - Simplified layout: Title + Status Badge in header, metadata below, agent avatars at bottom
+  - Reduced code complexity while maintaining core functionality
+
+### Performance
+- File size reduction: ConversationCard component simplified
+- Conversations page: 6.35 kB → 5.69 kB
+
+### Quality
+- ESLint: 0 errors, 0 warnings
+- TypeScript: No compilation errors
+- Build: Production build successful
+
+## [0.0.16] - 2025-10-25
+
+### Added
+- **Toast Notification System**: Global toast notifications using React Context API
+  - `ToastProvider` component for app-wide toast management
+  - `useToast()` hook for displaying notifications from any component
+  - Support for multiple toast types: success, error, info, warning
+  - Auto-dismiss after configurable duration (default 5 seconds)
+  - Stacking support for multiple toasts
+
+- **Navbar Connection Status Badge**: Always-visible connection indicator
+  - Moved `WebSocketStatus` component to Header for centralized visibility
+  - Shows "Connected" or "Connecting" status
+  - Animated green pulse for active connections
+  - Hidden on mobile, visible on larger screens
+  - Real-time SSE connection monitoring
+
+- **New Conversation Auto-Navigation**: Enhanced user experience
+  - Listen for `conversation.started` SSE events in Header
+  - Auto-display success toast when new conversation detected
+  - Auto-navigate to conversation detail page after brief delay
+  - Seamless integration with dashboard workflow
+
+- **Comprehensive Design System Overhaul**:
+  - Fixed left sidebar navigation (250px wide)
+  - Working light/dark mode toggle with persistence
+  - Visual examples for 66+ reusable components
+  - Complete color system for all 14 AI agents
+  - WCAG 2.1 AA accessibility guidelines and standards
+  - Code snippets and Tailwind class usage examples
+  - Interactive theme switching with sun/moon icon button
+
+### Changed
+- **Removed Redundant Status Indicators**:
+  - Removed `WebSocketStatus` from dashboard/page.tsx
+  - Removed `WebSocketStatus` from debug/page.tsx
+  - Removed `WebSocketStatus` from conversations/[id]/page.tsx
+  - Centralized connection status in Header component
+
+- **Agent Showcase Improvements**:
+  - Fixed container width to match navbar (max-w-[1400px])
+  - Consistent responsive padding across pages (px-4 sm:px-6 lg:px-8)
+  - Improved visual alignment
+
+### Fixed
+- **14 ESLint Warnings Resolved** (0 errors remaining):
+  - Removed unused variable prefixes (_error, _data, _stats, etc.)
+  - Fixed 'NextRequest' unused import in doctor/route.ts
+  - Proper error handling with catch clauses
+  - Clean, production-ready code
+
+### Technical
+- Added `app/components/ui/ToastProvider.tsx` for global toast management
+- Updated `app/layout.tsx` to wrap app with ToastProvider
+- Integrated useRealtimeEvents hook in Header component
+- Updated design-system/index.html with left sidebar navigation
+- TypeScript strict mode: 0 errors
+- Production build: Successful
+
+### Quality
+- ESLint: 0 errors, 0 warnings
+- TypeScript compilation: No errors
+- Build: Production build successful
+- Test suite: Passing
+
 ## [0.0.15] - 2025-10-25
 
 ### Added

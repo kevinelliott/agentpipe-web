@@ -29,18 +29,22 @@ AgentPipe Web is a **Next.js 15 + React 19 + TypeScript** application that serve
 
 ### 🎯 Dashboard & Realtime Monitoring
 - **Live Conversations**: Real-time monitoring of multi-agent conversations using Server-Sent Events (SSE)
-- **Conversation Cards**: View active sessions with agent participants, status badges, and message counts
+- **Conversation Cards**: View active sessions with agent participants, status badges, message counts, and AI summaries
 - **View Modes**: Compact and expanded view modes for flexible UI layouts
-- **WebSocket Status**: Visual indicator of real-time connection status
+- **Connection Status**: Always-visible connection indicator in navbar with animated pulse when connected
+- **Toast Notifications**: Automatic notifications when new conversations start with one-click navigation
+- **Auto-Navigation**: Seamlessly navigate to new conversations as they start
 
 ### 📊 Analytics & Metrics
 - **Metrics Overview**: Total conversations, active agents, token usage, and cost tracking
 - **Message Stream**: Real-time message feeds with agent identification and timestamps
 - **Performance Metrics**: Track per-message tokens, costs, and processing duration
-- **AI Summaries**: Automatic AI-generated conversation summaries with token/cost metadata
+- **AI Summaries**: Automatic AI-generated conversation summaries with visual indicators
+  - Sparkle icon with "AI SUMMARY" label for quick identification
+  - Summary text truncated to 2 lines for consistent card heights
+  - Optional summaries (displays gracefully when unavailable)
+  - Light background container to visually distinguish from other content
   - Full summary cards on detailed session pages
-  - 2-line preview summaries on conversation lists
-  - Graceful fallback to initial prompts when unavailable
 
 ### 🔍 Search & Filtering
 - **Full-Text Search**: Search conversations by title, initial prompt, and agent names
@@ -49,9 +53,19 @@ AgentPipe Web is a **Next.js 15 + React 19 + TypeScript** application that serve
 
 ### 🎨 Design & UX
 - **Modern Dark/Light Theme**: Comprehensive theme system with CSS variables and Tailwind CSS v4
+- **Living Design System**: Interactive `/design-system/index.html` with sidebar navigation, theme toggle, and 66+ component examples
+  - All components documented with visual examples and code snippets
+  - Light/dark mode support with working theme toggle
+  - WCAG 2.1 AA accessibility guidelines included
+  - React usage examples and Tailwind class documentation
 - **Agent Showcase**: Dedicated `/agents` page discovering all 14 supported AI agents with metadata, statistics, and links
-- **Agent-Specific Colors**: Visual theming for 14+ agent types (Claude, Codex, Copilot, Cursor, Factory, Gemini, Groq, Kimi, Crush, Qwen, Qoder, Amp, OpenCode, Ollama)
-- **Improved Conversations**: Enhanced conversation cards showing prompt as title, agent avatars positioned on right, metrics in footer
+- **Agent-Specific Colors**: Visual theming for 14 agent types (Amp, Claude, Codex, Copilot, Crush, Cursor, Factory, Gemini, Groq, Kimi, Ollama, OpenCode, Qoder, Qwen)
+- **Enhanced Conversation Cards**:
+  - Prompt displayed as title for clarity
+  - Message count and total cost in metadata
+  - Optional AI Summary with sparkle icon
+  - Agent avatars with color-coded badges
+  - Clean, scannable layout
 - **Responsive Design**: Fully responsive layouts for desktop, tablet, and mobile
 - **Component Library**: Reusable design system components with consistent styling
 - **Agent Logos**: Professional SVG logos for all supported agents used throughout the application
@@ -576,7 +590,7 @@ Images are automatically built and published on version tags:
 ```bash
 # GitHub Container Registry (ghcr.io)
 docker pull ghcr.io/kevinelliott/agentpipe-web:latest
-docker pull ghcr.io/kevinelliott/agentpipe-web:v0.0.13
+docker pull ghcr.io/kevinelliott/agentpipe-web:v0.0.18
 
 # Multi-architecture support
 # - linux/amd64 (Intel, AMD)
