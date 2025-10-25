@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2025-10-25
+
+### Added
+- **Comprehensive README Updates**:
+  - Status badges for Node.js 22, Next.js 15, TypeScript, React 19, Tailwind CSS, PostgreSQL, CI status, and MIT License
+  - Detailed feature descriptions organized by category (Dashboard, Analytics, Search, Design, Integration, Advanced)
+  - Complete tech stack table with all technologies and versions
+  - Expanded Quick Start guide with step-by-step numbered instructions
+  - Database setup options with collapsible detailed instructions for PostgreSQL and Supabase
+  - Detailed project structure documentation with comments
+  - Architecture section with real-time data flow diagram
+  - Complete REST API, SSE, and Webhook API documentation with code examples
+  - Development workflow guidelines with code quality gates
+  - Deployment guides for Docker, Vercel, Railway, and self-hosted options
+  - Contributing guidelines with code standards
+  - Extended documentation section with quick references and external resources
+  - Support section with getting help resources
+
+### Changed
+- **Node.js Runtime**: Upgraded from Node.js 20 to Node.js 22 LTS across all environments
+  - Updated Dockerfile: All three stages (deps, builder, runner) now use `node:22-alpine`
+  - Updated GitHub Actions workflows: CI and release workflows now use Node.js 22
+  - Added `.nvmrc` file for automatic version management with nvm
+- **Configuration Files**: Updated documentation examples from Node.js 20 to Node.js 22
+
+### Fixed
+- **Critical Security Vulnerabilities** (5 CodeQL alerts resolved):
+  - **Alert #9**: Command-line injection in docker.ts:88 - Replaced unsafe `exec()` with `execFile()`
+  - **Alert #10**: Command-line injection in settings.ts:289 - Migrated to safe argument passing
+  - **Alert #11**: Path injection in settings.ts:265 - Added input sanitization for path validation
+  - **Alert #12**: Incomplete sanitization in docker.ts:60 - Removed manual escaping, used execFile()
+  - **Alert #13**: Incomplete sanitization in docker.ts:66 - Applied secure argument handling
+  - **Summary**: Migrated all command execution from shell-based `exec()` to safer `execFile()` with array arguments
+  - Added path validation to reject null bytes and directory traversal patterns
+- **TypeScript Compilation Errors**:
+  - Removed unused `id` parameter from ConversationCard component and interface
+  - Removed unused `agentType` parameter from SummaryCard component
+  - Updated prop passing in conversations/page.tsx
+- **GitHub Actions Labeler**: Fixed `.github/labeler.yml` configuration format
+  - Updated to actions/labeler v5 compatible format with `any`/`all` object structure
+  - Previously flat array format caused parsing errors
+- **GitHub Actions Docker Build Workflow**:
+  - Removed duplicate Trivy security scanning job
+  - Consolidated security scanning in dedicated Trivy workflow
+  - Docker build workflow now focuses solely on building and pushing images
+
+### Security
+- Replaced all command execution with safe alternatives:
+  - docker.ts: `spawnAgentPipeContainer()`, `getContainerStatus()`, `stopContainer()`, `getContainerLogs()`
+  - settings.ts: `validateBinaryPath()`
+  - Prevents shell injection attacks through user-controlled input
+- Added path sanitization in settings validation
+
+### Dependencies
+- (No dependency version changes)
+
+### Technical
+- Improved GitHub Actions workflow separation of concerns:
+  - ci.yml: Code quality checks only
+  - docker-build.yml: Build and push Docker images only
+  - trivy.yml: Dedicated security scanning with schedule
+  - labeler.yml: Automatic PR labeling
+  - release.yml: Release automation
+- Docker build now uses explicit argument arrays instead of command string concatenation
+
 ## [0.0.11] - 2025-10-24
 
 ### Added
