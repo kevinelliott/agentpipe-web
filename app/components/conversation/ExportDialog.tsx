@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '../ui/Button';
 
 type ExportFormat = 'json' | 'csv' | 'markdown';
@@ -29,6 +30,34 @@ export function ExportDialog({
   onExport,
 }: ExportDialogProps) {
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const firstButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Handle keyboard navigation (ESC to close)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      // ESC key closes dialog
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Focus first format button when dialog opens
+      setTimeout(() => firstButtonRef.current?.focus(), 0);
+      // Prevent body scroll when dialog is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
 
   const exportOptions: ExportOption[] = [
     {
@@ -95,17 +124,29 @@ export function ExportDialog({
       <div
         className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-200 animate-in fade-in duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-background border border-border rounded-lg shadow-lg max-w-sm w-full animate-in fade-in zoom-in-95 duration-300">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        role="presentation"
+        onClick={(e) => e.currentTarget === e.target && onClose()}
+      >
+        <div
+          ref={dialogRef}
+          className="bg-background border border-border rounded-lg shadow-lg max-w-sm w-full animate-in fade-in zoom-in-95 duration-300"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="export-dialog-title"
+          aria-describedby="export-dialog-description"
+        >
           {/* Header */}
           <div className="border-b border-border px-6 py-4">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 id="export-dialog-title" className="text-lg font-semibold text-foreground">
               Export Conversation
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p id="export-dialog-description" className="text-sm text-muted-foreground mt-1">
               Choose a format to export this conversation
             </p>
           </div>
@@ -114,14 +155,19 @@ export function ExportDialog({
           <div className="px-6 py-4 space-y-3">
             {exportOptions.map((option, index) => (
               <button
+                ref={index === 0 ? firstButtonRef : null}
                 key={option.format}
                 onClick={() => setSelectedFormat(option.format)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all hover:shadow-md active:scale-98 animate-in fade-in slide-in-from-top-2 duration-300 ${
+                className={`w-full text-left p-4 rounded-lg border-2 transition-all hover:shadow-md active:scale-98 animate-in fade-in slide-in-from-top-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                   selectedFormat === option.format
                     ? 'border-primary bg-primary/5'
                     : 'border-border hover:border-muted-foreground'
                 }`}
                 style={{ animationDelay: `${index * 50}ms` }}
+                role="radio"
+                aria-checked={selectedFormat === option.format}
+                aria-label={`Export as ${option.label}`}
+                title={option.description}
               >
                 <div className="flex items-start gap-3">
                   <div className="text-2xl flex-shrink-0 pt-1">
@@ -167,6 +213,7 @@ export function ExportDialog({
               variant="ghost"
               size="sm"
               disabled={isLoading}
+              aria-label="Close export dialog"
             >
               Cancel
             </Button>
@@ -175,9 +222,10 @@ export function ExportDialog({
               variant="primary"
               size="sm"
               disabled={isLoading}
+              aria-label={`Export conversation as ${selectedFormat.toUpperCase()}`}
             >
               {isLoading ? (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2" aria-label="Exporting conversation">
                   <span className="inline-flex animate-spin">⟳</span>
                   Exporting...
                 </span>
