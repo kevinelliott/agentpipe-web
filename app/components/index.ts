@@ -50,6 +50,10 @@ export { ConversationMainContent } from './conversation/ConversationMainContent'
 export { ConversationHeader } from './conversation/ConversationHeader';
 export { ConversationMetaBadges } from './conversation/ConversationMetaBadges';
 export { ConversationActions } from './conversation/ConversationActions';
+export { MetricsGrid } from './conversation/MetricsGrid';
+export { ParticipantCard } from './conversation/ParticipantCard';
+export { ParticipantsList } from './conversation/ParticipantsList';
+export { TechnicalDetailsCard } from './conversation/TechnicalDetailsCard';
 
 // Theme Components
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
