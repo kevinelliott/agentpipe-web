@@ -23,6 +23,7 @@ export function useConversationActions({
   const [copySummaryState, setCopySummaryState] = useState<ActionState>({ loading: false, error: null });
   const [exportState, setExportState] = useState<ActionState>({ loading: false, error: null });
   const [deleteState, setDeleteState] = useState<ActionState>({ loading: false, error: null });
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
 
   /**
    * Copy conversation summary to clipboard
@@ -45,13 +46,19 @@ export function useConversationActions({
   }, [summaryText]);
 
   /**
-   * Export conversation data
-   * Currently triggers download - full export functionality in Phase 4
+   * Export conversation data - opens dialog to select format
    */
-  const handleExport = useCallback(async () => {
+  const handleExport = useCallback(() => {
+    setIsExportDialogOpen(true);
+  }, []);
+
+  /**
+   * Handle actual export after format selection
+   */
+  const handleExportWithFormat = useCallback(async (format: 'json' | 'csv' | 'markdown') => {
     setExportState({ loading: true, error: null });
     try {
-      const response = await fetch(`/api/conversations/${conversationId}/export?format=json`);
+      const response = await fetch(`/api/conversations/${conversationId}/export?format=${format}`);
 
       if (!response.ok) {
         throw new Error('Failed to export conversation');
@@ -61,13 +68,15 @@ export function useConversationActions({
       const url = URL.createObjectURL(data);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `conversation-${conversationId}.json`;
+      const extension = format === 'markdown' ? 'md' : format;
+      link.download = `conversation-${conversationId}-${new Date().toISOString().split('T')[0]}.${extension}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
       setExportState({ loading: false, error: null });
+      setIsExportDialogOpen(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to export conversation';
       setExportState({ loading: false, error: errorMessage });
@@ -107,6 +116,7 @@ export function useConversationActions({
     // Actions
     onCopySummary: handleCopySummary,
     onExport: handleExport,
+    onExportWithFormat: handleExportWithFormat,
     onDelete: handleDelete,
 
     // State
@@ -116,6 +126,10 @@ export function useConversationActions({
     exportError: exportState.error,
     isDeleting: deleteState.loading,
     deleteError: deleteState.error,
+
+    // Export dialog state
+    isExportDialogOpen,
+    setIsExportDialogOpen,
 
     // Combined loading state for UI
     isActionLoading: copySummaryState.loading || exportState.loading || deleteState.loading,

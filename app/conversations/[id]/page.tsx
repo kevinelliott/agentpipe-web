@@ -10,6 +10,7 @@ import { SummaryCard } from '@/app/components/conversation/SummaryCard';
 import { ConversationMessages } from '@/app/components/conversation/ConversationMessages';
 import { ViewToggle } from '@/app/components/conversation/ViewToggle';
 import { ConversationHeader } from '@/app/components/conversation/ConversationHeader';
+import { ExportDialog } from '@/app/components/conversation/ExportDialog';
 import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
 import { useViewMode } from '@/app/hooks/useViewMode';
 import { useConversationActions } from '@/app/hooks/useConversationActions';
@@ -424,6 +425,15 @@ export default function SessionDetailPage() {
             )}
           </div>
         </div>
+
+        {/* Export Dialog */}
+        <ExportDialog
+          conversationId={session.id}
+          isOpen={conversationActions.isExportDialogOpen}
+          isLoading={conversationActions.isExporting}
+          onClose={() => conversationActions.setIsExportDialogOpen(false)}
+          onExport={conversationActions.onExportWithFormat}
+        />
       </div>
     </div>
   );

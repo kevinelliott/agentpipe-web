@@ -55,6 +55,7 @@ export { MetricsGrid } from './conversation/MetricsGrid';
 export { ParticipantCard } from './conversation/ParticipantCard';
 export { ParticipantsList } from './conversation/ParticipantsList';
 export { TechnicalDetailsCard } from './conversation/TechnicalDetailsCard';
+export { ExportDialog } from './conversation/ExportDialog';
 
 // Theme Components
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
