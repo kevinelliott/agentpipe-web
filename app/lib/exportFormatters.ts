@@ -19,19 +19,19 @@ interface ConversationExportData {
     agentType: string;
     content: string;
     timestamp: string;
-    model?: string;
-    inputTokens?: number;
-    outputTokens?: number;
-    totalTokens?: number;
-    cost?: number;
-    duration?: number;
+    model?: string | null;
+    inputTokens?: number | null;
+    outputTokens?: number | null;
+    totalTokens?: number | null;
+    cost?: number | null;
+    duration?: number | null;
   }>;
   participants?: Array<{
     agentName: string;
     agentType: string;
-    model?: string;
+    model?: string | null;
   }>;
-  summaryText?: string;
+  summaryText?: string | null;
 }
 
 /**
