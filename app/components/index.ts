@@ -47,6 +47,9 @@ export { MessageContent } from './conversation/MessageContent';
 export { MessageMetrics } from './conversation/MessageMetrics';
 export { ConversationLayout } from './conversation/ConversationLayout';
 export { ConversationMainContent } from './conversation/ConversationMainContent';
+export { ConversationHeader } from './conversation/ConversationHeader';
+export { ConversationMetaBadges } from './conversation/ConversationMetaBadges';
+export { ConversationActions } from './conversation/ConversationActions';
 
 // Theme Components
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
