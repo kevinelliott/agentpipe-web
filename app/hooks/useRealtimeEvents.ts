@@ -13,6 +13,7 @@ interface UseRealtimeEventsOptions {
   onMessageCreated?: (data: any) => void;
   onConversationCompleted?: (data: any) => void;
   onConversationInterrupted?: (data: any) => void;
+  onBridgeConnected?: (data: any) => void;
   onError?: (data: any) => void;
   autoReconnect?: boolean;
   reconnectInterval?: number;
@@ -26,6 +27,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     onMessageCreated,
     onConversationCompleted,
     onConversationInterrupted,
+    onBridgeConnected,
     onError,
     autoReconnect = true,
     reconnectInterval = 3000,
@@ -48,6 +50,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     onMessageCreated,
     onConversationCompleted,
     onConversationInterrupted,
+    onBridgeConnected,
     onError,
   });
   callbacksRef.current = {
@@ -56,6 +59,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     onMessageCreated,
     onConversationCompleted,
     onConversationInterrupted,
+    onBridgeConnected,
     onError,
   };
 
@@ -111,6 +115,9 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
             break;
           case 'conversation.interrupted':
             callbacksRef.current.onConversationInterrupted?.(event.data);
+            break;
+          case 'bridge.connected':
+            callbacksRef.current.onBridgeConnected?.(event.data);
             break;
           case 'conversation.error':
           case 'error.occurred':

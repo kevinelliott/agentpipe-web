@@ -6,8 +6,12 @@ export const systemInfoSchema = z.object({
   os: z.string(),
   os_version: z.string(),
   go_version: z.string(),
-  architecture: z.string(),
-});
+  architecture: z.string().optional(),
+  arch: z.string().optional(),
+}).refine(
+  (data) => data.architecture || data.arch,
+  { message: "Either 'architecture' or 'arch' must be provided" }
+);
 
 // Agent participant schema
 export const agentParticipantSchema = z.object({
@@ -112,12 +116,23 @@ export const bridgeTestSchema = z.object({
   }),
 });
 
+// Bridge connected event (when an emitter is created)
+export const bridgeConnectedSchema = z.object({
+  type: z.literal('bridge.connected'),
+  timestamp: z.string().datetime(),
+  data: z.object({
+    system_info: systemInfoSchema,
+    connected_at: z.string().datetime(),
+  }),
+});
+
 // Union type for all streaming events
 export const streamingEventSchema = z.discriminatedUnion('type', [
   conversationStartedSchema,
   messageCreatedSchema,
   conversationCompletedSchema,
   conversationErrorSchema,
+  bridgeConnectedSchema,
   bridgeTestSchema,
 ]);
 
@@ -170,5 +185,6 @@ export type ConversationStartedEvent = z.infer<typeof conversationStartedSchema>
 export type MessageCreatedEvent = z.infer<typeof messageCreatedSchema>;
 export type ConversationCompletedEvent = z.infer<typeof conversationCompletedSchema>;
 export type ConversationErrorEvent = z.infer<typeof conversationErrorSchema>;
+export type BridgeConnectedEvent = z.infer<typeof bridgeConnectedSchema>;
 export type BridgeTestEvent = z.infer<typeof bridgeTestSchema>;
 export type SessionUpload = z.infer<typeof sessionUploadSchema>;

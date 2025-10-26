@@ -243,6 +243,42 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true });
       }
 
+      case 'bridge.connected': {
+        // Bridge connected event (when an emitter is created)
+        console.log('Bridge connected event received:', {
+          timestamp: event.timestamp,
+          system_info: data.system_info,
+          connected_at: data.connected_at,
+        });
+
+        // Store bridge connection event for analytics/audit trail
+        await prisma.event.create({
+          data: {
+            type: 'bridge.connected',
+            data: {
+              system_info: data.system_info,
+              connected_at: data.connected_at,
+            },
+          },
+        });
+
+        // Broadcast to all SSE clients
+        eventManager.emit({
+          type: 'bridge.connected',
+          timestamp: new Date(event.timestamp),
+          data: {
+            system_info: data.system_info,
+            connected_at: data.connected_at,
+          },
+        });
+
+        return NextResponse.json({
+          success: true,
+          message: 'Bridge connection registered',
+          received_at: new Date().toISOString(),
+        });
+      }
+
       case 'bridge.test': {
         // Bridge connectivity test event
         console.log('Bridge test event received:', {
