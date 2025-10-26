@@ -3,16 +3,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { AgentAvatar, type AgentType } from '@/app/components/agent/AgentAvatar';
-import { StatusDot, type StatusType } from '@/app/components/status/StatusDot';
-import { Badge } from '@/app/components/ui/Badge';
 import { Button } from '@/app/components/ui/Button';
 import { Skeleton } from '@/app/components/status/Skeleton';
 import { MetricCard } from '@/app/components/metrics/MetricCard';
 import { SummaryCard } from '@/app/components/conversation/SummaryCard';
 import { ConversationMessages } from '@/app/components/conversation/ConversationMessages';
 import { ViewToggle } from '@/app/components/conversation/ViewToggle';
+import { ConversationHeader } from '@/app/components/conversation/ConversationHeader';
 import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
 import { useViewMode } from '@/app/hooks/useViewMode';
+import { useConversationActions } from '@/app/hooks/useConversationActions';
 
 interface Participant {
   id: string;
@@ -96,6 +96,13 @@ export default function SessionDetailPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [viewMode, setViewMode] = useViewMode();
 
+  // Initialize conversation actions hook
+  const conversationActions = useConversationActions({
+    conversationId: sessionId,
+    summaryText: session?.summaryText,
+    onDeleted: () => router.push('/conversations'),
+  });
+
   // Fetch session details
   const fetchSession = useCallback(async (showLoading = true) => {
     try {
@@ -160,16 +167,6 @@ export default function SessionDetailPage() {
   });
 
   // Helper functions
-  const mapStatusToStatusType = (status: string): StatusType => {
-    const statusMap: Record<string, StatusType> = {
-      ACTIVE: 'active',
-      COMPLETED: 'completed',
-      ERROR: 'error',
-      INTERRUPTED: 'interrupted',
-    };
-    return statusMap[status] || 'pending';
-  };
-
   const mapAgentTypeToAgentType = (agentType: string): AgentType => {
     const agentMap: Record<string, AgentType> = {
       claude: 'claude',
@@ -205,25 +202,6 @@ export default function SessionDetailPage() {
     return tokens.toString();
   };
 
-  const getSourceBadgeVariant = (source: string) => {
-    const variants: Record<string, 'default' | 'success' | 'info' | 'warning' | 'error'> = {
-      web: 'info',
-      'cli-stream': 'success',
-      'cli-upload': 'default',
-    };
-    return variants[source] || 'default';
-  };
-
-  const getStatusBadgeVariant = (status: string) => {
-    const variants: Record<string, 'default' | 'success' | 'info' | 'warning' | 'error'> = {
-      ACTIVE: 'success',
-      COMPLETED: 'info',
-      INTERRUPTED: 'warning',
-      ERROR: 'error',
-    };
-    return variants[status] || 'default';
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -256,48 +234,21 @@ export default function SessionDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <Button
-              onClick={() => router.push('/conversations')}
-              variant="ghost"
-              size="sm"
-            >
-              ← Back to Conversations
-            </Button>
-            {isUpdating && (
-              <span className="text-xs text-muted-foreground animate-pulse">
-                Updating...
-              </span>
-            )}
-          </div>
+      <ConversationHeader
+        id={session.id}
+        title={session.initialPrompt}
+        status={session.status as 'ACTIVE' | 'COMPLETED' | 'INTERRUPTED' | 'ERROR'}
+        source={session.source}
+        messageCount={session.totalMessages}
+        duration={session.totalDuration}
+        createdAt={session.createdAt}
+        isUpdating={isUpdating}
+        onCopySummary={conversationActions.onCopySummary}
+        onExport={conversationActions.onExport}
+        onDelete={conversationActions.onDelete}
+      />
 
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{session.initialPrompt}</h1>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <StatusDot status={mapStatusToStatusType(session.status)} pulse={session.status === 'ACTIVE'} />
-                  <span>{session.status}</span>
-                </div>
-                <span>•</span>
-                <span>{session.mode}</span>
-                <span>•</span>
-                <span>Started {new Date(session.startedAt).toLocaleString()}</span>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Badge variant={getSourceBadgeVariant(session.source)}>
-                {session.source}
-              </Badge>
-              <Badge variant={getStatusBadgeVariant(session.status)}>
-                {session.status}
-              </Badge>
-            </div>
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
 
         {/* Initial Prompt */}
         <div className="bg-card border border-border rounded-lg p-4 mb-6">
