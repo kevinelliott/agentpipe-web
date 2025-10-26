@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Virtuoso } from 'react-virtuoso';
 import { MessageBubble } from '@/app/components/agent/MessageBubble';
 import { MessageBubbleCompact } from '@/app/components/agent/MessageBubbleCompact';
 import { MessageBubbleSlim } from '@/app/components/agent/MessageBubbleSlim';
@@ -35,6 +36,10 @@ interface ConversationMessagesProps {
   emptyState?: React.ReactNode;
 }
 
+type VirtualizedItem =
+  | { type: 'separator'; id: string; timeDiff: number }
+  | { type: 'message'; id: string; message: Message; isTurnChange: boolean };
+
 export function ConversationMessages({
   messages,
   viewMode,
@@ -46,78 +51,100 @@ export function ConversationMessages({
     return <>{emptyState}</>;
   }
 
-  // Calculate time differences and detect turn changes
-  const messagesWithMetadata = messages.map((message, index) => {
-    const prevMessage = index > 0 ? messages[index - 1] : null;
-    const timeDiff = prevMessage
-      ? new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime()
-      : 0;
-    const isTurnChange = prevMessage ? message.agentId !== prevMessage.agentId : false;
+  // Prepare items for virtualization including turn separators
+  const prepareVirtualizedItems = (): VirtualizedItem[] => {
+    const items: VirtualizedItem[] = [];
 
-    return {
-      message,
-      timeDiff,
-      isTurnChange,
-    };
-  });
+    messages.forEach((message, index) => {
+      const prevMessage = index > 0 ? messages[index - 1] : null;
+      const timeDiff = prevMessage
+        ? new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime()
+        : 0;
+      const isTurnChange = prevMessage ? message.agentId !== prevMessage.agentId : false;
 
-  if (viewMode === 'slim') {
-    return (
-      <div className="space-y-0">
-        {messagesWithMetadata.map(({ message, timeDiff, isTurnChange }, index) => (
-          <React.Fragment key={message.id}>
-            {isTurnChange && index > 0 && <TurnSeparator timeDiff={timeDiff} />}
-            <MessageBubbleSlim
-              agent={mapAgentTypeToAgentType(message.agentType)}
-              agentName={message.agentName}
-              content={message.content}
-              timestamp={new Date(message.timestamp)}
-              onClick={onMessageClick ? () => onMessageClick(message) : undefined}
-            />
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
+      // Add turn separator if needed (only for slim and compact views)
+      if (isTurnChange && index > 0 && (viewMode === 'slim' || viewMode === 'compact')) {
+        items.push({
+          type: 'separator',
+          id: `sep-${message.id}`,
+          timeDiff,
+        });
+      }
 
-  if (viewMode === 'compact') {
-    return (
-      <div className="space-y-0">
-        {messagesWithMetadata.map(({ message, timeDiff, isTurnChange }, index) => (
-          <React.Fragment key={message.id}>
-            {isTurnChange && index > 0 && <TurnSeparator timeDiff={timeDiff} />}
-            <MessageBubbleCompact
-              agent={mapAgentTypeToAgentType(message.agentType)}
-              agentName={message.agentName}
-              content={message.content}
-              timestamp={new Date(message.timestamp)}
-              onClick={onMessageClick ? () => onMessageClick(message) : undefined}
-            />
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
+      // Add message
+      items.push({
+        type: 'message',
+        id: message.id,
+        message,
+        isTurnChange,
+      });
+    });
 
-  // Normal view
-  return (
-    <div className="space-y-2">
-      {messages.map((message) => (
-        <MessageBubble
+    return items;
+  };
+
+  const virtualizedItems = prepareVirtualizedItems();
+
+  const renderItem = (index: number, item: VirtualizedItem) => {
+    if (item.type === 'separator') {
+      return <TurnSeparator key={item.id} timeDiff={item.timeDiff} />;
+    }
+
+    const { message } = item;
+    const agentType = mapAgentTypeToAgentType(message.agentType);
+
+    if (viewMode === 'slim') {
+      return (
+        <MessageBubbleSlim
           key={message.id}
-          agent={mapAgentTypeToAgentType(message.agentType)}
+          agent={agentType}
           agentName={message.agentName}
-          agentVersion={message.agentVersion}
           content={message.content}
           timestamp={new Date(message.timestamp)}
-          tokens={message.totalTokens || undefined}
-          inputTokens={message.inputTokens || undefined}
-          outputTokens={message.outputTokens || undefined}
-          cost={message.cost || undefined}
-          model={message.model}
-          duration={message.duration || undefined}
+          onClick={onMessageClick ? () => onMessageClick(message) : undefined}
         />
-      ))}
-    </div>
+      );
+    }
+
+    if (viewMode === 'compact') {
+      return (
+        <MessageBubbleCompact
+          key={message.id}
+          agent={agentType}
+          agentName={message.agentName}
+          content={message.content}
+          timestamp={new Date(message.timestamp)}
+          onClick={onMessageClick ? () => onMessageClick(message) : undefined}
+        />
+      );
+    }
+
+    // Normal view
+    return (
+      <MessageBubble
+        key={message.id}
+        agent={agentType}
+        agentName={message.agentName}
+        agentVersion={message.agentVersion}
+        content={message.content}
+        timestamp={new Date(message.timestamp)}
+        tokens={message.totalTokens || undefined}
+        inputTokens={message.inputTokens || undefined}
+        outputTokens={message.outputTokens || undefined}
+        cost={message.cost || undefined}
+        model={message.model}
+        duration={message.duration || undefined}
+      />
+    );
+  };
+
+  return (
+    <Virtuoso
+      data={virtualizedItems}
+      itemContent={renderItem}
+      className="virtuoso-list"
+      style={{ height: '100%' }}
+      increaseViewportBy={{ top: 100, bottom: 100 }}
+    />
   );
 }
