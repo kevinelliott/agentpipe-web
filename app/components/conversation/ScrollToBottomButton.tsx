@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 interface ScrollToBottomButtonProps {
   isVisible: boolean;
@@ -15,12 +16,35 @@ export function ScrollToBottomButton({
   onScrollToBottom,
   onToggleAutoScroll,
 }: ScrollToBottomButtonProps) {
+  const scrollButtonRef = useRef<HTMLButtonElement>(null);
+  const toggleButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Add keyboard support for buttons (Escape to dismiss)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isVisible) {
+        e.preventDefault();
+        // Dismiss button by blurring (or could add logic to hide)
+        scrollButtonRef.current?.blur();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVisible]);
+
   if (!isVisible && isAutoScrollEnabled) {
     return null;
   }
 
   return (
-    <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+    <div
+      className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2"
+      role="group"
+      aria-label="Message scrolling controls"
+    >
       {/* Auto-scroll toggle (always visible as indicator) */}
       {isAutoScrollEnabled && (
         <div className="bg-background/95 backdrop-blur-sm border border-border rounded-full px-3 py-2 text-xs font-medium text-foreground flex items-center gap-2 shadow-lg animate-in fade-in zoom-in-95 duration-300">
@@ -35,10 +59,11 @@ export function ScrollToBottomButton({
       {/* Scroll to bottom button (only visible when not at bottom) */}
       {isVisible && (
         <button
+          ref={scrollButtonRef}
           onClick={() => onScrollToBottom(true)}
-          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300"
-          aria-label="Scroll to bottom"
-          title="Scroll to latest message"
+          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
+          aria-label="Scroll to latest message"
+          title="Scroll to latest message (Press Enter)"
         >
           <svg
             className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5"
@@ -60,10 +85,12 @@ export function ScrollToBottomButton({
       {/* Toggle auto-scroll when visible */}
       {isVisible && (
         <button
+          ref={toggleButtonRef}
           onClick={onToggleAutoScroll}
-          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100"
-          aria-label="Toggle auto-scroll"
-          title={isAutoScrollEnabled ? 'Disable auto-scroll' : 'Enable auto-scroll'}
+          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100 focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2"
+          aria-label={isAutoScrollEnabled ? 'Disable auto-scroll' : 'Enable auto-scroll'}
+          aria-pressed={isAutoScrollEnabled}
+          title={isAutoScrollEnabled ? 'Disable auto-scroll (currently enabled)' : 'Enable auto-scroll (currently disabled)'}
         >
           {isAutoScrollEnabled ? (
             <svg
