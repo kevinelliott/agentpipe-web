@@ -61,7 +61,7 @@ export function ScrollToBottomButton({
         <button
           ref={scrollButtonRef}
           onClick={() => onScrollToBottom(true)}
-          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
+          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium min-h-[2.75rem] min-w-[2.75rem] md:min-h-[2.5rem] md:min-w-[2.5rem] py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
           aria-label="Scroll to latest message"
           title="Scroll to latest message (Press Enter)"
         >
@@ -87,7 +87,7 @@ export function ScrollToBottomButton({
         <button
           ref={toggleButtonRef}
           onClick={onToggleAutoScroll}
-          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100 focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2"
+          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium min-h-[2.75rem] min-w-[2.75rem] md:min-h-[2.5rem] md:min-w-[2.5rem] py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100 focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2"
           aria-label={isAutoScrollEnabled ? 'Disable auto-scroll' : 'Enable auto-scroll'}
           aria-pressed={isAutoScrollEnabled}
           title={isAutoScrollEnabled ? 'Disable auto-scroll (currently enabled)' : 'Enable auto-scroll (currently disabled)'}

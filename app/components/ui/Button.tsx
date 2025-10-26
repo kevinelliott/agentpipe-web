@@ -29,10 +29,15 @@ export function Button({
   };
 
   const sizeClasses: Record<ButtonSize, string> = {
-    xs: 'min-h-[2rem] min-w-[2rem] px-2 text-xs',
-    sm: 'min-h-[2.25rem] min-w-[2.25rem] px-3 text-xs',
-    md: 'min-h-[2.5rem] min-w-[2.5rem] px-4 text-sm',
-    lg: 'min-h-[3rem] min-w-[3rem] px-6 text-base',
+    // Touch targets: mobile should be 44x44px minimum (WCAG guideline)
+    // xs: small inline buttons (e.g., close icons)
+    xs: 'min-h-[2rem] min-w-[2rem] md:min-h-[1.75rem] md:min-w-[1.75rem] px-2 text-xs',
+    // sm: secondary buttons (44px on mobile, 36px on desktop)
+    sm: 'min-h-[2.75rem] min-w-[2.75rem] md:min-h-[2.25rem] md:min-w-[2.25rem] px-3 text-xs',
+    // md: primary buttons (44px+ on all screens)
+    md: 'min-h-[2.75rem] min-w-[2.75rem] md:min-h-[2.5rem] md:min-w-[2.5rem] px-4 text-sm',
+    // lg: prominent buttons (56px on mobile, 48px on desktop)
+    lg: 'min-h-[3.5rem] min-w-[3.5rem] md:min-h-[3rem] md:min-w-[3rem] px-6 text-base',
   };
 
   const iconClasses = isIcon ? 'p-0 aspect-square' : '';

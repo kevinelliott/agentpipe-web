@@ -158,7 +158,7 @@ export function ExportDialog({
                 ref={index === 0 ? firstButtonRef : null}
                 key={option.format}
                 onClick={() => setSelectedFormat(option.format)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all hover:shadow-md active:scale-98 animate-in fade-in slide-in-from-top-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                className={`w-full text-left p-4 md:p-3 rounded-lg border-2 transition-all hover:shadow-md active:scale-98 animate-in fade-in slide-in-from-top-2 duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[3rem] md:min-h-[2.5rem] flex items-center ${
                   selectedFormat === option.format
                     ? 'border-primary bg-primary/5'
                     : 'border-border hover:border-muted-foreground'
