@@ -30,6 +30,7 @@ export function ExportDialog({
   onExport,
 }: ExportDialogProps) {
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json');
+  const [error, setError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -84,8 +85,16 @@ export function ExportDialog({
   ];
 
   const handleExport = async () => {
+    setError(null);
+
     if (onExport) {
-      onExport(selectedFormat);
+      try {
+        onExport(selectedFormat);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to export conversation';
+        setError(errorMessage);
+        console.error('Error exporting conversation:', err);
+      }
     } else {
       // Default behavior: trigger download
       try {
@@ -94,7 +103,17 @@ export function ExportDialog({
         );
 
         if (!response.ok) {
-          throw new Error('Export failed');
+          const statusMessage = response.status === 404
+            ? 'Conversation not found'
+            : response.status === 500
+            ? 'Server error during export'
+            : `Export failed (${response.status})`;
+          throw new Error(statusMessage);
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType?.includes('application')) {
+          throw new Error('Invalid response from server');
         }
 
         const blob = await response.blob();
@@ -108,8 +127,10 @@ export function ExportDialog({
         URL.revokeObjectURL(url);
 
         onClose();
-      } catch (error) {
-        console.error('Error exporting conversation:', error);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to export conversation';
+        setError(errorMessage);
+        console.error('Error exporting conversation:', err);
       }
     }
   };
@@ -150,6 +171,14 @@ export function ExportDialog({
               Choose a format to export this conversation
             </p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mx-6 mt-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm" role="alert" aria-live="polite">
+              <div className="font-medium">Export failed</div>
+              <div className="text-xs mt-1">{error}</div>
+            </div>
+          )}
 
           {/* Content */}
           <div className="px-6 py-4 space-y-3">
@@ -221,13 +250,18 @@ export function ExportDialog({
               onClick={handleExport}
               variant="primary"
               size="sm"
-              disabled={isLoading}
+              disabled={isLoading || error !== null}
               aria-label={`Export conversation as ${selectedFormat.toUpperCase()}`}
             >
               {isLoading ? (
-                <span className="flex items-center gap-2" aria-label="Exporting conversation">
+                <span className="flex items-center gap-2" aria-label="Exporting conversation" aria-live="polite">
                   <span className="inline-flex animate-spin">⟳</span>
                   Exporting...
+                </span>
+              ) : error ? (
+                <span className="flex items-center gap-2">
+                  <span>⚠</span>
+                  Retry
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
