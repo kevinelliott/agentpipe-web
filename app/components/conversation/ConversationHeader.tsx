@@ -69,7 +69,8 @@ export function ConversationHeader({
   };
 
   return (
-    <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 space-y-4">
+    <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-4 max-w-5xl mx-auto">
       {/* Top row: Back button + Status + Actions */}
       <div className="flex items-start justify-between gap-4">
         <Button
@@ -130,6 +131,7 @@ export function ConversationHeader({
           onDelete={onDelete}
           isLoading={isUpdating}
         />
+      </div>
       </div>
     </div>
   );
