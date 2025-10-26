@@ -1,9 +1,12 @@
 // UI Components
 export { Button } from './ui/Button';
+export { ActionButton } from './ui/ActionButton';
 export { Card, CardHeader, CardTitle, CardDescription, CardFooter } from './ui/Card';
 export { Badge } from './ui/Badge';
 export { Input, SearchInput } from './ui/Input';
 export { SectionHeader } from './ui/SectionHeader';
+export { SidebarSection } from './ui/SidebarSection';
+export { ConfirmDialog } from './ui/ConfirmDialog';
 export {
   MessagesIcon,
   ConversationsIcon,
@@ -38,6 +41,12 @@ export { MetricCard } from './metrics/MetricCard';
 
 // Conversation Components
 export { ConversationCard } from './conversation/ConversationCard';
+export { MessageCard } from './conversation/MessageCard';
+export { MessageHeader } from './conversation/MessageHeader';
+export { MessageContent } from './conversation/MessageContent';
+export { MessageMetrics } from './conversation/MessageMetrics';
+export { ConversationLayout } from './conversation/ConversationLayout';
+export { ConversationMainContent } from './conversation/ConversationMainContent';
 
 // Theme Components
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
