@@ -11,9 +11,11 @@ import { ConversationMessages } from '@/app/components/conversation/Conversation
 import { ViewToggle } from '@/app/components/conversation/ViewToggle';
 import { ConversationHeader } from '@/app/components/conversation/ConversationHeader';
 import { ExportDialog } from '@/app/components/conversation/ExportDialog';
+import { ScrollToBottomButton } from '@/app/components/conversation/ScrollToBottomButton';
 import { useRealtimeEvents } from '@/app/hooks/useRealtimeEvents';
 import { useViewMode } from '@/app/hooks/useViewMode';
 import { useConversationActions } from '@/app/hooks/useConversationActions';
+import { useScrollToBottom } from '@/app/hooks/useScrollToBottom';
 
 interface Participant {
   id: string;
@@ -96,6 +98,9 @@ export default function SessionDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [viewMode, setViewMode] = useViewMode();
+
+  // Initialize scroll management
+  const scrollState = useScrollToBottom({ threshold: 100, enabled: true });
 
   // Initialize conversation actions hook
   const conversationActions = useConversationActions({
@@ -331,7 +336,7 @@ export default function SessionDetailPage() {
         )}
 
         {/* Messages */}
-        <div className="mb-6">
+        <div className="mb-6 relative">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">
               Conversation ({session.messages.length} messages)
@@ -350,19 +355,34 @@ export default function SessionDetailPage() {
             </div>
           </div>
 
-          <ConversationMessages
-            messages={session.messages}
-            viewMode={viewMode}
-            mapAgentTypeToAgentType={mapAgentTypeToAgentType}
-            emptyState={
-              <div className="bg-card border border-border rounded-lg p-8 text-center">
-                <p className="text-muted-foreground">No messages in this conversation yet</p>
-                {session.status === 'ACTIVE' && (
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Messages will appear here as they arrive
-                  </p>
-                )}
-              </div>
+          <div
+            ref={scrollState.containerRef}
+            className="max-h-96 overflow-y-auto rounded-lg border border-border bg-card/50 p-4"
+          >
+            <ConversationMessages
+              messages={session.messages}
+              viewMode={viewMode}
+              mapAgentTypeToAgentType={mapAgentTypeToAgentType}
+              emptyState={
+                <div className="p-4 text-center">
+                  <p className="text-muted-foreground">No messages in this conversation yet</p>
+                  {session.status === 'ACTIVE' && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Messages will appear here as they arrive
+                    </p>
+                  )}
+                </div>
+              }
+            />
+          </div>
+
+          {/* Scroll to bottom button */}
+          <ScrollToBottomButton
+            isVisible={scrollState.isNearBottom}
+            isAutoScrollEnabled={scrollState.isAutoScrollEnabled}
+            onScrollToBottom={scrollState.scrollToBottom}
+            onToggleAutoScroll={() =>
+              scrollState.setIsAutoScrollEnabled(!scrollState.isAutoScrollEnabled)
             }
           />
         </div>
