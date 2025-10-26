@@ -50,6 +50,7 @@ export { ConversationMainContent } from './conversation/ConversationMainContent'
 export { ConversationHeader } from './conversation/ConversationHeader';
 export { ConversationMetaBadges } from './conversation/ConversationMetaBadges';
 export { ConversationActions } from './conversation/ConversationActions';
+export { ConversationSidebar } from './conversation/ConversationSidebar';
 export { MetricsGrid } from './conversation/MetricsGrid';
 export { ParticipantCard } from './conversation/ParticipantCard';
 export { ParticipantsList } from './conversation/ParticipantsList';
