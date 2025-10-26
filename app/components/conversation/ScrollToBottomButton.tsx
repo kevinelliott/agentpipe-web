@@ -23,7 +23,7 @@ export function ScrollToBottomButton({
     <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
       {/* Auto-scroll toggle (always visible as indicator) */}
       {isAutoScrollEnabled && (
-        <div className="bg-background/95 backdrop-blur-sm border border-border rounded-full px-3 py-2 text-xs font-medium text-foreground flex items-center gap-2 shadow-lg">
+        <div className="bg-background/95 backdrop-blur-sm border border-border rounded-full px-3 py-2 text-xs font-medium text-foreground flex items-center gap-2 shadow-lg animate-in fade-in zoom-in-95 duration-300">
           <span className="relative flex h-2 w-2">
             <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -36,12 +36,12 @@ export function ScrollToBottomButton({
       {isVisible && (
         <button
           onClick={() => onScrollToBottom(true)}
-          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm"
+          className="bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300"
           aria-label="Scroll to bottom"
           title="Scroll to latest message"
         >
           <svg
-            className="w-4 h-4"
+            className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -61,13 +61,13 @@ export function ScrollToBottomButton({
       {isVisible && (
         <button
           onClick={onToggleAutoScroll}
-          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm"
+          className="bg-background/95 backdrop-blur-sm hover:bg-muted border border-border text-foreground font-medium py-2 px-3 rounded-full shadow-lg transition-all duration-200 text-sm hover:shadow-xl hover:scale-105 active:scale-95 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100"
           aria-label="Toggle auto-scroll"
           title={isAutoScrollEnabled ? 'Disable auto-scroll' : 'Enable auto-scroll'}
         >
           {isAutoScrollEnabled ? (
             <svg
-              className="w-4 h-4"
+              className="w-4 h-4 transition-transform duration-300"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -75,7 +75,7 @@ export function ScrollToBottomButton({
             </svg>
           ) : (
             <svg
-              className="w-4 h-4"
+              className="w-4 h-4 transition-transform duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

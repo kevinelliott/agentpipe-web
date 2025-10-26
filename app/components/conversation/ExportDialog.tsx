@@ -93,13 +93,13 @@ export function ExportDialog({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-200"
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-200 animate-in fade-in duration-200"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-background border border-border rounded-lg shadow-lg max-w-sm w-full">
+        <div className="bg-background border border-border rounded-lg shadow-lg max-w-sm w-full animate-in fade-in zoom-in-95 duration-300">
           {/* Header */}
           <div className="border-b border-border px-6 py-4">
             <h2 className="text-lg font-semibold text-foreground">
@@ -112,15 +112,16 @@ export function ExportDialog({
 
           {/* Content */}
           <div className="px-6 py-4 space-y-3">
-            {exportOptions.map((option) => (
+            {exportOptions.map((option, index) => (
               <button
                 key={option.format}
                 onClick={() => setSelectedFormat(option.format)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                className={`w-full text-left p-4 rounded-lg border-2 transition-all hover:shadow-md active:scale-98 animate-in fade-in slide-in-from-top-2 duration-300 ${
                   selectedFormat === option.format
                     ? 'border-primary bg-primary/5'
                     : 'border-border hover:border-muted-foreground'
                 }`}
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start gap-3">
                   <div className="text-2xl flex-shrink-0 pt-1">
