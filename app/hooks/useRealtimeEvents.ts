@@ -17,6 +17,7 @@ interface UseRealtimeEventsOptions {
   onError?: (data: any) => void;
   autoReconnect?: boolean;
   reconnectInterval?: number;
+  messageDebounceMs?: number; // Debounce rapid message events (default: 300ms)
 }
 
 export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
@@ -31,6 +32,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     onError,
     autoReconnect = true,
     reconnectInterval = 3000,
+    messageDebounceMs = 300,
   } = options;
 
   const [isConnected, setIsConnected] = useState(false);
@@ -41,6 +43,8 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isManualCloseRef = useRef(false);
+  const messageDebounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingMessageDataRef = useRef<any | null>(null);
 
   // Store callbacks in refs to avoid dependency issues
   // Update ref on every render without triggering effects
@@ -62,6 +66,26 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     onBridgeConnected,
     onError,
   };
+
+  // Debounce message created events to avoid excessive re-renders
+  const scheduleMessageCallback = useCallback((data: any) => {
+    // Store the latest message data
+    pendingMessageDataRef.current = data;
+
+    // Clear existing timer if any
+    if (messageDebounceTimerRef.current) {
+      clearTimeout(messageDebounceTimerRef.current);
+    }
+
+    // Schedule callback after debounce interval
+    messageDebounceTimerRef.current = setTimeout(() => {
+      if (pendingMessageDataRef.current && callbacksRef.current.onMessageCreated) {
+        callbacksRef.current.onMessageCreated(pendingMessageDataRef.current);
+      }
+      messageDebounceTimerRef.current = null;
+      pendingMessageDataRef.current = null;
+    }, messageDebounceMs);
+  }, [messageDebounceMs]);
 
   const connect = useCallback(() => {
     // Clear any existing connection
@@ -108,7 +132,8 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
             callbacksRef.current.onConversationStarted?.(event.data);
             break;
           case 'message.created':
-            callbacksRef.current.onMessageCreated?.(event.data);
+            // Debounce rapid message events
+            scheduleMessageCallback(event.data);
             break;
           case 'conversation.completed':
             callbacksRef.current.onConversationCompleted?.(event.data);
@@ -147,7 +172,7 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
 
       eventSource.close();
     };
-  }, [conversationId, autoReconnect, reconnectInterval]);
+  }, [conversationId, autoReconnect, reconnectInterval, scheduleMessageCallback]);
 
   const disconnect = useCallback(() => {
     console.log('[SSE Client] Disconnecting manually');
@@ -161,6 +186,12 @@ export function useRealtimeEvents(options: UseRealtimeEventsOptions = {}) {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
+    }
+
+    // Clear message debounce timer
+    if (messageDebounceTimerRef.current) {
+      clearTimeout(messageDebounceTimerRef.current);
+      messageDebounceTimerRef.current = null;
     }
 
     setIsConnected(false);
