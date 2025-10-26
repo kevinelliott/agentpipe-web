@@ -68,6 +68,7 @@ export const messageCreatedSchema = z.object({
 
 // Conversation summary schema
 export const conversationSummarySchema = z.object({
+  short_text: z.string().max(1000).optional(), // Optional short summary
   text: z.string().max(10000), // 10KB limit for summary text
   agent_type: z.string(),
   model: z.string(),
