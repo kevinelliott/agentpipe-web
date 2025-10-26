@@ -56,6 +56,7 @@ export { ParticipantCard } from './conversation/ParticipantCard';
 export { ParticipantsList } from './conversation/ParticipantsList';
 export { TechnicalDetailsCard } from './conversation/TechnicalDetailsCard';
 export { ExportDialog } from './conversation/ExportDialog';
+export { ScrollToBottomButton } from './conversation/ScrollToBottomButton';
 
 // Theme Components
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
