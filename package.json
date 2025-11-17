@@ -29,7 +29,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/ws": "^8.18.1",
     "@vercel/analytics": "^1.5.0",
-    "next": "^15.5.5",
+    "next": "^16.0.3",
     "prisma": "^6.19.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
